@@ -41,7 +41,6 @@
         // バーボタン(編集開始)
         barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"完了" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonEditEnd)];
         [self setEditEndBarButton:barButtonItem];
-        
     }
     return self;
 }
