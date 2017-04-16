@@ -1,8 +1,8 @@
 //
 //  CitrusTouchApplication.m
-//  HanayuAccountBookPod
+//  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/03/31.
+//  Created by take64 on 2017/03/31.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -14,6 +14,8 @@
 // synthesize
 //
 @synthesize theme;
+@synthesize coreDataManager;
+@synthesize coreDataContext;
 
 
 // init
@@ -28,13 +30,37 @@
 }
 
 // call theme
-- (CTTheme *)callTheme
++ (CTTheme *)callTheme
 {
-    if([self theme] == nil)
+    CTTheme *_theme = [[CitrusTouchApplication sharedApplication] theme];
+    if(_theme == nil)
     {
-        [self setTheme:[[CTTheme alloc] init]];
+        _theme = [[CTTheme alloc] init];
     }
-    return [self theme];
+    return _theme;
+}
+
+
+// CoreData manager
++ (CTCoreDataManager *)callCoreDataManager
+{
+    CTCoreDataManager *_coreDataManager = [[CitrusTouchApplication sharedApplication] coreDataManager];
+    if(_coreDataManager == nil)
+    {
+        CTLog(@"error : CitrusTouchApplication.callCoreDataManager");
+    }
+    return _coreDataManager;
+}
+
+// CoreData context
++ (NSManagedObjectContext *)callCoreDataContext
+{
+    NSManagedObjectContext *_coreDataContext = [[CitrusTouchApplication sharedApplication] coreDataContext];
+    if(_coreDataContext == nil)
+    {
+        CTLog(@"error : CitrusTouchApplication.callCoreDataContext");
+    }
+    return _coreDataContext;
 }
 
 

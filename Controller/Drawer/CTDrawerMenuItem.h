@@ -2,7 +2,7 @@
 //  CTDrawerMenuItem.h
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/01/24.
+//  Created by take64 on 2017/01/24.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -28,6 +28,9 @@
 
 // init
 - (id)initWithTitle:(NSString *)titleValue controller:(UIViewController *)controllerValue;
+
+// init
++ (CTDrawerMenuItem *)menuWithController:(UIViewController *)controllerValue;
 
 // init
 + (CTDrawerMenuItem *)menuWithTitle:(NSString *)titleValue controller:(UIViewController *)controllerValue;

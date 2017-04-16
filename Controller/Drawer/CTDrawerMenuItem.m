@@ -2,7 +2,7 @@
 //  CTDrawerMenuItem.m
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/01/24.
+//  Created by take64 on 2017/01/24.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -27,6 +27,17 @@
         [self setController:controllerValue];
     }
     return self;
+}
+
+// init
++ (CTDrawerMenuItem *)menuWithController:(UIViewController *)controllerValue
+{
+    NSString *titleValue = @"";
+    if([controllerValue isKindOfClass:[CTBaseListController class]] == YES)
+    {
+        titleValue = [(CTBaseListController *)controllerValue callTitle];
+    }
+    return [self menuWithTitle:titleValue controller:controllerValue];
 }
 
 // init

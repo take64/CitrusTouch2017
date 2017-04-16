@@ -2,7 +2,7 @@
 //  CTView.m
 //  CitrusTouch
 //
-//  Created by kouhei.takemoto on 2016/04/25.
+//  Created by take64 on 2016/04/25.
 //  Copyright © 2016年 citrus.tk. All rights reserved.
 //
 

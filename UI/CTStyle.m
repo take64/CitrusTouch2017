@@ -56,7 +56,7 @@
     return self;
 }
 // 追加
-- (void) addStyleKey:(NSString *)keyValue value:(NSString *)dataValue
+- (void)addStyleKey:(NSString *)keyValue value:(NSString *)dataValue
 {
 //    BOOL isRootExist = NO;
 //    for(NSString *rootKey in @[ @"top", @"left", @"width", @"height" ])
@@ -84,15 +84,15 @@
     }
 }
 // 追加
-- (void) addStyles:(NSDictionary *)dictionaryValue
+- (void)addStyles:(NSDictionary *)dictionaryValue
 {
-    for(NSString *keyValue in [dictionaryValue allKeys])
+    for(NSString *keyValue in [[dictionaryValue copy] allKeys])
     {
         [self addStyleKey:keyValue value:[dictionaryValue objectForKey:keyValue]];
     }
 }
 // 追加
-- (void) addStyleDictionary:(NSDictionary *)dictionaryValue
+- (void)addStyleDictionary:(NSDictionary *)dictionaryValue
 {
     for(NSString *keyValue in [dictionaryValue allKeys])
     {
@@ -100,7 +100,7 @@
     }
 }
 // 削除
-- (void) removeStyleKey:(NSString *)keyValue
+- (void)removeStyleKey:(NSString *)keyValue
 {
     if([[self _styles] objectForKey:keyValue] != nil)
     {
@@ -114,27 +114,27 @@
     }
 }
 // 取得
-- (NSString *) callStyleKey:(NSString *)keyValue
+- (NSString *)callStyleKey:(NSString *)keyValue
 {
     return [[self _styles] objectForKey:keyValue];
 }
 // 設定
-- (void) setStyleKey:(NSString *)keyValue value:(NSString *)dataValue
+- (void)setStyleKey:(NSString *)keyValue value:(NSString *)dataValue
 {
     [self addStyleKey:keyValue value:dataValue];
 }
 // 設定
-- (void) setStyleDictionary:(NSDictionary *)dictionaryValue
+- (void)setStyleDictionary:(NSDictionary *)dictionaryValue
 {
     [self addStyleDictionary:dictionaryValue];
 }
 // 全取得
-- (NSMutableDictionary *) callAllStyles
+- (NSMutableDictionary *)callAllStyles
 {
     return [self _styles];
 }
 // フォント取得
-- (UIFont *) callFont
+- (UIFont *)callFont
 {
     // フォントサイズ
     NSString *_fontSizeString = [[self _styles] objectForKey:@"font-size"];
@@ -189,7 +189,7 @@
     return _font;
 }
 // サイズ取得
-- (CGSize) callSize
+- (CGSize)callSize
 {
     NSString *_widthString = [[self _styles] objectForKey:@"width"];
     NSString *_heightString = [[self _styles] objectForKey:@"height"];
@@ -207,8 +207,18 @@
     
     return CGSizeMake(_width, _height);
 }
+
+// サイズ設定
+- (void)setSize:(CGSize)size
+{
+    [self addStyles:@{
+                      @"width"  :CTStr(size.width),
+                      @"height" :CTStr(size.height),
+                      }];
+}
+
 // ポイント取得
-- (CGPoint) callPoint
+- (CGPoint)callPoint
 {
     NSString *_topString = [[self _styles] objectForKey:@"top"];
     NSString *_leftString = [[self _styles] objectForKey:@"left"];
@@ -226,8 +236,18 @@
     
     return CGPointMake(_left, _top);
 }
+
+// ポイント設定
+- (void)setPoint:(CGPoint)point
+{
+    [self addStyles:@{
+                      @"left"   :CTStr(point.x),
+                      @"top"    :CTStr(point.y),
+                      }];
+}
+
 // フレーム取得
-- (CGRect) callFrame
+- (CGRect)callFrame
 {
     CGPoint _point = [self callPoint];
     CGSize _size = [self callSize];
@@ -237,8 +257,16 @@
     _rect.size = _size;
     return _rect;
 }
+
+// フレーム設定
+- (void)setFrame:(CGRect)frame
+{
+    [self setSize:frame.size];
+    [self setPoint:frame.origin];
+}
+
 // マージン取得(右)
-- (CGFloat) callMarginRight
+- (CGFloat)callMarginRight
 {
     // マージン
     NSString *_marginString = [self callStyleKey:@"margin"];
@@ -271,8 +299,9 @@
     }
     return _margins[1];
 }
+
 // マージン取得(下)
-- (CGFloat) callMarginBottom
+- (CGFloat)callMarginBottom
 {
     // マージン
     NSString *_marginString = [self callStyleKey:@"margin"];
@@ -305,8 +334,9 @@
     }
     return _margins[2];
 }
+
 // ボーダー幅取得
-- (CGFloat) callBorderWidth
+- (CGFloat)callBorderWidth
 {
     NSString *_borderWidthString = [self callStyleKey:@"border-width"];
     CGFloat _borderWidth = 0;
@@ -321,8 +351,7 @@
 
 
 
-#pragma mark -
-#pragma mark NSCopying
+#pragma mark - NSCopying
 //
 // NSCopying
 //

@@ -2,7 +2,7 @@
 //  CTTableCell.m
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/03/28.
+//  Created by take64 on 2017/03/28.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 #import "CTLabel.h"
 
-//#import "CitrusTouchPlatform.h"
+#import "CTPlatformDevice.h"
 
 @implementation CTTableCell
 
@@ -27,6 +27,9 @@
 @synthesize prefixPriority;
 @synthesize contentPriority;
 @synthesize suffixPriority;
+@synthesize layouted;
+@synthesize subLayouted;
+@synthesize bgView;
 
 
 
@@ -46,7 +49,7 @@
         // プレフィックス
         label = [[CTLabel alloc] initWithText:prefixString];
         [[label callStyle] addStyles:@{
-                                       @"font-size"    :@"14",
+                                       @"font-size"    :@"12",
                                        @"color"        :@"333333",
                                        @"text-align"   :@"left",
                                        @"font-weight"  :@"bold",
@@ -57,13 +60,22 @@
         // サフィックス
         label = [[CTLabel alloc] initWithText:suffixString];
         [[label callStyle] addStyles:@{
-                                       @"font-size"    :@"14",
+                                       @"font-size"    :@"12",
                                        @"color"        :@"333333",
                                        @"text-align"   :@"center",
                                        }];
         [[self contentView] addSubview:label];
         [self setSuffixLabel:label];
         
+        // レイアウト
+        [self setLayouted:NO];
+        [self setSubLayouted:NO];
+        
+        // 背景
+        [self setBgView:[[CTControl alloc] initWithFrame:[self frame]]];
+        [[self bgView] setUserInteractionEnabled:NO];
+        [self addSubview:[self bgView]];
+
         
 //        // ツールバー
 //        [self setToolbar:[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)]];
@@ -92,6 +104,98 @@
     [self setContentPriority:content];
     [self setSuffixPriority:suffix];
 }
+
+// レイアウト
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    // 未レイアウトの場合
+    if([self isLayouted] == NO)
+    {
+        // コンテンツフレーム
+        CGRect contentRect = [[self contentView] frame];
+        
+        
+        // 背景
+        [[self bgView] setFrame:contentRect];
+        
+        // アクセサリがある場合(アクセサリ分を縮める)
+        if([self accessoryType] != UITableViewCellAccessoryNone)
+        {
+            contentRect.size.width -= 8;
+        }
+        
+        
+        // プレフィックスサイズ
+        if(([[self prefixLabel] text] != nil && [[[self prefixLabel] text] length] > 0) || [self prefixWidth] > 0)
+        {
+            // prefix優先度(非表示)
+            if([self prefixPriority] == CTTableCellPartPriorityHidden)
+            {
+                [self setPrefixWidth:0];
+            }
+            // prefix優先度(高)
+            else if([self prefixPriority] == CTTableCellPartPriorityHigh)
+            {
+                CGSize prefixFontSize = [[[self prefixLabel] text] sizeWithAttributes:@{ NSFontAttributeName :[[[self prefixLabel] callStyle] callFont] }];
+                [self setPrefixWidth:prefixFontSize.width + 16];
+            }
+            // prefix優先度(中/低)
+            else if([self prefixPriority] == CTTableCellPartPriorityMiddle || [self prefixPriority] == CTTableCellPartPriorityLow)
+            {
+                [self setPrefixWidth:8];
+                if([CTPlatformDevice isIPad] == YES)
+                {
+                    [self setPrefixWidth:120];
+                }
+                else
+                {
+                    [self setPrefixWidth:80];
+                }
+            }
+        }
+        CGRect prefixRect = CGRectMake(16, 0, [self prefixWidth], contentRect.size.height);
+        [[self prefixLabel] setFrame:prefixRect];
+        
+        
+        // サフィックスサイズ
+        //        CGFloat suffixWidth = 16;
+        if(([[self suffixLabel] text] != nil && [[[self suffixLabel] text] length] > 0) || [self suffixWidth] > 0)
+        {
+            // suffix優先度(高/中)
+            if([self suffixPriority] == CTTableCellPartPriorityHigh || [self suffixPriority] == CTTableCellPartPriorityMiddle)
+            {
+                CGSize suffixFontSize = [[[self suffixLabel] text] sizeWithAttributes:@{ NSFontAttributeName:[[[self suffixLabel] callStyle] callFont] }];
+                [self setSuffixWidth:suffixFontSize.width + 16];
+            }
+            // suffix優先度(低)
+            else if([self suffixPriority] == CTTableCellPartPriorityLow)
+            {
+                CGSize suffixFontSize = [[[self suffixLabel] text] sizeWithAttributes:@{ NSFontAttributeName:[[[self suffixLabel] callStyle] callFont]}];
+                [self setSuffixWidth:suffixFontSize.width];
+            }
+            // suffix優先度(非表示)
+            else if([self suffixPriority] == CTTableCellPartPriorityHidden)
+            {
+                [self setSuffixWidth:0];
+            }
+        }
+        CGRect suffixRect = CGRectMake(contentRect.size.width - [self suffixWidth] , 0, [self suffixWidth], contentRect.size.height);
+        [[self suffixLabel] setFrame:suffixRect];
+        
+        
+        // コンテンツサイズ変更
+        contentRect.origin.x += [self prefixWidth];
+        contentRect.size.width -= [self prefixWidth];
+        contentRect.size.width -= [self suffixWidth];
+        [self setContentFrame:contentRect];
+        
+        // レイアウト済み
+        [self setLayouted:YES];
+    }
+}
+
 
 
 //@synthesize layout;
@@ -452,12 +556,16 @@
 - (void)bindEntity:(NSManagedObject *)entityValue
 {
     [self setEntity:entityValue];
+    
+    [self redraw];
 }
 
 // bind object
 - (void)bindObject:(NSObject *)objectValue
 {
     [self setObject:objectValue];
+    
+    [self redraw];
 }
 
 // redraw

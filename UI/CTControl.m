@@ -2,7 +2,7 @@
 //  CTControl.m
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/03/28.
+//  Created by take64 on 2017/03/28.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 #import "CTControl.h"
@@ -58,7 +58,7 @@
 }
 
 // キー値監視
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     // width 変更時
     if([keyPath isEqualToString:@"width"] == YES)
@@ -99,7 +99,7 @@
 }
 
 // 描画
-- (void) drawRect:(CGRect)rect
+- (void)drawRect:(CGRect)rect
 {
     // コンテクスト
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -545,7 +545,7 @@
     }
 }
 // 強制描画
-- (void) setNeedsDisplay
+- (void)setNeedsDisplay
 {
     [super setNeedsDisplay];
     
@@ -567,7 +567,7 @@
 //
 
 // 初期化
-- (id) initWithText:(NSString *)textString
+- (id)initWithText:(NSString *)textString
 {
     self = [self initWithFrame:CGRectZero];
     if(self)
@@ -578,7 +578,7 @@
     return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
     [[[self callStyleNormal] callAllStyles] removeObserver:self forKeyPath:@"left"];
     [[[self callStyleNormal] callAllStyles] removeObserver:self forKeyPath:@"top"];
@@ -587,11 +587,11 @@
 }
 
 // スタイル設定
-- (CTStyle *) callStyle
+- (CTStyle *)callStyle
 {
     return [self callStyleNormal];
 }
-- (CTStyle *) callStyleNormal
+- (CTStyle *)callStyleNormal
 {
     if([self ctstyleNormal] == nil)
     {
@@ -599,7 +599,7 @@
     }
     return [self ctstyleNormal];
 }
-- (CTStyle *) callStyleHighlighted
+- (CTStyle *)callStyleHighlighted
 {
     if([self ctstyleHighlighted] == nil)
     {
@@ -615,7 +615,7 @@
     }
     return [self ctstyleHighlighted];
 }
-- (CTStyle *) callStyleDisabled
+- (CTStyle *)callStyleDisabled
 {
     if([self ctstyleDisabled] == nil)
     {
@@ -632,25 +632,25 @@
     return [self ctstyleDisabled];
 }
 // スタイル設定
-- (void) setStyle:(CTStyle *)styleValue
+- (void)setStyle:(CTStyle *)styleValue
 {
     [[self callStyle] addStyles:[styleValue callAllStyles]];
 }
-- (void) setStyleNormal:(CTStyle *)styleValue
+- (void)setStyleNormal:(CTStyle *)styleValue
 {
     [[self callStyleNormal] addStyles:[styleValue callAllStyles]];
 }
-- (void) setStyleHighlighted:(CTStyle *)styleValue
+- (void)setStyleHighlighted:(CTStyle *)styleValue
 {
     [[self callStyleHighlighted] addStyles:[styleValue callAllStyles]];
 }
-- (void) setStyleDisabled:(CTStyle *)styleValue
+- (void)setStyleDisabled:(CTStyle *)styleValue
 {
     [[self callStyleDisabled] addStyles:[styleValue callAllStyles]];
 }
 
 // ステート
-- (void) modifyControlState:(CTControlState)_controlState
+- (void)modifyControlState:(CTControlState)_controlState
 {
     // ステート設定
     [self setControlState:_controlState];
@@ -658,8 +658,15 @@
     // 強制描画
     [self setNeedsDisplay];
 }
+
+//// 再描画
+//- (void)redraw
+//{
+//    [self drawRect:[self bounds]];
+//}
+
 // ステート変更(enable)
-- (void) setEnabled:(BOOL)enabled
+- (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
     if(enabled == YES)
@@ -673,7 +680,7 @@
     [self setNeedsDisplay];
 }
 // ステート変更(highlighted)
-- (void) setHighlighted:(BOOL)highlighted
+- (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
     if(highlighted == YES)
@@ -696,13 +703,13 @@
 //
 
 // 角丸のパスを生成
-- (void) addPathRadius:(const CGFloat *)radius rect:(CGRect)rect
+- (void)addPathRadius:(const CGFloat *)radius rect:(CGRect)rect
 {
     [self addPathRadius:radius rect:rect offset:0];
 }
 
 // 角丸のパスを生成
-- (void) addPathRadius:(const CGFloat *)radius rect:(CGRect)rect offset:(CGFloat)offset
+- (void)addPathRadius:(const CGFloat *)radius rect:(CGRect)rect offset:(CGFloat)offset
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     

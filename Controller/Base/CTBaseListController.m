@@ -2,7 +2,7 @@
 //  CTBaseListController.m
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/03/27.
+//  Created by take64 on 2017/03/27.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -13,6 +13,49 @@
 @end
 
 @implementation CTBaseListController
+
+//
+// synthesize
+//
+@synthesize addBarButton;
+@synthesize editStartBarButton;
+@synthesize editEndBarButton;
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if(self)
+    {
+        // part
+        CTBarButtonItem *barButtonItem;
+        
+        // タイトル
+        [self setTitle:[self callTitle]];
+        
+        // バーボタン(追加)
+        barButtonItem = [[CTBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onTapBarButtonAdd)];
+        [self setAddBarButton:barButtonItem];
+        // バーボタン(編集開始)
+        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"編集" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonEditStart)];
+        [self setEditStartBarButton:barButtonItem];
+        // バーボタン(編集開始)
+        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"完了" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonEditEnd)];
+        [self setEditEndBarButton:barButtonItem];
+        
+    }
+    return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // バーボタン再描画
+    [self redrawBarButton];
+    
+    [[self tableView] reloadData];
+}
+
 
 #pragma mark - UITableViewDataSource
 //
@@ -44,7 +87,12 @@
 //// Moving/reordering
 //
 //// Allows the reorder accessory view to optionally be shown for a particular row. By default, the reorder control will be shown only if the datasource implements -tableView:moveRowAtIndexPath:toIndexPath:
-//- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath;
+
+// 編集時移動可能
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self canMoveEditing];
+}
 //
 //// Index
 //
@@ -59,8 +107,10 @@
 //
 //// Data manipulation - reorder / moving support
 //
-//- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath;
-
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    // ソート編集を可能にする為、このメソッドはコメントしてはいけない
+}
 
 
 #pragma mark - UITableViewDelegate
@@ -72,16 +122,47 @@
 //// Display customization
 //
 //- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
-//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section NS_AVAILABLE_IOS(6_0);
+
+//// セルヘッダビュー
+//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+//{
+//    if([tableView style] == UITableViewStylePlain)
+//    {
+//        [view setTintColor:[[CitrusTouchApplication callTheme] callTableCellHeadBackColor]];
+//        [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callTableCellHeadTextColor]];
+//    }
+//    else if([tableView style] == UITableViewStyleGrouped)
+//    {
+//        [[(UITableViewHeaderFooterView *)view backgroundView] setBackgroundColor:[[CitrusTouchApplication callTheme] callTableCellHeadBackColor]];
+//        [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callTableCellHeadTextColor]];
+////        [[(UITableViewHeaderFooterView *)view textLabel] setAutoresizingMask:(UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin)];
+//    }
+//}
 //- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section NS_AVAILABLE_IOS(6_0);
 //- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath NS_AVAILABLE_IOS(6_0);
-//- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section NS_AVAILABLE_IOS(6_0);
+//// セルヘッダビュー
+//- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section
+//{
+//    
+////    CGRect rect = [[(UITableViewHeaderFooterView *)view textLabel] frame];
+////    rect.origin.y += 8;
+////    [[(UITableViewHeaderFooterView *)view textLabel] setFrame:rect];
+//}
 //- (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section NS_AVAILABLE_IOS(6_0);
 //
 //// Variable height support
 //
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section;
+// セルヘッダ高さ
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if([self tableView:tableView viewForHeaderInSection:section] == nil)
+    {
+        return 0;
+    }
+
+    return CT8(3);
+}
 //- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
 //
 //// Use the estimatedHeight methods to quickly calcuate guessed values which will allow for fast load times of the table.
@@ -92,7 +173,38 @@
 //
 //// Section header & footer information. Views are preferred over title should you decide to provide both
 //
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section;   // custom view for header. will be adjusted to default or specified header height
+// セルヘッダを返す
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    // head title
+    NSString *titleString = [self callHeaderTitleWithSection:section];
+    
+    // head title exist
+    if([titleString length] > 0)
+    {
+        // head id
+        NSString *HeadID = [CTTableHeaderFooterView reuseIdentifierWithSection:section];
+        
+        // dequeue
+        CTTableHeaderFooterView *headerFooterView = (CTTableHeaderFooterView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:HeadID];
+        
+        // generate
+        if(headerFooterView == nil)
+        {
+            headerFooterView = [[CTTableHeaderFooterView alloc] initWithReuseIdentifier:HeadID];
+        }
+        
+        // bind
+        if(headerFooterView != nil)
+        {
+            [headerFooterView bindTitle:titleString];
+        }
+        
+        return headerFooterView;
+    }
+    
+    return nil;
+}
 //- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;   // custom view for footer. will be adjusted to default or specified footer height
 //
 //// Accessories (disclosures).
@@ -132,7 +244,20 @@
 //// Moving/reordering
 //
 //// Allows customization of the target row for a particular row as it is being moved/reordered
-//- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath;
+
+// セクション変更時のセル設定
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    // セクションを変更してはいけない
+    if([self allowMoveSectionModify] == NO)
+    {
+        if([sourceIndexPath section] != [proposedDestinationIndexPath section])
+        {
+            return sourceIndexPath;
+        }
+    }
+    return proposedDestinationIndexPath;
+}
 //
 //// Indentation
 //
@@ -150,6 +275,103 @@
 //- (BOOL)tableView:(UITableView *)tableView shouldUpdateFocusInContext:(UITableViewFocusUpdateContext *)context NS_AVAILABLE_IOS(9_0);
 //- (void)tableView:(UITableView *)tableView didUpdateFocusInContext:(UITableViewFocusUpdateContext *)context withAnimationCoordinator:(UIFocusAnimationCoordinator *)coordinator NS_AVAILABLE_IOS(9_0);
 //- (nullable NSIndexPath *)indexPathForPreferredFocusedViewInTableView:(UITableView *)tableView NS_AVAILABLE_IOS(9_0);
+
+
+
+#pragma mark - method
+//
+// method
+//
+
+// タイトル取得
+- (NSString *)callTitle
+{
+    return @"";
+}
+
+// セルヘッダタイトル取得
+- (NSString *)callHeaderTitleWithSection:(NSInteger)section
+{
+    return @"";
+}
+
+// 表示(追加ボタン)
+- (BOOL)visibleAddButton
+{
+    return NO;
+}
+
+// 表示(編集ボタン)
+- (BOOL)visibleEditButton
+{
+    return NO;
+}
+
+// 編集時(移動可能)
+- (BOOL)canMoveEditing
+{
+    return YES;
+}
+
+// 編集時(移動の際にセクションを変えても良い)
+- (BOOL)allowMoveSectionModify
+{
+    return NO;
+}
+
+// ボタン押下時(追加)
+- (void)onTapBarButtonAdd
+{
+}
+
+// ボタン押下時(編集開始)
+- (void)onTapBarButtonEditStart
+{
+    [[self tableView] setEditing:YES animated:YES];
+    
+    // ボーボタン再描画
+    [self redrawBarButton];
+}
+
+// ボタン押下時(編集終了)
+- (void)onTapBarButtonEditEnd
+{
+    [[self tableView] setEditing:NO animated:YES];
+    
+    // ボーボタン再描画
+    [self redrawBarButton];
+}
+
+
+#pragma mark - private
+//
+// private
+//
+
+// バーボタン再描画
+- (void)redrawBarButton
+{
+    // バーボタン表示
+    NSMutableArray *barButtonItems = [@[] mutableCopy];
+    if([self visibleAddButton] == YES)
+    {
+        [barButtonItems addObject:[self addBarButton]];
+    }
+    if([self visibleEditButton] == YES)
+    {
+        if([[self tableView] isEditing] == YES)
+        {
+            // 編集中
+            [barButtonItems addObject:[self editEndBarButton]];
+        }
+        else
+        {
+            // 平常時
+            [barButtonItems addObject:[self editStartBarButton]];
+        }
+    }
+    [[self navigationItem] setRightBarButtonItems:barButtonItems];
+}
 
 
 @end

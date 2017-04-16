@@ -26,53 +26,62 @@
 //
 
 // 初期化
-- (id) initWithStyles:(NSDictionary *)dictionaryValue;
+- (id)initWithStyles:(NSDictionary *)dictionaryValue;
 
 // 初期化
-- (id) initWithStyleDictionary:(NSDictionary *)dictionaryValue __attribute__ ((deprecated));
+- (id)initWithStyleDictionary:(NSDictionary *)dictionaryValue __attribute__ ((deprecated));
 
 // 追加
-- (void) addStyleKey:(NSString *)keyValue value:(NSString *)dataValue;
+- (void)addStyleKey:(NSString *)keyValue value:(NSString *)dataValue;
 
 // 追加
-- (void) addStyles:(NSDictionary *)dictionaryValue;
+- (void)addStyles:(NSDictionary *)dictionaryValue;
 
 // 追加
-- (void) addStyleDictionary:(NSDictionary *)dictionaryValue __attribute__ ((deprecated));
+- (void)addStyleDictionary:(NSDictionary *)dictionaryValue __attribute__ ((deprecated));
 
 // 削除
-- (void) removeStyleKey:(NSString *)keyValue;
+- (void)removeStyleKey:(NSString *)keyValue;
 
 // 取得
-- (NSString *) callStyleKey:(NSString *)keyValue;
+- (NSString *)callStyleKey:(NSString *)keyValue;
 
 // 設定
-- (void) setStyleKey:(NSString *)keyValue value:(NSString *)dataValue;
+- (void)setStyleKey:(NSString *)keyValue value:(NSString *)dataValue;
 
 // 設定
-- (void) setStyleDictionary:(NSDictionary *)dictionaryValue __attribute__ ((deprecated));
+- (void)setStyleDictionary:(NSDictionary *)dictionaryValue __attribute__ ((deprecated));
 
 // 全取得
-- (NSMutableDictionary *) callAllStyles;
+- (NSMutableDictionary *)callAllStyles;
 
 // フォント取得
-- (UIFont *) callFont;
+- (UIFont *)callFont;
 
 // サイズ取得
-- (CGSize) callSize;
+- (CGSize)callSize;
+
+// サイズ設定
+- (void)setSize:(CGSize)size;
 
 // ポイント取得
-- (CGPoint) callPoint;
+- (CGPoint)callPoint;
+
+// ポイント設定
+- (void)setPoint:(CGPoint)point;
 
 // フレーム取得
-- (CGRect) callFrame;
+- (CGRect)callFrame;
+
+// フレーム設定
+- (void)setFrame:(CGRect)frame;
 
 // マージン取得(右)
-- (CGFloat) callMarginRight;
+- (CGFloat)callMarginRight;
 // マージン取得(下)
-- (CGFloat) callMarginBottom;
+- (CGFloat)callMarginBottom;
 
 // ボーダー幅取得
-- (CGFloat) callBorderWidth;
+- (CGFloat)callBorderWidth;
 
 @end

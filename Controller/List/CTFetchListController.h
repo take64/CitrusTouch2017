@@ -2,13 +2,15 @@
 //  CTFetchListController.h
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/03/28.
+//  Created by take64 on 2017/03/28.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
 #import "CTBaseListController.h"
 
-@interface CTFetchListController : CTBaseListController
+#import "CTTableCell.h"
+
+@interface CTFetchListController : CTBaseListController <NSFetchedResultsControllerDelegate>
 {
     // フェッチ
     NSFetchedResultsController *fetchedResultsController;
@@ -19,6 +21,13 @@
 //
 @property(nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 
+
+//
+// method
+//
+
+// セルデータ設定
+- (void)bindCell:(CTTableCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 //
 // singleton

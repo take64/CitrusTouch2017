@@ -2,7 +2,7 @@
 //  CTDrawerViewController.m
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/01/24.
+//  Created by take64 on 2017/01/24.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -89,9 +89,9 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         NSInteger row = [indexPath row];
         
         CTDrawerMenuItem *menuItem = [[[[self menuSections] objectAtIndex:section] menuItems] objectAtIndex:row];
-        [cell setBackgroundColor:[[[CitrusTouchApplication sharedApplication] callTheme] callDrawerCellBodyBackColor]];
+        [cell setBackgroundColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyBackColor]];
         [[cell textLabel] setText:[menuItem title]];
-        [[cell textLabel] setTextColor:[[[CitrusTouchApplication sharedApplication] callTheme] callDrawerCellBodyTextColor]];
+        [[cell textLabel] setTextColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyTextColor]];
         [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:16]];
     }
     return cell;
@@ -123,8 +123,8 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 //- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    [view setTintColor:[[[CitrusTouchApplication sharedApplication] callTheme] callDrawerCellHeadBackColor]];
-    [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[[CitrusTouchApplication sharedApplication] callTheme] callDrawerCellHeadTextColor]];
+    [view setTintColor:[[CitrusTouchApplication callTheme] callDrawerCellHeadBackColor]];
+    [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callDrawerCellHeadTextColor]];
 }
 //- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section;
 //- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath;
@@ -180,77 +180,41 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // init
 - (id)initWithController:(UIViewController *)controllerValue menuSections:(NSArray<CTDrawerMenuSection *> *)menuSectionList
 {
-//    self = [super initWithNibName:nil bundle:nil];
     self = [super initWithRootViewController:controllerValue];
     if(self)
     {
+        // part
+        UIBarButtonItem *barButtonItem;
+        UIButton *button;
+        
         // メニュー設定
         [self setMenuSections:menuSectionList];
         
         // 初期化
         [self setMainViewController:controllerValue];
-//        [self setMainNavigationController:[[UINavigationController alloc] initWithRootViewController:[self mainViewController]]];
+        
+//        // ナヴィゲーション
+//        [[self navigationBar] setBarTintColor:[[CitrusTouchApplication callTheme] callNavigationBarTintColor]];
+//        [[self navigationBar] setTitleTextAttributes:@{
+//                                                       NSForegroundColorAttributeName :[[CitrusTouchApplication callTheme] callNavigationBarTextColor]
+//                                                       }];
         
         // メニューボタン
-        [self setSlideMenuButton:[[UIBarButtonItem alloc] initWithTitle:@"MENU" style:UIBarButtonItemStylePlain target:self action:@selector(slideMenu)]];
+        button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 32, 32)];
+        [button setBackgroundImage:[[CitrusTouchApplication callTheme] callAppIconImage] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(slideMenu) forControlEvents:UIControlEventTouchUpInside];
+        barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+        [self setSlideMenuButton:barButtonItem];
         [[[self mainViewController] navigationItem] setLeftBarButtonItem:[self slideMenuButton]];
     }
     return self;
 }
-
-//// set color
-//- (void)setTintColor:(UIColor *)tintColorValue headColor:(UIColor *)headColorValue cellColor:(UIColor *)cellColorValue
-//{
-//    [self setTintColor:tintColorValue];
-//    [self setHeadColor:headColorValue];
-//    [self setCellColor:cellColorValue];
-//    
-//    [[self callMenuPanel] setTableViewBackgroundColor:[self callCellColor]];
-//    [[self callMenuPanel] setHeadBackgroundColor:[self callTintColor]];
-//}
-
-// setting head image
-- (void)setHeadImage:(UIImage *)imageValue
-{
-    [[self callMenuPanel] bindImage:imageValue];
-}
-
 
 
 #pragma mark - private
 //
 // private
 //
-
-//// tint color
-//- (UIColor *)callTintColor
-//{
-//    if([self tintColor] == nil)
-//    {
-//        [self setTintColor:[CTColor colorWithHEXString:@"333333"]];
-//    }
-//    return [self tintColor];
-//}
-//
-//// head color
-//- (UIColor *)callHeadColor
-//{
-//    if([self headColor] == nil)
-//    {
-//        [self setHeadColor:[CTColor colorWithHEXString:@"333333"]];
-//    }
-//    return [self headColor];
-//}
-//
-//// cell color
-//- (UIColor *)callCellColor
-//{
-//    if([self cellColor] == nil)
-//    {
-//        [self setCellColor:[CTColor colorWithHEXString:@"CCCCCC"]];
-//    }
-//    return [self cellColor];
-//}
 
 // スライド処理
 - (void)slideMenu

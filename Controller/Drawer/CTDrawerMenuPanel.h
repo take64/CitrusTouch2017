@@ -2,7 +2,7 @@
 //  CTDrawerMenuPanel.h
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/01/25.
+//  Created by take64 on 2017/01/25.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -32,8 +32,8 @@
 // method
 //
 
-// bind
-- (void)bindImage:(UIImage *)imageValue;
+//// bind
+//- (void)bindImage:(UIImage *)imageValue;
 
 //// setter head background-color
 //- (void)setHeadBackgroundColor:(UIColor *)colorValue;

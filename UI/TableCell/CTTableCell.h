@@ -2,7 +2,7 @@
 //  CTTableCell.h
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/03/28.
+//  Created by take64 on 2017/03/28.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -16,11 +16,11 @@ typedef enum {
 } CTTableCellPartPriority;
 
 @class CTLabel;
+@class CTControl;
 
 //
 //@class CTColor;
 
-//@class CTControl;
 
 @interface CTTableCell : UITableViewCell
 {
@@ -46,7 +46,14 @@ typedef enum {
     CTTableCellPartPriority contentPriority;
     CTTableCellPartPriority suffixPriority;
 
+    // レイアウト済み
+    BOOL layouted;
+    // サブクラスレイアウト済み
+    BOOL subLayouted;
     
+    // 背景ビュー
+    CTControl *bgView;
+
     
 //    // ActiveColor
 //    CTColor *activateColor;
@@ -54,11 +61,7 @@ typedef enum {
 //    CTColor *deactivateColor;
 //    
 //
-//    // レイアウト済み
-//    BOOL layout;
-//    // サブクラスレイアウト済み
-//    BOOL subLayout;
-//    
+//
 //    // レスポンダー
 //    UIResponder *responder;
 //    CTTableCell *prevCell;
@@ -93,12 +96,13 @@ typedef enum {
 @property (nonatomic, assign) CTTableCellPartPriority prefixPriority;
 @property (nonatomic, assign) CTTableCellPartPriority contentPriority;
 @property (nonatomic, assign) CTTableCellPartPriority suffixPriority;
+@property (nonatomic, assign, getter = isLayouted) BOOL layouted;
+@property (nonatomic, assign, getter = isSubLayouted) BOOL subLayouted;
+@property (nonatomic, retain) CTControl *bgView;
 
 
 //@property (nonatomic, retain) CTColor *activateColor;
 //@property (nonatomic, retain) CTColor *deactivateColor;
-//@property (nonatomic, getter = isLayout) BOOL layout;
-//@property (nonatomic, getter = isSubLayout) BOOL subLayout;
 //@property (nonatomic, retain) UIResponder *responder;
 //@property (nonatomic, retain) CTTableCell *prevCell;
 //@property (nonatomic, retain) CTTableCell *nextCell;

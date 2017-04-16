@@ -1,8 +1,8 @@
 //
 //  CTNVL.h
-//  HanayuAccountBookPod
+//  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/03/31.
+//  Created by take64 on 2017/03/31.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 

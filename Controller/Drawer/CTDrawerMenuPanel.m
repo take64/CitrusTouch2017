@@ -2,7 +2,7 @@
 //  CTDrawerMenuPanel.m
 //  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/01/25.
+//  Created by take64 on 2017/01/25.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
@@ -50,7 +50,7 @@
         // ヘッダビュー
         CTView *view;
         view = [[CTView alloc] initWithFrame:CGRectMake(0, 0, headWidth, headHeight)];
-        [[view callStyle] addStyleKey:@"background-color" value:[CTColor hexStringWithColor:[[[CitrusTouchApplication sharedApplication] callTheme] callDrawerPanelBackColor]]];
+        [[view callStyle] addStyleKey:@"background-color" value:[CTColor hexStringWithColor:[[CitrusTouchApplication callTheme] callDrawerPanelBackColor]]];
         [view setUserInteractionEnabled:YES];
         [self addSubview:view];
         [self setHeadView:view];
@@ -62,14 +62,14 @@
         [imageView setCenter:[view center]];
         [imageView setClipsToBounds:YES];
         [[imageView layer] setCornerRadius:8];
-        [imageView setImage:[[[CitrusTouchApplication sharedApplication] callTheme] callDrawerPanelIcon]];
+        [imageView setImage:[[CitrusTouchApplication callTheme] callDrawerPanelIconImage]];
         [view addSubview:imageView];
         [self setHeadImageView:imageView];
         
         // テーブルビュー
         UITableView *tableView;
         tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, panelWidth, panelWidth, (panelHeight - headHeight)) style:UITableViewStylePlain];
-        [tableView setBackgroundColor:[[[CitrusTouchApplication sharedApplication] callTheme] callDrawerPanelBackColor]];
+        [tableView setBackgroundColor:[[CitrusTouchApplication callTheme] callDrawerPanelBackColor]];
         [self addSubview:tableView];
         [self setMenuTableView:tableView];
     }

@@ -1,25 +1,32 @@
 //
 //  CitrusTouchApplication.h
-//  HanayuAccountBookPod
+//  CitrusTouch2017
 //
-//  Created by kouhei.takemoto on 2017/03/31.
+//  Created by take64 on 2017/03/31.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 #import "CitrusTouchTheme.h"
+#import "CitrusTouchCoreData.h"
 
 @interface CitrusTouchApplication : NSObject
 {
     // theme
     CTTheme *theme;
+    
+    // coredata
+    CTCoreDataManager *coreDataManager;
+    NSManagedObjectContext * coreDataContext;
 }
 
 //
 // property
 //
 @property (nonatomic, retain) CTTheme *theme;
+@property (nonatomic, retain) CTCoreDataManager *coreDataManager;
+@property (nonatomic, retain) NSManagedObjectContext * coreDataContext;
 
 
 //
@@ -27,7 +34,13 @@
 //
 
 // call theme
-- (CTTheme *)callTheme;
++ (CTTheme *)callTheme;
+
+// CoreData manager
++ (CTCoreDataManager *)callCoreDataManager;
+
+// CoreData context
++ (NSManagedObjectContext *)callCoreDataContext;
 
 // singleton
 + (instancetype)sharedApplication;
