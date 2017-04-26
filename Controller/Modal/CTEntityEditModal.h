@@ -13,16 +13,12 @@
     // entity
     NSManagedObject *entity;
     
-    // controller
-    CTBaseEditController *editController;
-    
 }
 
 //
 // property
 //
 @property (nonatomic, retain) NSManagedObject *entity;
-@property (nonatomic, retain) CTBaseEditController *editController;
 
 
 //

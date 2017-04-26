@@ -20,6 +20,7 @@
 @synthesize addBarButton;
 @synthesize editStartBarButton;
 @synthesize editEndBarButton;
+@synthesize selectBarButton;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -41,6 +42,9 @@
         // バーボタン(編集開始)
         barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"完了" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonEditEnd)];
         [self setEditEndBarButton:barButtonItem];
+        // バーボタン(選択)
+        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"選択" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonSelect)];
+        [self setSelectBarButton:barButtonItem];
     }
     return self;
 }
@@ -306,6 +310,12 @@
     return NO;
 }
 
+// 表示(選択ボタン)
+- (BOOL)visibleSelectButton
+{
+    return NO;
+}
+
 // 編集時(移動可能)
 - (BOOL)canMoveEditing
 {
@@ -341,6 +351,12 @@
     [self redrawBarButton];
 }
 
+// ボタン押下時(選択)
+- (void)onTapBarButtonSelect
+{
+    
+}
+
 
 #pragma mark - private
 //
@@ -368,6 +384,9 @@
             // 平常時
             [barButtonItems addObject:[self editStartBarButton]];
         }
+    }if([self visibleSelectButton] == YES)
+    {
+        [barButtonItems addObject:[self selectBarButton]];
     }
     [[self navigationItem] setRightBarButtonItems:barButtonItems];
 }

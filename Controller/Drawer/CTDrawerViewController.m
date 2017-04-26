@@ -11,6 +11,8 @@
 #import "CitrusTouchApplication.h"
 
 #import "CTColor.h"
+#import "CTBarButtonItem.h"
+#import "CTTableCellLabel.h"
 
 //static const CGFloat CTDrawerViewControllerMenuWidth = 256;
 static CGFloat CTDrawerViewControllerMenuWidth()
@@ -78,10 +80,16 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     static NSString *CellID = @"CellID";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellID];
+    CTTableCellLabel *cell = [tableView dequeueReusableCellWithIdentifier:CellID];
     if(cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
+        cell = [[CTTableCellLabel alloc] initWithPrefix:nil reuseIdentifier:CellID];
+        [cell setBackgroundColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyBackColor]];
+        [[[cell label] callStyle] addStyles:@{
+                                              @"font-size"  :@"14",
+                                              @"color"      :[CTColor hexStringWithColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyTextColor]],
+                                              @"margin"     :@"0 0 0 8",
+                                              }];
     }
     if(cell != nil)
     {
@@ -89,10 +97,10 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         NSInteger row = [indexPath row];
         
         CTDrawerMenuItem *menuItem = [[[[self menuSections] objectAtIndex:section] menuItems] objectAtIndex:row];
-        [cell setBackgroundColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyBackColor]];
-        [[cell textLabel] setText:[menuItem title]];
-        [[cell textLabel] setTextColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyTextColor]];
-        [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:16]];
+        [cell setContentText:[menuItem title]];
+//        [[cell textLabel] setText:[menuItem title]];
+//        [[cell textLabel] setTextColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyTextColor]];
+//        [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:16]];
     }
     return cell;
 }
@@ -101,10 +109,10 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     return [[self menuSections] count];
 }
-- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [[[self menuSections] objectAtIndex:section] title];
-}
+//- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    return [[[self menuSections] objectAtIndex:section] title];
+//}
 //- (nullable NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section;
 //- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath;
 //- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -121,22 +129,62 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 //
 
 //- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    [view setTintColor:[[CitrusTouchApplication callTheme] callDrawerCellHeadBackColor]];
-    [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callDrawerCellHeadTextColor]];
-}
+//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+//{
+//    [view setTintColor:[[CitrusTouchApplication callTheme] callDrawerCellHeadBackColor]];
+//    [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callDrawerCellHeadTextColor]];
+//}
 //- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section;
 //- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath;
 //- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section;
 //- (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section;
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section;
+// セルヘッダ高さ
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if([self tableView:tableView viewForHeaderInSection:section] == nil)
+    {
+        return 0;
+    }
+    
+    return CT8(3);
+}
 //- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath;
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section;
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section;
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section;
+// セルヘッダを返す
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    // head title
+    NSString *titleString = [self callHeaderTitleWithSection:section];
+    
+    // head title exist
+    if([titleString length] > 0)
+    {
+        // head id
+        NSString *HeadID = [CTTableHeaderFooterView reuseIdentifierWithSection:section];
+        
+        // dequeue
+        CTTableHeaderFooterView *headerFooterView = (CTTableHeaderFooterView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:HeadID];
+        
+        // generate
+        if(headerFooterView == nil)
+        {
+            headerFooterView = [[CTTableHeaderFooterView alloc] initWithReuseIdentifier:HeadID];
+        }
+        
+        // bind
+        if(headerFooterView != nil)
+        {
+            [headerFooterView bindTitle:titleString];
+        }
+        
+        return headerFooterView;
+    }
+    
+    return nil;
+}
 //- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;
 //- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath;
 //- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath;
@@ -184,7 +232,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     if(self)
     {
         // part
-        UIBarButtonItem *barButtonItem;
+        CTBarButtonItem *barButtonItem;
         UIButton *button;
         
         // メニュー設定
@@ -203,7 +251,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 32, 32)];
         [button setBackgroundImage:[[CitrusTouchApplication callTheme] callAppIconImage] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(slideMenu) forControlEvents:UIControlEventTouchUpInside];
-        barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+        barButtonItem = [[CTBarButtonItem alloc] initWithCustomView:button];
         [self setSlideMenuButton:barButtonItem];
         [[[self mainViewController] navigationItem] setLeftBarButtonItem:[self slideMenuButton]];
     }
@@ -332,6 +380,14 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         default:
             break;
     }
+}
+
+
+
+// セルヘッダタイトル取得
+- (NSString *)callHeaderTitleWithSection:(NSInteger)section
+{
+    return [[[self menuSections] objectAtIndex:section] title];
 }
 
 

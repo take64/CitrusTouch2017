@@ -93,6 +93,12 @@
 //
 
 // 初期化
+- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
+{
+    return [self initWithPrefix:nil suffix:nil reuseIdentifier:reuseIdentifier];
+}
+
+// 初期化
 - (id)initWithPrefix:(NSString *)prefixString suffix:(NSString *)suffixString reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithPrefix:prefixString suffix:suffixString reuseIdentifier:reuseIdentifier];
@@ -100,7 +106,7 @@
     {
         // テキストフィールド
         CTTableCellTextFieldInnerTextField *_textField = [[CTTableCellTextFieldInnerTextField alloc] initWithFrame:CGRectZero];
-        [_textField setFont:[UIFont systemFontOfSize:16.0]];
+        [_textField setFont:[UIFont systemFontOfSize:14.0]];
         [_textField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [_textField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
         [_textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];

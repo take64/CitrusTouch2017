@@ -262,6 +262,39 @@
     
 }
 
+// フィールド内容変更処理
+- (void)changeFieldWithIndexPath:(NSIndexPath *)indexPath cellClass:(Class)cellClass valueClass:(Class)valueClass
+{
+    if([[self tableView] cellForRowAtIndexPath:indexPath] != nil)
+    {
+        // CTTableCellTextField
+        if(cellClass == [CTTableCellTextField class])
+        {
+            // 入力値
+            NSString *stringValue = [(CTTableCellTextField *) [[self tableView] cellForRowAtIndexPath:indexPath] contentText];
+            
+            // default
+            id defaultValue = [NSNull null];
+            id settingValue = [NSNull null];
+            // convert class
+            if(valueClass == [NSString class])
+            {
+                defaultValue = @"";
+                settingValue = stringValue;
+            }
+            else if(valueClass == [NSNumber class])
+            {
+                defaultValue = @0;
+                settingValue = @([stringValue integerValue]);
+            }
+            settingValue = [CTEmptyVL compare:settingValue value1:settingValue value2:defaultValue];
+            
+            // 設定
+            [[self temporary] setObject:settingValue forKey:indexPath];
+        }
+    }
+}
+
 // 保存処理
 - (void)save
 {

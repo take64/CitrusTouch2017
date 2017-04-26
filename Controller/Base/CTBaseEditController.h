@@ -63,4 +63,13 @@
 // ボタン押下時(削除)
 - (void)onTapBarButtonRemove;
 
+// フィールド内容変更処理
+- (void)changeFieldWithIndexPath:(NSIndexPath *)indexPath cellClass:(Class)cellClass valueClass:(Class)valueClass;
+
+// 保存処理
+- (void)save;
+
+// 削除処理
+- (void)remove;
+
 @end

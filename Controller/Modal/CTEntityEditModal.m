@@ -18,7 +18,6 @@
 // synthesize
 //
 @synthesize entity;
-@synthesize editController;
 
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -38,6 +37,7 @@
 //
 // UITableViewDataSource
 //
+
 
 //
 //@required
@@ -192,11 +192,13 @@
     [self setTemporary:[NSMutableDictionary dictionary]];
     [self setRelations:[NSMutableDictionary dictionary]];
     
+    // データ設定
+    [self loadData];
+    
 }
 
-
-// フィールド内容変更時
-- (void)onChangeField
+// データ設定
+- (void)loadData
 {
     
 }
@@ -206,6 +208,10 @@
 {
     if([self entity] != nil)
     {
+        if([[self entity] respondsToSelector:@selector(setModified:)] == YES)
+        {
+            [[self entity] performSelector:@selector(setModified:) withObject:[NSDate date]];
+        }
         [[CitrusTouchApplication callCoreDataManager] saveComplete];
     }
     [self hide];

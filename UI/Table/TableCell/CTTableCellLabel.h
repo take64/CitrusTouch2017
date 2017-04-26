@@ -25,6 +25,9 @@
 //
 
 // 初期化
+- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+
+// 初期化
 - (id)initWithPrefix:(NSString *)prefixString reuseIdentifier:(NSString *)reuseIdentifier;
 
 // 初期化

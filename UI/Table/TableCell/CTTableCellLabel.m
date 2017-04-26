@@ -40,9 +40,19 @@
 // method
 //
 
+// 初期化
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [self initWithPrefix:nil reuseIdentifier:reuseIdentifier];
+    if(self)
+    {
+        
+    }
+    return self;
+}
 
 // 初期化
-- (id)initWithPrefix:(NSString *)prefixString reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithPrefix:(NSString *)prefixString reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [self initWithPrefix:prefixString content:nil suffix:nil reuseIdentifier:reuseIdentifier];
     if(self)
@@ -54,7 +64,7 @@
 
 // 初期化
 
-- (id)initWithPrefix:(NSString *)prefixString content:(NSString *)textString suffix:(NSString *)suffixString reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithPrefix:(NSString *)prefixString content:(NSString *)textString suffix:(NSString *)suffixString reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithPrefix:prefixString suffix:suffixString reuseIdentifier:reuseIdentifier];
     if(self)

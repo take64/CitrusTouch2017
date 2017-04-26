@@ -20,7 +20,7 @@
 //#define CTLog(...)
 //#endif
 
-
+typedef void (^CitrusTouchBlock)(void);
 typedef void (^CitrusTouchProgressBlock)(CTProgress *progress, NSError *error);
 typedef void (^CitrusTouchModalBlock)(NSObject *object);
 

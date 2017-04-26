@@ -1,27 +1,25 @@
 //
-//  CTBaseEditModal.m
+//  CTBaseSelectModal.m
 //  CitrusTouch2017
 //
-//  Created by take64 on 2017/04/09.
+//  Created by take64 on 2017/04/19.
 //  Copyright © 2017年 citrus.live. All rights reserved.
 //
 
-#import "CTBaseEditModal.h"
+#import "CTBaseSelectModal.h"
 
-#import "CTNavigationController.h"
-#import "CTBarButtonItem.h"
-
-@interface CTBaseEditModal ()
+@interface CTBaseSelectModal ()
 
 @end
 
-@implementation CTBaseEditModal
+@implementation CTBaseSelectModal
 
 //
 // synthesize
 //
 @synthesize _navigationController;
 @synthesize modalComplete;
+@synthesize selectedList;
 
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -49,22 +47,22 @@
 
 //- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
 //{
-//    
+//
 //}
 //
 //- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
 //{
-//    
+//
 //}
 //
 //- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id <UIViewControllerAnimatedTransitioning>)animator
 //{
-//    
+//
 //}
 //
 //- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id <UIViewControllerAnimatedTransitioning>)animator
 //{
-//    
+//
 //}
 
 - (nullable UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented presentingViewController:(nullable UIViewController *)presenting sourceViewController:(UIViewController *)source
@@ -85,17 +83,9 @@
 {
     if(parent != nil)
     {
-//        [present presentModalViewController:<#(nonnull UIViewController *)#> animated:<#(BOOL)#>]
-//        UIPresentationController *presentation = [[UIPresentationController alloc] initWithPresentedViewController:parent presentingViewController:[self callNavigationController]];
-        
         CTBasePresentationController *presentation NS_VALID_UNTIL_END_OF_SCOPE;
         presentation = [[CTBasePresentationController alloc] initWithPresentedViewController:[self callNavigationController] presentingViewController:parent];
-        
-//        [self setPresent]
-        
-//        [self setTransitioningDelegate:presentation];
         [[self callNavigationController] setTransitioningDelegate:presentation];
-        
         [parent presentViewController:[self callNavigationController] animated:YES completion:nil];
     }
 }
@@ -134,28 +124,29 @@
 }
 
 
+#pragma mark - extends
+//
+// extends
+//
+
+
+// 表示(選択ボタン)
+- (BOOL)visibleSelectButton
+{
+    return YES;
+}
+
+// 編集時(移動可能)
+- (BOOL)canMoveEditing
+{
+    return NO;
+}
+
+
 #pragma mark - singleton
 //
 // singleton
 //
-
-//// call presentation controller
-//- (CTBasePresentationController *)callPresentationController
-//{
-//    if([self _presentationController] == nil)
-//    {
-//        CTBasePresentationController *presentation = [[CTBasePresentationController alloc] initWithPresentedViewController:nil presentingViewController:[self callNavigationController]];
-//        [self set_presentationController:presentation];
-//        
-//        [[self _presentationController] ]
-//                                                  
-////        UIPopoverPresentationController *presentation = [self pre];
-//        
-//        
-////        UIPresentationController *presentation = [[UIPresentationController alloc] initWithPresentedViewController:<#(nonnull UIViewController *)#> presentingViewController:<#(nullable UIViewController *)#>]
-//    }
-//    return [self _presentationController];
-//}
 
 // call navigation controller
 - (CTNavigationController *)callNavigationController

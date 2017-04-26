@@ -15,6 +15,7 @@
     CTBarButtonItem *addBarButton;
     CTBarButtonItem *editStartBarButton;
     CTBarButtonItem *editEndBarButton;
+    CTBarButtonItem *selectBarButton;
 }
 
 //
@@ -23,6 +24,7 @@
 @property (nonatomic, retain) CTBarButtonItem *addBarButton;
 @property (nonatomic, retain) CTBarButtonItem *editStartBarButton;
 @property (nonatomic, retain) CTBarButtonItem *editEndBarButton;
+@property (nonatomic, retain) CTBarButtonItem *selectBarButton;
 
 //
 // method
@@ -40,6 +42,9 @@
 // 表示(編集ボタン)
 - (BOOL)visibleEditButton;
 
+// 表示(選択ボタン)
+- (BOOL)visibleSelectButton;
+
 // 編集時(移動可能)
 - (BOOL)canMoveEditing;
 
@@ -51,5 +56,8 @@
 
 // ボタン押下時(編集終了)
 - (void)onTapBarButtonEditEnd;
+
+// ボタン押下時(選択)
+- (void)onTapBarButtonSelect;
 
 @end

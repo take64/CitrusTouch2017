@@ -33,13 +33,18 @@ __attribute__((unused)) static NSString * CTStr(CGFloat floatValue)
 
 #import "CTView.h"
 
+#import "CTTextView.h"
+
+
 // overlay
 #import "CTOverlayProgressIndicator.h"
 
 // table cell
 #import "CTTableCell.h"
 #import "CTTableCellButton.h"
+#import "CTTableCellDatePicker.h"
 #import "CTTableCellLabel.h"
+#import "CTTableCellTextView.h"
 #import "CTTableCellTextField.h"
 #import "CTTableCellTextFieldInnerTextField.h"
 

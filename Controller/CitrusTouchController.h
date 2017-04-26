@@ -32,4 +32,7 @@
 #import "CTNavigationController.h"
 #import "CTBarButtonItem.h"
 
+// alert
+#import "CTAlert.h"
+
 #endif /* CitrusTouchController_h */

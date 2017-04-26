@@ -29,4 +29,10 @@
     return [NSString stringWithCString:md5cstring encoding:NSUTF8StringEncoding];
 }
 
+// NSStringに変換
++ (NSString *)stringFromDecimal:(NSDecimalNumber *)decimalValue
+{
+    return [decimalValue stringValue];
+}
+
 @end

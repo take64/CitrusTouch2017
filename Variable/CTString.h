@@ -27,4 +27,7 @@ __attribute__((unused)) static NSString * CTStringf(NSString *format, ...)
 // MD5ハッシュを取得する
 + (NSString *)md5FromString:(NSString *)stringValue;
 
+// NSStringに変換
++ (NSString *)stringFromDecimal:(NSDecimalNumber *)decimalValue;
+
 @end

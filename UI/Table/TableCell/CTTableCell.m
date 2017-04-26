@@ -49,7 +49,7 @@
         // プレフィックス
         label = [[CTLabel alloc] initWithText:prefixString];
         [[label callStyle] addStyles:@{
-                                       @"font-size"    :@"12",
+                                       @"font-size"    :@"14",
                                        @"color"        :@"333333",
                                        @"text-align"   :@"left",
                                        @"font-weight"  :@"bold",
@@ -60,7 +60,7 @@
         // サフィックス
         label = [[CTLabel alloc] initWithText:suffixString];
         [[label callStyle] addStyles:@{
-                                       @"font-size"    :@"12",
+                                       @"font-size"    :@"14",
                                        @"color"        :@"333333",
                                        @"text-align"   :@"center",
                                        }];

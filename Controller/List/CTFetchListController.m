@@ -44,7 +44,6 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-//    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     
     // フェッチ
     [[self callFetchedResultsController] setDelegate:nil];
