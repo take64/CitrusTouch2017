@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/04/22.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTTableCellDatePicker.h"
@@ -35,8 +35,10 @@
     self = [super initWithPrefix:prefixString suffix:suffixString reuseIdentifier:reuseIdentifier];
     if(self)
     {
+        CGFloat datePickerHeight = 216;
+        
         // ピッカー
-        [self setDatePicker:[[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, 320, 216)]];
+        [self setDatePicker:[[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, 320, datePickerHeight)]];
         [[self datePicker] addTarget:self action:@selector(onChangeDate:) forControlEvents:UIControlEventValueChanged];
         
         // フォーマッター
@@ -53,11 +55,11 @@
         {
             width = 1024;
         }
-        [self setInputPackingView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 216)]];
+        [self setInputPackingView:[[UIView alloc] initWithFrame:CGRectMake(0, 0, width, datePickerHeight)]];
         [[self inputPackingView] setBackgroundColor:[CTColor colorWithHEXString:@"999999"]];
         
         // ピッカーモード
-        [self chnagePickerMode:CTTableCellDatePickerModeNone];
+        [self changePickerMode:CTTableCellDatePickerModeNone];
         
         // 配置
         [[self textField] setInputView:[self inputPackingView]];
@@ -77,7 +79,7 @@
 }
 
 // 変更(ピッカーモード)
-- (void)chnagePickerMode:(CTTableCellDatePickerMode)_pickerModeValue
+- (void)changePickerMode:(CTTableCellDatePickerMode)_pickerModeValue
 {
     // 設定
     [self setPickerMode:_pickerModeValue];
@@ -108,7 +110,9 @@
     {
         // 位置変更
         [[self datePicker] setFrame:CGRectMake(0, 32, 320, 216)];
-        [[self datePicker] setCenter:[[self inputPackingView] center]];
+        CGRect rect = [[self datePicker] frame];
+        rect.origin.x = ([[self datePicker] center].x - (rect.size.width / 2));
+        [[self datePicker] setFrame:rect];
         
         // パッキングビュー
         [[self inputPackingView] setFrame:CGRectMake(0, 0, 320, 248)];

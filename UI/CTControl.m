@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 #import "CTControl.h"
 
@@ -53,6 +53,7 @@
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"height" options:NSKeyValueObservingOptionNew context:NULL];
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"top" options:NSKeyValueObservingOptionNew context:NULL];
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"left" options:NSKeyValueObservingOptionNew context:NULL];
+//        [[self text] addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
 }
@@ -96,6 +97,11 @@
         _frame.origin = _origin;
         [self setFrame:_frame];
     }
+//    // text 変更時
+//    else if([keyPath isEqualToString:@"text"] == YES)
+//    {
+//        [self setNeedsDisplay];
+//    }
 }
 
 // 描画

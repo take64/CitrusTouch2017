@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -63,21 +63,21 @@ typedef enum {
 //
 //
 //    // レスポンダー
-//    UIResponder *responder;
-//    CTTableCell *prevCell;
-//    CTTableCell *nextCell;
-//    
+//
 //    // セル
 //    NSIndexPath *prevIndexPath;
 //    NSIndexPath *nextIndexPath;
 //
-//    
+////    
 //    // 処理用ツールバー
 //    UIToolbar *toolbar;
+//    UISegmentedControl *prevNextSegmented;
+//    CTTableCell *prevCell;
+//    CTTableCell *nextCell;
+//    UIResponder *responder;
+
+
 //
-//    // 処理用ツールバー内前後ボタン
-//    UISegmentedControl *segmentedPrevNext;
-//    
 //
 //    // 背景View
 //    CTControl *bgView;
@@ -103,13 +103,11 @@ typedef enum {
 
 //@property (nonatomic, retain) CTColor *activateColor;
 //@property (nonatomic, retain) CTColor *deactivateColor;
-//@property (nonatomic, retain) UIResponder *responder;
-//@property (nonatomic, retain) CTTableCell *prevCell;
-//@property (nonatomic, retain) CTTableCell *nextCell;
+
 //@property (nonatomic, retain) NSIndexPath *prevIndexPath;
 //@property (nonatomic, retain) NSIndexPath *nextIndexPath;
-//@property (nonatomic, retain) UIToolbar *toolbar;
-//@property (nonatomic, retain) UISegmentedControl *segmentedPrevNext;
+
+
 //@property (nonatomic, retain) CTControl *bgView;
 
 //

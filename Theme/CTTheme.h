@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -29,7 +29,9 @@
     
     // table setting
     UIColor *tableCellHeadBackColor;    // table cell head back color
-    UIColor *tableCellHeadTextColor;    // table cell head back color
+    UIColor *tableCellHeadTextColor;    // table cell head text color
+    UIColor *tableCellFootBackColor;    // table cell foot back color
+    UIColor *tableCellFootTextColor;    // table cell foot text color
     
 }
 
@@ -52,7 +54,9 @@
 @property (nonatomic, retain) UIColor *drawerCellBodyTextColor;   // cell body text color
 // table setting
 @property (nonatomic, retain) UIColor *tableCellHeadBackColor;    // table cell head back color
-@property (nonatomic, retain) UIColor *tableCellHeadTextColor;    // table cell head back color
+@property (nonatomic, retain) UIColor *tableCellHeadTextColor;    // table cell head text color
+@property (nonatomic, retain) UIColor *tableCellFootBackColor;    // table cell foot back color
+@property (nonatomic, retain) UIColor *tableCellFootTextColor;    // table cell foot text color
 
 
 // application
@@ -75,6 +79,8 @@
 
 // table setting
 - (UIColor *)callTableCellHeadBackColor;    // table cell head back color
-- (UIColor *)callTableCellHeadTextColor;    // table cell head back color
+- (UIColor *)callTableCellHeadTextColor;    // table cell head text color
+- (UIColor *)callTableCellFootBackColor;    // table cell head back color
+- (UIColor *)callTableCellFootTextColor;    // table cell head text color
 
 @end

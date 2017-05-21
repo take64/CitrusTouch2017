@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTTableCell.h"
@@ -14,12 +14,24 @@
 {
     // テキストフィールド
     CTTableCellTextFieldInnerTextField *textField;
+    
+    // 処理用ツールバー
+    UIToolbar *toolbar;
+    UISegmentedControl *prevNextSegmented;
+    CTTableCellTextField *prevCell;
+    CTTableCellTextField *nextCell;
+    UIResponder *responder;
 }
 
 //
 // property
 //
 @property (nonatomic, retain) CTTableCellTextFieldInnerTextField *textField;
+@property (nonatomic, retain) UIToolbar *toolbar;
+@property (nonatomic, retain) UISegmentedControl *prevNextSegmented;
+@property (nonatomic, retain) CTTableCellTextField *prevCell;
+@property (nonatomic, retain) CTTableCellTextField *nextCell;
+@property (nonatomic, retain) UIResponder *responder;
 
 
 
@@ -38,5 +50,18 @@
 
 // テキスト設定
 - (void)setContentText:(NSString *)stringValue;
+
+// レスポンダ設定(前へ)
+- (void)setPrevCellResponder:(CTTableCell *)tableCell;
+
+// レスポンダ設定(次へ)
+- (void)setNextCellResponder:(CTTableCell *)tableCell;
+
+//// レスポンダ設定(前へ)
+//- (void)setPrevCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath;
+//
+//// レスポンダ設定(次へ)
+//- (void)setNextCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath;
+
 
 @end

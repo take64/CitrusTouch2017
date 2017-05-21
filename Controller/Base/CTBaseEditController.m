@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTBaseEditController.h"
@@ -37,9 +37,6 @@
         // part
         CTBarButtonItem *barButtonItem;
         
-        // タイトル
-        [self setTitle:[self callTitle]];
-        
         // テーブル線タイプ
         [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
         
@@ -52,7 +49,7 @@
         // バーボタン(保存)
         barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonSave)];
         [self setSaveBarButton:barButtonItem];
-        // バーボタン(編集開始)
+        // バーボタン(削除)
         barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"削除" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonRemove)];
         [self setRemoveBarButton:barButtonItem];
     }
@@ -66,8 +63,14 @@
     // バーボタン再描画
     [self redrawBarButton];
     
-    [[self tableView] reloadData];
+//    [[self tableView] reloadData];
 }
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//    
+//    [[self tableView] reloadData];
+//}
 
 
 #pragma mark - UITableViewDataSource
@@ -90,11 +93,11 @@
     return [[self rowOfSection] count];
 }
 
-// ヘッダタイトル
-- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [[self headTitles] objectAtIndex:section];
-}
+//// ヘッダタイトル
+//- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    return [[self headTitles] objectAtIndex:section];
+//}
 
 //- (nullable NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section;
 //
@@ -146,8 +149,64 @@
 //// Variable height support
 //
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section;
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
+//// セルヘッダ高さ
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+////    NSNumber *height = [[self heightHeaders] objectForKey:@(section)];
+////    if(height != nil)
+////    {
+////        return [height floatValue];
+////    }
+////    return 0;
+////    UIView *headerView = [CTTableViewTrait callTableHeaderViewWithController:self tableView:tableView section:section];
+//    UIView *headerView = [self tableView:tableView viewForHeaderInSection:section];
+//    if(headerView == nil)
+//    {
+//        return 0;
+//    }
+////    CTLog(@"section = %ld, height = %f", (long)section, [headerView frame].size.height);
+//    return [headerView frame].size.height;
+//}
+//// セルフッタ高さ
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+////    NSNumber *height = [[self heightFooters] objectForKey:@(section)];
+////    if(height != nil)
+////    {
+////        CTLog(@"aa section = %ld, height = %f", section, [height floatValue]);
+////        return [height floatValue]+24;
+////    }
+////    CTLog(@"aa section = %ld, height = %f", section, [height floatValue]);
+////    return 0;
+////    UIView *footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[CTTableHeaderFooterView reuseIdentifierWithSection:section]];
+////    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+////    if(footerView != nil)
+////    {
+////        return [footerView frame].size.height;
+////    }
+////    return 0;
+//    
+//    UIView *footerView = [self tableView:tableView viewForFooterInSection:section];
+////    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+//    if(footerView == nil)
+//    {
+//        return 0;
+//    }
+//    return [footerView frame].size.height;
+//    
+////    [self table]
+//    
+//////    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+////    UIView *footerView = [self tableView:tableView viewForFooterInSection:section];
+////    if(footerView == nil)
+////    {
+////        CTLog(@"section = %ld, height = %f", (long)section, .0f);
+////        return 0;
+////    }
+////    CTLog(@"section = %ld, height = %f", (long)section, [footerView frame].size.height);
+////    return [footerView frame].size.height;
+////    return 40;
+//}
 //
 //// Use the estimatedHeight methods to quickly calcuate guessed values which will allow for fast load times of the table.
 //// If these methods are implemented, the above -tableView:heightForXXX calls will be deferred until views are ready to be displayed, so more expensive logic can be placed there.
@@ -157,7 +216,50 @@
 //
 //// Section header & footer information. Views are preferred over title should you decide to provide both
 //
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section;   // custom view for header. will be adjusted to default or specified header height
+//// セルヘッダを返す
+//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    // head title
+//    NSString *titleString = [self callHeaderTitleWithSection:section];
+//    
+//    // head title exist
+//    if([titleString length] > 0)
+//    {
+//        // head id
+//        NSString *HeadID = [CTTableHeaderFooterView reuseHeaderIdentifierWithSection:section];
+//        
+//        // dequeue
+//        CTTableHeaderFooterView *headerFooterView = (CTTableHeaderFooterView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:HeadID];
+//        
+//        // generate
+//        if(headerFooterView == nil)
+//        {
+//            headerFooterView = [[CTTableHeaderFooterView alloc] initWithReuseIdentifier:HeadID];
+//        }
+//        
+//        // bind
+//        if(headerFooterView != nil)
+//        {
+//            [headerFooterView bindTitle:titleString];
+//        }
+//        
+//        return headerFooterView;
+//    }
+//    
+//    return nil;
+//}
+//// セルヘッダを返す
+//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UIView *headerView = [CTTableViewTrait callTableHeaderViewWithController:self tableView:tableView section:section];
+//    return headerView;
+//}
+//// セルフッタを返す
+//- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+//    return footerView;
+//}
 //- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;   // custom view for footer. will be adjusted to default or specified footer height
 //
 //// Accessories (disclosures).
@@ -220,16 +322,50 @@
 
 
 
+#pragma mark - CTTableViewDelagate
+//
+// CTTableViewDelagate
+//
+
+// セルヘッダタイトル取得
+- (NSString *)callHeaderTitleWithSection:(NSInteger)section
+{
+    if([[self headTitles] count] >= (section + 1))
+    {
+        return [[self headTitles] objectAtIndex:section];
+    }
+    return @"";
+}
+
+// セルフッタタイトル取得
+- (NSString *)callFooterTitleWithSection:(NSInteger)section
+{
+    return @"";
+}
+
+// セルヘッダビュー取得
+- (UIView *)callHeaderViewWithSection:(NSInteger)section
+{
+    return nil;
+}
+
+// セルフッタビュー取得
+- (UIView *)callFooterViewWithSection:(NSInteger)section
+{
+    return nil;
+}
+
+// テーブルモード
+- (CTTableViewMode)callTableViewMode
+{
+    return CTTableViewModeEdit;
+}
+
+
 #pragma mark - method
 //
 // method
 //
-
-// タイトル取得
-- (NSString *)callTitle
-{
-    return @"";
-}
 
 // 表示(保存ボタン)
 - (BOOL)visibleSaveButton
@@ -272,6 +408,31 @@
         {
             // 入力値
             NSString *stringValue = [(CTTableCellTextField *) [[self tableView] cellForRowAtIndexPath:indexPath] contentText];
+            
+            // default
+            id defaultValue = [NSNull null];
+            id settingValue = [NSNull null];
+            // convert class
+            if(valueClass == [NSString class])
+            {
+                defaultValue = @"";
+                settingValue = stringValue;
+            }
+            else if(valueClass == [NSNumber class])
+            {
+                defaultValue = @0;
+                settingValue = @([stringValue integerValue]);
+            }
+            settingValue = [CTEmptyVL compare:settingValue value1:settingValue value2:defaultValue];
+            
+            // 設定
+            [[self temporary] setObject:settingValue forKey:indexPath];
+        }
+        // CTTableCellTextView
+        else if(cellClass == [CTTableCellTextView class])
+        {
+            // 入力値
+            NSString *stringValue = [(CTTableCellTextView *) [[self tableView] cellForRowAtIndexPath:indexPath] contentText];
             
             // default
             id defaultValue = [NSNull null];

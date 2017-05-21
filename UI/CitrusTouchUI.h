@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #ifndef CitrusTouchUI_h
@@ -30,6 +30,7 @@ __attribute__((unused)) static NSString * CTStr(CGFloat floatValue)
 #import "CTControl.h"
 #import "CTLabel.h"
 #import "CTButton.h"
+#import "CTImageButton.h"
 
 #import "CTView.h"
 
@@ -42,6 +43,7 @@ __attribute__((unused)) static NSString * CTStr(CGFloat floatValue)
 // table cell
 #import "CTTableCell.h"
 #import "CTTableCellButton.h"
+#import "CTTableCellButtonTextField.h"
 #import "CTTableCellDatePicker.h"
 #import "CTTableCellLabel.h"
 #import "CTTableCellTextView.h"
@@ -50,5 +52,11 @@ __attribute__((unused)) static NSString * CTStr(CGFloat floatValue)
 
 // table header footer
 #import "CTTableHeaderFooterView.h"
+#import "CTTableHeaderView.h"
+#import "CTTableFooterView.h"
+
+// mark
+#import "CTMark.h"
+
 
 #endif /* CitrusTouchUI_h */

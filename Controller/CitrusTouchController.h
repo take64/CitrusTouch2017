@@ -3,13 +3,20 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #ifndef CitrusTouchController_h
 #define CitrusTouchController_h
 
+// delegate
+#import "CTTableViewDelegate.h"
+
+// trait
+#import "CTTableViewTrait.h"
+
 // base
+#import "CTBaseTableController.h"
 #import "CTBaseEditController.h"
 #import "CTBaseListController.h"
 
@@ -31,6 +38,11 @@
 // navigation controller
 #import "CTNavigationController.h"
 #import "CTBarButtonItem.h"
+
+// modal
+#import "CTEntityEditModal.h"
+#import "CTKeySelectModal.h"
+#import "CTEntitySelectModal.h"
 
 // alert
 #import "CTAlert.h"

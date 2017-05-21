@@ -3,14 +3,14 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "CTBaseTableController.h"
 
 @class CTBarButtonItem;
 
-@interface CTBaseEditController : UITableViewController
+@interface CTBaseEditController : CTBaseTableController
 {
     // bar button
     CTBarButtonItem *saveBarButton;
@@ -47,9 +47,6 @@
 //
 // method
 //
-
-// タイトル取得
-- (NSString *)callTitle;
 
 // 表示(保存ボタン)
 - (BOOL)visibleSaveButton;

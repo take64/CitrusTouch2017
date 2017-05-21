@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTBaseListController.h"
@@ -30,9 +30,6 @@
         // part
         CTBarButtonItem *barButtonItem;
         
-        // タイトル
-        [self setTitle:[self callTitle]];
-        
         // バーボタン(追加)
         barButtonItem = [[CTBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onTapBarButtonAdd)];
         [self setAddBarButton:barButtonItem];
@@ -56,7 +53,7 @@
     // バーボタン再描画
     [self redrawBarButton];
     
-    [[self tableView] reloadData];
+//    [[self tableView] reloadData];
 }
 
 
@@ -156,17 +153,25 @@
 //// Variable height support
 //
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
-// セルヘッダ高さ
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if([self tableView:tableView viewForHeaderInSection:section] == nil)
-    {
-        return 0;
-    }
-
-    return CT8(3);
-}
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
+//// セルヘッダ高さ
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    if([self tableView:tableView viewForHeaderInSection:section] == nil)
+//    {
+//        return 0;
+//    }
+//
+//    return CT8(3);
+//}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+//    if(footerView == nil)
+//    {
+//        return 0;
+//    }
+//    return [footerView frame].size.height;
+//}
 //
 //// Use the estimatedHeight methods to quickly calcuate guessed values which will allow for fast load times of the table.
 //// If these methods are implemented, the above -tableView:heightForXXX calls will be deferred until views are ready to be displayed, so more expensive logic can be placed there.
@@ -179,36 +184,13 @@
 // セルヘッダを返す
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    // head title
-    NSString *titleString = [self callHeaderTitleWithSection:section];
-    
-    // head title exist
-    if([titleString length] > 0)
-    {
-        // head id
-        NSString *HeadID = [CTTableHeaderFooterView reuseIdentifierWithSection:section];
-        
-        // dequeue
-        CTTableHeaderFooterView *headerFooterView = (CTTableHeaderFooterView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:HeadID];
-        
-        // generate
-        if(headerFooterView == nil)
-        {
-            headerFooterView = [[CTTableHeaderFooterView alloc] initWithReuseIdentifier:HeadID];
-        }
-        
-        // bind
-        if(headerFooterView != nil)
-        {
-            [headerFooterView bindTitle:titleString];
-        }
-        
-        return headerFooterView;
-    }
-    
-    return nil;
+    return [CTTableViewTrait callTableHeaderViewWithController:self tableView:tableView section:section];
 }
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;   // custom view for footer. will be adjusted to default or specified footer height
+// セルフッタを返す
+- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+}
 //
 //// Accessories (disclosures).
 //
@@ -280,23 +262,40 @@
 //- (nullable NSIndexPath *)indexPathForPreferredFocusedViewInTableView:(UITableView *)tableView NS_AVAILABLE_IOS(9_0);
 
 
-
-#pragma mark - method
+#pragma mark - CTTableViewDelegate
 //
-// method
+// CTTableViewDelegate
 //
-
-// タイトル取得
-- (NSString *)callTitle
-{
-    return @"";
-}
 
 // セルヘッダタイトル取得
 - (NSString *)callHeaderTitleWithSection:(NSInteger)section
 {
     return @"";
 }
+
+// セルフッタタイトル取得
+- (NSString *)callFooterTitleWithSection:(NSInteger)section
+{
+    return @"";
+}
+
+// セルヘッダビュー取得
+- (UIView *)callHeaderViewWithSection:(NSInteger)section
+{
+    return nil;
+}
+
+// セルフッタビュー取得
+- (UIView *)callFooterViewWithSection:(NSInteger)section
+{
+    return nil;
+}
+
+
+#pragma mark - method
+//
+// method
+//
 
 // 表示(追加ボタン)
 - (BOOL)visibleAddButton

@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -21,5 +21,12 @@
 
 // NSDecimalNumberからフォーマット文字列を生成
 + (NSString *)formatWithDecimal:(NSDecimalNumber *)decimalValue prefix:(NSString *)prefixString suffix:(NSString *)suffixString scale:(int)scale;
+
+
+// doubleからの変換
++ (NSDecimalNumber *)decimalWithDouble:(double)doubleValue;
+
+// NSStringからの変換
++ (NSDecimalNumber *)decimalWithString:(NSString *)stringValue;
 
 @end

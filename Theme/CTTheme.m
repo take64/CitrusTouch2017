@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTTheme.h"
@@ -31,6 +31,8 @@
 
 @synthesize tableCellHeadBackColor;
 @synthesize tableCellHeadTextColor;
+@synthesize tableCellFootBackColor;
+@synthesize tableCellFootTextColor;
 
 
 #pragma mark - method
@@ -59,5 +61,7 @@
 // table setting
 - (UIColor *)callTableCellHeadBackColor { return [CTNVL compare:[self tableCellHeadBackColor]   replace:[UIColor whiteColor]]; }
 - (UIColor *)callTableCellHeadTextColor { return [CTNVL compare:[self tableCellHeadTextColor]   replace:[UIColor whiteColor]]; }
+- (UIColor *)callTableCellFootBackColor { return [CTNVL compare:[self tableCellFootBackColor]   replace:[UIColor whiteColor]]; }
+- (UIColor *)callTableCellFootTextColor { return [CTNVL compare:[self tableCellFootTextColor]   replace:[UIColor whiteColor]]; }
 
 @end

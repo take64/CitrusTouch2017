@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTTableCell.h"
@@ -75,23 +75,6 @@
         [self setBgView:[[CTControl alloc] initWithFrame:[self frame]]];
         [[self bgView] setUserInteractionEnabled:NO];
         [self addSubview:[self bgView]];
-
-        
-//        // ツールバー
-//        [self setToolbar:[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)]];
-//        [[self toolbar] setBarStyle:UIBarStyleBlackOpaque];
-//        [[self toolbar] setTranslucent:YES];
-//        [self setSegmentedPrevNext:[[UISegmentedControl alloc] initWithItems:@[@"前へ", @"次へ"]]];
-//        //        [[self segmentedPrevNext] setSegmentedControlStyle:UISegmentedControlStyleBar];
-//        [[self segmentedPrevNext] addTarget:self action:@selector(onChangeSegmentedPrevNext:) forControlEvents:UIControlEventValueChanged];
-//        [[self segmentedPrevNext] setTintColor:[UIColor whiteColor]];
-//        UIBarButtonItem *barButtonPrevNext = [[UIBarButtonItem alloc] initWithCustomView:[self segmentedPrevNext]];
-//        
-//        // ツールバーパーツ
-//        UIBarButtonItem *barSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-//        UIBarButtonItem *barButtonDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onTapBarButtonDone)];
-//        [barButtonDone setTintColor:[UIColor whiteColor]];
-//        [[self toolbar] setItems:[NSArray arrayWithObjects:barButtonPrevNext, barSpacer, barButtonDone, nil]];
         
     }
     return self;
@@ -206,7 +189,7 @@
 //@synthesize prevIndexPath;
 //@synthesize nextIndexPath;
 //@synthesize toolbar;
-//@synthesize segmentedPrevNext;
+//@synthesize prevNextSegmented;
 //@synthesize bgView;
 
 //
@@ -385,11 +368,11 @@
 //        [self setToolbar:[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)]];
 //        [[self toolbar] setBarStyle:UIBarStyleBlackOpaque];
 //        [[self toolbar] setTranslucent:YES];
-//        [self setSegmentedPrevNext:[[UISegmentedControl alloc] initWithItems:@[@"前へ", @"次へ"]]];
-////        [[self segmentedPrevNext] setSegmentedControlStyle:UISegmentedControlStyleBar];
-//        [[self segmentedPrevNext] addTarget:self action:@selector(onChangeSegmentedPrevNext:) forControlEvents:UIControlEventValueChanged];
-//        [[self segmentedPrevNext] setTintColor:[UIColor whiteColor]];
-//        UIBarButtonItem *barButtonPrevNext = [[UIBarButtonItem alloc] initWithCustomView:[self segmentedPrevNext]];
+//        [self setPrevNextSegmented:[[UISegmentedControl alloc] initWithItems:@[@"前へ", @"次へ"]]];
+////        [[self prevNextSegmented] setSegmentedControlStyle:UISegmentedControlStyleBar];
+//        [[self prevNextSegmented] addTarget:self action:@selector(onChangePrevNextSegmented:) forControlEvents:UIControlEventValueChanged];
+//        [[self prevNextSegmented] setTintColor:[UIColor whiteColor]];
+//        UIBarButtonItem *barButtonPrevNext = [[UIBarButtonItem alloc] initWithCustomView:[self prevNextSegmented]];
 //        
 //        // ツールバーパーツ
 //        UIBarButtonItem *barSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -402,19 +385,19 @@
 //}
 //
 //// アクティブ
-//- (void) activate
+//- (void)activate
 //{
 //    [self setBackgroundColor:[self activateColor]];
 //}
 //
 //// デアクティブ
-//- (void) deactivate
+//- (void)deactivate
 //{
 //    [self setBackgroundColor:[self deactivateColor]];
 //}
-//
+////
 //// ボタン押下時(キーボードDONE)
-//- (void) onTapBarButtonDone
+//- (void)onTapBarButtonDone
 //{
 //    if([[self responder] canResignFirstResponder] == YES)
 //    {
@@ -423,7 +406,7 @@
 //}
 //
 //// 値変更時(前後ボタン)
-//- (void) onChangeSegmentedPrevNext:(UISegmentedControl *)segmentedControl
+//- (void)onChangePrevNextSegmented:(UISegmentedControl *)segmentedControl
 //{
 //    switch ([segmentedControl selectedSegmentIndex])
 //    {
@@ -447,33 +430,33 @@
 //    }
 //    
 //    // リフレッシュ
-//    [self refreshSegmentedPrevNext];
+//    [self refreshprevNextSegmented];
 //}
 //
 //// リフレッシュ(前後ボタン)
-//- (void) refreshSegmentedPrevNext
+//- (void)refreshprevNextSegmented
 //{
 //    // 前後ボタン
 //    if([self prevCell] != nil && [[self prevCell] responder] != nil)
 //    {
-//        [[self segmentedPrevNext] setEnabled:YES forSegmentAtIndex:0];
+//        [[self prevNextSegmented] setEnabled:YES forSegmentAtIndex:0];
 //    }
 //    else
 //    {
-//        [[self segmentedPrevNext] setEnabled:NO forSegmentAtIndex:0];
+//        [[self prevNextSegmented] setEnabled:NO forSegmentAtIndex:0];
 //    }
 //    if([self nextCell] != nil && [[self nextCell] responder] != nil)
 //    {
-//        [[self segmentedPrevNext] setEnabled:YES forSegmentAtIndex:1];
+//        [[self prevNextSegmented] setEnabled:YES forSegmentAtIndex:1];
 //    }
 //    else
 //    {
-//        [[self segmentedPrevNext] setEnabled:NO forSegmentAtIndex:1];
+//        [[self prevNextSegmented] setEnabled:NO forSegmentAtIndex:1];
 //    }
-//    [[self segmentedPrevNext] setMomentary:YES];
+//    [[self prevNextSegmented] setMomentary:YES];
 //}
 //// レスポンダ設定(前へ)
-//- (void) setPrevCellResponder:(CTTableCell *)tableCell
+//- (void)setPrevCellResponder:(CTTableCell *)tableCell
 //{
 //    if([tableCell isKindOfClass:[CTTableCellTextField class]] == YES
 //       || [tableCell isKindOfClass:[CTTableCellDatePicker class]] == YES
@@ -486,11 +469,11 @@
 //        [self setPrevCell:tableCell];
 //        
 //        // リフレッシュ
-//        [self refreshSegmentedPrevNext];
+//        [self refreshprevNextSegmented];
 //    }
 //}
 //// レスポンダ設定(次へ)
-//- (void) setNextCellResponder:(CTTableCell *)tableCell
+//- (void)setNextCellResponder:(CTTableCell *)tableCell
 //{
 //    if([tableCell isKindOfClass:[CTTableCellTextField class]] == YES
 //       || [tableCell isKindOfClass:[CTTableCellDatePicker class]] == YES
@@ -500,11 +483,11 @@
 //        [self setNextCell:tableCell];
 //        
 //        // リフレッシュ
-//        [self refreshSegmentedPrevNext];
+//        [self refreshprevNextSegmented];
 //    }
 //}
 //// レスポンダ設定(前へ)
-//- (void) setPrevCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath
+//- (void)setPrevCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath
 //{
 //    // IndexPath
 //    [self setPrevIndexPath:indexPath];
@@ -513,7 +496,7 @@
 //    [self setPrevCellResponder:tableCell];
 //}
 //// レスポンダ設定(次へ)
-//- (void) setNextCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath
+//- (void)setNextCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath
 //{
 //    // IndexPath
 //    [self setNextIndexPath:indexPath];
@@ -523,7 +506,7 @@
 //}
 //
 //// 優先度設定
-//- (void) setPriorityPrefix:(CTTableCellPartPriority)prefix content:(CTTableCellPartPriority)content suffix:(CTTableCellPartPriority)suffix
+//- (void)setPriorityPrefix:(CTTableCellPartPriority)prefix content:(CTTableCellPartPriority)content suffix:(CTTableCellPartPriority)suffix
 //{
 //    [self setPrefixPriority:prefix];
 //    [self setContentPriority:content];

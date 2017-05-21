@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTTableCellTextField.h"
@@ -14,6 +14,11 @@
 // synthesize
 //
 @synthesize textField;
+@synthesize toolbar;
+@synthesize prevNextSegmented;
+@synthesize prevCell;
+@synthesize nextCell;
+@synthesize responder;
 
 
 - (void)layoutSubviews
@@ -84,6 +89,19 @@
 //    return YES;
 //}
 
+// 編集開始時
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    [self refreshPrevNextSegmented];
+    return YES;
+}
+
+// Return押し時
+- (BOOL)textFieldShouldReturn:(UITextField *)_textField
+{
+    [_textField resignFirstResponder];
+    return YES;
+}
 
 
 
@@ -118,17 +136,34 @@
                                          UIViewAutoresizingFlexibleWidth	|
                                          UIViewAutoresizingFlexibleHeight)];
         [_textField setDelegate:self];
-//        [self setResponder:[self textField]];
         [[self contentView] addSubview:_textField];
         [self setTextField:_textField];
-        
+        [self setResponder:[self textField]];
         
         // セル選択
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         
         
+        
+        
+        // ツールバー
+        [self setToolbar:[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)]];
+        [[self toolbar] setBarStyle:UIBarStyleBlackOpaque];
+        [[self toolbar] setTranslucent:YES];
+        [self setPrevNextSegmented:[[UISegmentedControl alloc] initWithItems:@[@"前へ", @"次へ"]]];
+        //        [[self prevNextSegmented] setSegmentedControlStyle:UISegmentedControlStyleBar];
+        [[self prevNextSegmented] addTarget:self action:@selector(onChangePrevNextSegmented:) forControlEvents:UIControlEventValueChanged];
+        [[self prevNextSegmented] setTintColor:[UIColor whiteColor]];
+        UIBarButtonItem *barButtonPrevNext = [[UIBarButtonItem alloc] initWithCustomView:[self prevNextSegmented]];
+        
+        // ツールバーパーツ
+        UIBarButtonItem *barSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        UIBarButtonItem *barButtonDone = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onTapBarButtonDone)];
+        [barButtonDone setTintColor:[UIColor whiteColor]];
+        [[self toolbar] setItems:[NSArray arrayWithObjects:barButtonPrevNext, barSpacer, barButtonDone, nil]];
+        
         // ツールバー(配置)
-//        [[self textField] setInputAccessoryView:[self toolbar]];
+        [[self textField] setInputAccessoryView:[self toolbar]];
     }
     return self;
 }
@@ -159,5 +194,119 @@
 {
     [[self textField] setText:stringValue];
 }
+
+// ボタン押下時(キーボードDONE)
+- (void)onTapBarButtonDone
+{
+    if([[self responder] canResignFirstResponder] == YES)
+    {
+        [[self responder] resignFirstResponder];
+    }
+}
+
+// 値変更時(前後ボタン)
+- (void)onChangePrevNextSegmented:(UISegmentedControl *)segmentedControl
+{
+    switch ([segmentedControl selectedSegmentIndex])
+    {
+        case 0: // 前へ
+            if([self prevCell] != nil && [[self prevCell] responder] != nil && [[[self prevCell] responder] canBecomeFirstResponder] == YES)
+            {
+                //                UITableView *tableView = (UITableView *)[self superview];
+                //                [tableView scrollToRowAtIndexPath:[self prevIndexPath] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+                [[[self prevCell] responder] becomeFirstResponder];
+            }
+            break;
+        case 1: // 次へ
+            if([self nextCell] != nil && [[self nextCell] responder] != nil && [[[self nextCell] responder] canBecomeFirstResponder] == YES)
+            {
+                //                UITableView *tableView = (UITableView *)[self superview];
+                //                [tableView scrollToRowAtIndexPath:[self nextIndexPath] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+                [[[self nextCell] responder] becomeFirstResponder];
+            }
+        default:
+            break;
+    }
+    
+    // リフレッシュ
+    [self refreshPrevNextSegmented];
+}
+
+// リフレッシュ(前後ボタン)
+- (void)refreshPrevNextSegmented
+{
+    // 前後ボタン
+    if([self prevCell] != nil && [[self prevCell] responder] != nil)
+    {
+        [[self prevNextSegmented] setEnabled:YES forSegmentAtIndex:0];
+    }
+    else
+    {
+        [[self prevNextSegmented] setEnabled:NO forSegmentAtIndex:0];
+    }
+    if([self nextCell] != nil && [[self nextCell] responder] != nil)
+    {
+        [[self prevNextSegmented] setEnabled:YES forSegmentAtIndex:1];
+    }
+    else
+    {
+        [[self prevNextSegmented] setEnabled:NO forSegmentAtIndex:1];
+    }
+    [[self prevNextSegmented] setMomentary:YES];
+}
+
+// レスポンダ設定(前へ)
+- (void)setPrevCellResponder:(CTTableCellTextField *)tableCell
+{
+    if([tableCell isKindOfClass:[CTTableCellTextField class]] == YES
+       || [tableCell isKindOfClass:[CTTableCellDatePicker class]] == YES
+       || [tableCell isKindOfClass:[CTTableCellTextView class]] == YES)
+    {
+        // 後ポインタの設定
+        [tableCell setNextCellResponder:self];
+        
+        // 前ポインタの設定
+        [self setPrevCell:tableCell];
+        
+        // リフレッシュ
+        [self refreshPrevNextSegmented];
+    }
+}
+
+// レスポンダ設定(次へ)
+- (void)setNextCellResponder:(CTTableCellTextField *)tableCell
+{
+    if([tableCell isKindOfClass:[CTTableCellTextField class]] == YES
+       || [tableCell isKindOfClass:[CTTableCellDatePicker class]] == YES
+       || [tableCell isKindOfClass:[CTTableCellTextView class]] == YES)
+    {
+        // 後ポインタの設定
+        [self setNextCell:tableCell];
+        
+        // リフレッシュ
+        [self refreshPrevNextSegmented];
+    }
+}
+
+//// レスポンダ設定(前へ)
+//- (void)setPrevCellResponder:(CTTableCellTextField *)tableCell indexPath:(NSIndexPath *)indexPath
+//{
+//    // IndexPath
+//    [self setPrevIndexPath:indexPath];
+//    
+//    // レスポンダ
+//    [self setPrevCellResponder:tableCell];
+//}
+//
+//// レスポンダ設定(次へ)
+//- (void)setNextCellResponder:(CTTableCellTextField *)tableCell indexPath:(NSIndexPath *)indexPath
+//{
+//    // IndexPath
+//    [self setNextIndexPath:indexPath];
+//    
+//    // レスポンダ
+//    [self setNextCellResponder:tableCell];
+//}
+
 
 @end

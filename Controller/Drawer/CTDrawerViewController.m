@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/01/24.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTDrawerViewController.h"
@@ -156,36 +156,13 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // セルヘッダを返す
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    // head title
-    NSString *titleString = [self callHeaderTitleWithSection:section];
-    
-    // head title exist
-    if([titleString length] > 0)
-    {
-        // head id
-        NSString *HeadID = [CTTableHeaderFooterView reuseIdentifierWithSection:section];
-        
-        // dequeue
-        CTTableHeaderFooterView *headerFooterView = (CTTableHeaderFooterView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:HeadID];
-        
-        // generate
-        if(headerFooterView == nil)
-        {
-            headerFooterView = [[CTTableHeaderFooterView alloc] initWithReuseIdentifier:HeadID];
-        }
-        
-        // bind
-        if(headerFooterView != nil)
-        {
-            [headerFooterView bindTitle:titleString];
-        }
-        
-        return headerFooterView;
-    }
-    
-    return nil;
+    return [CTTableViewTrait callTableHeaderViewWithController:self tableView:tableView section:section];
 }
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;
+// セルフッタを返す
+- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+}
 //- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath;
 //- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath;
 //- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -218,6 +195,36 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 //- (void)tableView:(UITableView *)tableView didUpdateFocusInContext:(UITableViewFocusUpdateContext *)context withAnimationCoordinator:(UIFocusAnimationCoordinator *)coordinator;
 //- (nullable NSIndexPath *)indexPathForPreferredFocusedViewInTableView:(UITableView *)tableView;
 
+
+
+#pragma mark - CTTableViewDelegate
+//
+// CTTableViewDelegate
+//
+
+// セルヘッダタイトル取得
+- (NSString *)callHeaderTitleWithSection:(NSInteger)section
+{
+    return [[[self menuSections] objectAtIndex:section] title];
+}
+
+// セルフッタタイトル取得
+- (NSString *)callFooterTitleWithSection:(NSInteger)section
+{
+    return @"";
+}
+
+// セルヘッダビュー取得
+- (UIView *)callHeaderViewWithSection:(NSInteger)section
+{
+    return nil;
+}
+
+// セルフッタビュー取得
+- (UIView *)callFooterViewWithSection:(NSInteger)section
+{
+    return nil;
+}
 
 
 #pragma mark - method
@@ -257,6 +264,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     }
     return self;
 }
+
 
 
 #pragma mark - private
@@ -341,16 +349,6 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     // メニュースライド
     [self slideMenu];
-//    
-//    if([[self mainNavigationController] topViewController] != viewController)
-//    {
-//        [[[[self mainNavigationController] topViewController] view] removeFromSuperview];
-//        [[self mainNavigationController] setViewControllers:@[ viewController ] animated:NO];
-//        
-//        // スライドボタンの移動
-//        [[[[self mainNavigationController] topViewController] navigationItem] setLeftBarButtonItem:[self slideMenuButton]];
-//        [self setMenuVisible:NO];
-//    }
     
     if([self topViewController] != viewController)
     {
@@ -384,11 +382,6 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 
 
 
-// セルヘッダタイトル取得
-- (NSString *)callHeaderTitleWithSection:(NSInteger)section
-{
-    return [[[self menuSections] objectAtIndex:section] title];
-}
 
 
 

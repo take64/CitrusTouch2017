@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -21,5 +21,9 @@
 
 // CTColor(UIColor) から 16進数文字列を取得
 + (NSString *)hexStringWithColor:(UIColor *)colorValue;
+
+
+// table background color
++ (UIColor *)colorTableBackground;
 
 @end

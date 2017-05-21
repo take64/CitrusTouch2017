@@ -3,13 +3,13 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "CTBaseTableController.h"
 #import <CoreData/CoreData.h>
 
-@interface CTBaseListController : UITableViewController <NSFetchedResultsControllerDelegate>
+@interface CTBaseListController : CTBaseTableController <NSFetchedResultsControllerDelegate>
 {
     // bar button
     CTBarButtonItem *addBarButton;
@@ -29,9 +29,6 @@
 //
 // method
 //
-
-// タイトル取得
-- (NSString *)callTitle;
 
 // セルヘッダタイトル取得
 - (NSString *)callHeaderTitleWithSection:(NSInteger)section;

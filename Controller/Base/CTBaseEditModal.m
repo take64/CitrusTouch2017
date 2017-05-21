@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTBaseEditModal.h"
@@ -138,24 +138,6 @@
 //
 // singleton
 //
-
-//// call presentation controller
-//- (CTBasePresentationController *)callPresentationController
-//{
-//    if([self _presentationController] == nil)
-//    {
-//        CTBasePresentationController *presentation = [[CTBasePresentationController alloc] initWithPresentedViewController:nil presentingViewController:[self callNavigationController]];
-//        [self set_presentationController:presentation];
-//        
-//        [[self _presentationController] ]
-//                                                  
-////        UIPopoverPresentationController *presentation = [self pre];
-//        
-//        
-////        UIPresentationController *presentation = [[UIPresentationController alloc] initWithPresentedViewController:<#(nonnull UIViewController *)#> presentingViewController:<#(nullable UIViewController *)#>]
-//    }
-//    return [self _presentationController];
-//}
 
 // call navigation controller
 - (CTNavigationController *)callNavigationController

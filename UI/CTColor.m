@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTColor.h"
@@ -157,5 +157,10 @@
     return colorString;
 }
 
+// table background color
++ (UIColor *)colorTableBackground
+{
+    return [CTColor colorWithHEXString:@"EBE9F0"];
+}
 
 @end

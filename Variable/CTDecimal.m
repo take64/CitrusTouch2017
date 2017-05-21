@@ -3,7 +3,7 @@
 //  CitrusTouch2017
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Copyright © 2017年 citrus.tk. All rights reserved.
 //
 
 #import "CTDecimal.h"
@@ -70,6 +70,28 @@
     [numberFormat setMinimumFractionDigits:scale];
     
     return [numberFormat stringForObjectValue:decimalValue];
+}
+
+// doubleからの変換
++ (NSDecimalNumber *)decimalWithDouble:(double)doubleValue
+{
+    return [NSDecimalNumber decimalNumberWithDecimal:[[NSNumber numberWithDouble:doubleValue] decimalValue]];
+}
+
+// NSStringからの変換
++ (NSDecimalNumber *)decimalWithString:(NSString *)stringValue
+{
+    NSDecimalNumber *decimalValue = [NSDecimalNumber zero];
+    @try
+    {
+        decimalValue = [NSDecimalNumber decimalNumberWithString:stringValue];
+    }
+    @catch (NSException *exception)
+    {
+        decimalValue = [self decimalWithDouble:[stringValue doubleValue]];
+    }
+    @finally {}
+    return decimalValue;
 }
 
 @end
