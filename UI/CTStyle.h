@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, CTStyleVerticalAlignment) {
+    CTStyleVerticalAlignmentTop,
+    CTStyleVerticalAlignmentMiddle,
+    CTStyleVerticalAlignmentBottom,
+};
+
 @interface CTStyle : NSObject <NSCopying>
 {
     // スタイル

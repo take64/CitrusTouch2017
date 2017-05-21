@@ -416,6 +416,7 @@
             CGContextSetShadowWithColor(context, CGSizeMake(_textShadowLeft, _textShadowTop), _textShadowShading, [_textShadowColor CGColor]);
         }
         
+        
         // 文字色
         NSString *_colorString = [stylesheet callStyleKey:@"color"];
         UIColor *_ctcolor;
@@ -428,43 +429,14 @@
             _ctcolor = [CTColor colorWithHEXString:@"FFFFFF"];
         }
         [attributes addEntriesFromDictionary:@{NSForegroundColorAttributeName:_ctcolor}];
-        //        CGColorRef _colorref = [_ctcolor CGColor];
-        //        const CGFloat *_colors = CGColorGetComponents(_colorref);
-        //        CGContextSetRGBFillColor(context, _colors[0], _colors[1], _colors[2], _colors[3]);
+        
         
         // ラインブレイク
         NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
         NSLineBreakMode lineBreakMode = 0;
         if(_lineBreak != nil)
         {
-            if([_lineBreak rangeOfString:@"truncating-middle"].location != NSNotFound)
-            {
-                lineBreakMode |= NSLineBreakByTruncatingMiddle;
-            }
-            if([_lineBreak isEqualToString:@"word-wrapping"] == YES)
-            {
-                lineBreakMode = NSLineBreakByWordWrapping;// Wrap at word boundaries, default
-            }
-            else if([_lineBreak isEqualToString:@"char-wrapping"] == YES)
-            {
-                lineBreakMode = NSLineBreakByCharWrapping; // Wrap at character boundaries
-            }
-            else if([_lineBreak isEqualToString:@"clipping"] == YES)
-            {
-                lineBreakMode = NSLineBreakByClipping; // Simply clip
-            }
-            else if([_lineBreak isEqualToString:@"truncating-head"] == YES)
-            {
-                lineBreakMode = NSLineBreakByTruncatingHead; // Truncate at head of line: "...wxyz"
-            }
-            else if([_lineBreak isEqualToString:@"truncating-tail"] == YES)
-            {
-                lineBreakMode = NSLineBreakByTruncatingTail; // Truncate at head of line: "...wxyz"
-            }
-            else if([_lineBreak isEqualToString:@"truncating-middle"] == YES)
-            {
-                lineBreakMode = NSLineBreakByTruncatingMiddle;  // Truncate middle of line:  "ab...yz"
-            }
+            lineBreakMode = [self convertLineBreakMode:_lineBreak];
         }
         [paragraph setLineBreakMode:lineBreakMode];
         
@@ -511,37 +483,106 @@
         
         // 文字寄せ
         CGRect titleFrame = CGRectMake(0, 0, (fontBounds.width), (fontBounds.height));
+        
+        // text-align
         NSString *_textAlignString = [stylesheet callStyleKey:@"text-align"];
         NSTextAlignment _textAlignment;
-        if(_textAlignString == nil)
+        if(_textAlignString == nil && [_textAlignString isEqualToString:@"center"] == YES)
         {
-            _textAlignString = @"center";
-        }
-        if([_textAlignString isEqualToString:@"center"] == YES)
-        {
-            titleFrame.origin = CGPointMake((paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x,
-                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
             _textAlignment = NSTextAlignmentCenter;
         }
         else if([_textAlignString isEqualToString:@"left"] == YES)
         {
-            titleFrame.origin = CGPointMake(paddedContentRect.origin.x,
-                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
             _textAlignment = NSTextAlignmentLeft;
         }
         else if([_textAlignString isEqualToString:@"right"] == YES)
         {
-            titleFrame.origin = CGPointMake((paddedContentRect.origin.x + paddedContentRect.size.width) - fontBounds.width,
-                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
             _textAlignment = NSTextAlignmentRight;
         }
         // AnalyzeのLogic error対策
         else
         {
-            titleFrame.origin = CGPointMake((paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x,
-                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
             _textAlignment = NSTextAlignmentCenter;
         }
+        
+        // vertical-align
+        NSString *_verticalAlignString = [stylesheet callStyleKey:@"vertical-align"];
+        CTStyleVerticalAlignment _verticalAlignment;
+        if(_verticalAlignString == nil && [_verticalAlignString isEqualToString:@"middle"] == YES)
+        {
+            _verticalAlignment = CTStyleVerticalAlignmentMiddle;
+        }
+        else if([_verticalAlignString isEqualToString:@"top"] == YES)
+        {
+            _verticalAlignment = CTStyleVerticalAlignmentTop;
+        }
+        else if([_verticalAlignString isEqualToString:@"bottom"] == YES)
+        {
+            _verticalAlignment = CTStyleVerticalAlignmentBottom;
+        }
+        // AnalyzeのLogic error対策
+        else
+        {
+            _verticalAlignment = CTStyleVerticalAlignmentMiddle;
+        }
+        
+        // 横位置
+        CGFloat titleFrameX = 0;
+        if(_textAlignment == NSTextAlignmentCenter)
+        {
+            titleFrameX = (paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x;
+        }
+        else if(_textAlignment == NSTextAlignmentLeft)
+        {
+            titleFrameX = paddedContentRect.origin.x;
+        }
+        else if(_textAlignment == NSTextAlignmentRight)
+        {
+            titleFrameX = (paddedContentRect.origin.x + paddedContentRect.size.width) - fontBounds.width;
+        }
+        
+        // 縦位置
+        CGFloat titleFrameY = 0;
+        if(_verticalAlignment == CTStyleVerticalAlignmentTop)
+        {
+            titleFrameY = paddedContentRect.origin.y;
+        }
+        else if(_verticalAlignment == CTStyleVerticalAlignmentMiddle)
+        {
+            titleFrameY = (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y;
+        }
+        else if(_verticalAlignment == CTStyleVerticalAlignmentBottom)
+        {
+            titleFrameY = (paddedContentRect.size.height - fontBounds.height) + paddedContentRect.origin.y;
+        }
+        
+        titleFrame.origin = CGPointMake(titleFrameX, titleFrameY);
+        
+//        if([_textAlignString isEqualToString:@"center"] == YES)
+//        {
+//            titleFrame.origin = CGPointMake((paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x,
+//                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
+//            _textAlignment = NSTextAlignmentCenter;
+//        }
+//        else if([_textAlignString isEqualToString:@"left"] == YES)
+//        {
+//            titleFrame.origin = CGPointMake(paddedContentRect.origin.x,
+//                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
+//            _textAlignment = NSTextAlignmentLeft;
+//        }
+//        else if([_textAlignString isEqualToString:@"right"] == YES)
+//        {
+//            titleFrame.origin = CGPointMake((paddedContentRect.origin.x + paddedContentRect.size.width) - fontBounds.width,
+//                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
+//            _textAlignment = NSTextAlignmentRight;
+//        }
+//        // AnalyzeのLogic error対策
+//        else
+//        {
+//            titleFrame.origin = CGPointMake((paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x,
+//                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
+//            _textAlignment = NSTextAlignmentCenter;
+//        }
         
         [paragraph setAlignment:_textAlignment];
         
@@ -738,6 +779,78 @@
     CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius[2] + offset);
     CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius[3] + offset);
     CGContextClosePath(context);
+}
+
+// line-break の変換
+- (NSLineBreakMode)convertLineBreakMode:(NSString *)lineBreakString
+{
+    NSLineBreakMode lineBreakMode = 0;
+    
+    if([lineBreakString rangeOfString:@"truncating-middle"].location != NSNotFound)
+    {
+        lineBreakMode |= NSLineBreakByTruncatingMiddle;
+    }
+    if([lineBreakString isEqualToString:@"word-wrapping"] == YES)
+    {
+        lineBreakMode = NSLineBreakByWordWrapping;// Wrap at word boundaries, default
+    }
+    else if([lineBreakString isEqualToString:@"char-wrapping"] == YES)
+    {
+        lineBreakMode = NSLineBreakByCharWrapping; // Wrap at character boundaries
+    }
+    else if([lineBreakString isEqualToString:@"clipping"] == YES)
+    {
+        lineBreakMode = NSLineBreakByClipping; // Simply clip
+    }
+    else if([lineBreakString isEqualToString:@"truncating-head"] == YES)
+    {
+        lineBreakMode = NSLineBreakByTruncatingHead; // Truncate at head of line: "...wxyz"
+    }
+    else if([lineBreakString isEqualToString:@"truncating-tail"] == YES)
+    {
+        lineBreakMode = NSLineBreakByTruncatingTail; // Truncate at head of line: "...wxyz"
+    }
+    else if([lineBreakString isEqualToString:@"truncating-middle"] == YES)
+    {
+        lineBreakMode = NSLineBreakByTruncatingMiddle;  // Truncate middle of line:  "ab...yz"
+    }
+    
+    return lineBreakMode;
+}
+
+
+
+// 高さ計算
+- (CGFloat)calcHeight
+{
+    CTStyle *stylesheet = [self callStyle];
+    CGFloat width = [stylesheet callSize].width;
+    CGFloat height = 0;
+    
+    // 文字列要素
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    // パラグラフ
+    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+    [attributes addEntriesFromDictionary:@{NSParagraphStyleAttributeName:paragraph}];
+    
+    // ラインブレイク
+    NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
+    NSLineBreakMode lineBreakMode = 0;
+    if(_lineBreak != nil)
+    {
+        lineBreakMode = [self convertLineBreakMode:_lineBreak];
+    }
+    [paragraph setLineBreakMode:lineBreakMode];
+    
+    
+    // フォント計算
+    UIFont *font = [stylesheet callFont];
+    [attributes addEntriesFromDictionary:@{NSFontAttributeName:font}];
+    CGSize fontBounds = [[self text] boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine) attributes:attributes context:nil].size;
+    
+    height = fontBounds.height;
+    
+    return height;
 }
 
 @end

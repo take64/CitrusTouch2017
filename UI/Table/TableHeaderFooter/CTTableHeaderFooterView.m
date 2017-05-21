@@ -29,11 +29,11 @@
         // label
         _label = [[CTLabel alloc] initWithText:@""];
         [[_label callStyle] addStyles:@{
-                                        @"height"       :@"18",
-                                        @"font-size"    :@"14",
-                                        @"text-align"   :@"left",
-//                                        @"color"        :[CTColor hexStringWithColor:[[CitrusTouchApplication callTheme] callTableCellHeadTextColor]],
-                                        @"padding"       :@"2 8"
+                                        @"width"            :@"320",
+                                        @"font-size"        :@"14",
+                                        @"text-align"       :@"left",
+                                        @"vertical-align"   :@"top",
+                                        @"padding"          :@"2 8"
                                         }];
         [self setLabel:_label];
         
@@ -72,7 +72,9 @@
 
     // サイズ調整
     CGRect rect = [self frame];
-    rect.size.height = [[self label] frame].origin.y + [[self label] frame].size.height + CT8(1);
+    rect.size.height = [[self label] frame].origin.y
+                     + [[self label] calcHeight]
+                     + [self margin];
     [self setFrame:rect];
     [[self contentView] setFrame:rect];
 }

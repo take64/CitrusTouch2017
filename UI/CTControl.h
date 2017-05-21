@@ -71,4 +71,8 @@ typedef NS_OPTIONS(NSUInteger, CTControlState) {
 - (void)setStyleHighlighted:(CTStyle *)styleValue;
 - (void)setStyleDisabled:(CTStyle *)styleValue;
 
+
+// 高さ計算
+- (CGFloat)calcHeight;
+
 @end

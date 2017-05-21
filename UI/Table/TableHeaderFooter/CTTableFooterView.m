@@ -22,22 +22,6 @@
                                               @"color"              :[CTColor hexStringWithColor:[[CitrusTouchApplication callTheme] callTableCellFootTextColor]],
                                               @"background-color"   :[CTColor hexStringWithColor:[[CitrusTouchApplication callTheme] callTableCellFootBackColor]]
                                               }];
-        
-//        // parts
-//        CTLabel *_label;
-//        
-//        // label
-//        _label = [[CTLabel alloc] initWithText:@""];
-//        [[_label callStyle] addStyles:@{
-//                                        @"text-align"   :@"left",
-//                                        @"color"        :[CTColor hexStringWithColor:[[CitrusTouchApplication callTheme] callTableCellFootTextColor]],
-//                                        @"margin"       :@"4 8"
-//                                        }];
-//        [self setLabel:_label];
-        
-        
-//        // theme
-//        [[self contentView] setBackgroundColor:[[CitrusTouchApplication callTheme] callTableCellFootBackColor]];
     }
     return self;
 }
