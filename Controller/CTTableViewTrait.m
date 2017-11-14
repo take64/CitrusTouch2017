@@ -1,6 +1,6 @@
 //
 //  CTTableViewTrait.m
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2017/05/03.
 //  Copyright © 2017年 citrus.tk. All rights reserved.
@@ -41,7 +41,6 @@
         {
             headerFooterView = [[CTTableHeaderView alloc] initWithReuseIdentifier:queueID];
             [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
-            CTLog(@"header generate section = %ld, height = %@", (long)section, NSStringFromCGSize(headerFooterView.frame.size));
         }
     }
     
@@ -95,7 +94,6 @@
         {
             headerFooterView = [[CTTableFooterView alloc] initWithReuseIdentifier:queueID];
             [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
-            CTLog(@"footer generate section = %ld, height = %@", (long)section, NSStringFromCGSize(headerFooterView.frame.size));
         }
     }
     

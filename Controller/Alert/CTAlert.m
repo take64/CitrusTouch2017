@@ -1,6 +1,6 @@
 //
 //  CTAlert.m
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2017/04/22.
 //  Copyright © 2017年 citrus.tk. All rights reserved.
@@ -16,17 +16,14 @@
 
 
 // OKアラート取得
-+ (CTAlert *)callOkWithTitle:(NSString *)title messages:(id)messages
++ (CTAlert *)callOkAlertWithTitle:(NSString *)title messages:(id)messages handler:(void (^)(UIAlertAction *action))handler
 {
-    static CTAlert *singleton = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        singleton = [CTAlert alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
-        [singleton addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    });
+    // alert
+    CTAlert *alert = [CTAlert alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:handler]];
     
     // title
-    [singleton setTitle:title];
+    [alert setTitle:title];
     // message
     NSString *messageString = @"";
     if([messages isKindOfClass:[NSArray class]] == YES)
@@ -37,17 +34,42 @@
     {
         messageString = (NSString *)messages;
     }
-    [singleton setMessage:messageString];
+    [alert setMessage:messageString];
     
-    return singleton;
+    return alert;
 }
 
 // OKアラート表示
-+ (void)okWithTitle:(NSString *)title messages:(id)messages parent:(UIViewController *)parentController
++ (void)okAlertWithTitle:(NSString *)title messages:(id)messages parent:(UIViewController *)parentController handler:(void (^)(UIAlertAction *action))handler
 {
-    CTAlert *alert = [CTAlert callOkWithTitle:title messages:messages];
+    CTAlert *alert = [CTAlert callOkAlertWithTitle:title messages:messages handler:handler];
     [parentController presentViewController:alert animated:YES completion:nil];
 }
 
+// アクションシート取得
++ (CTAlert *)callActionSheetWithTitle:(NSString *)title messages:(id)messages actions:(NSArray<UIAlertAction *> *)actions
+{
+    CTAlert *alert = [CTAlert alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    for(UIAlertAction *action in actions)
+    {
+        [alert addAction:action];
+    }
+    
+    // title
+    [alert setTitle:title];
+    // message
+    NSString *messageString = @"";
+    if([messages isKindOfClass:[NSArray class]] == YES)
+    {
+        messageString = [(NSArray *)messages componentsJoinedByString:@"\n"];
+    }
+    else if([messages isKindOfClass:[NSString class]] == YES)
+    {
+        messageString = (NSString *)messages;
+    }
+    [alert setMessage:messageString];
+    
+    return alert;
+}
 
 @end

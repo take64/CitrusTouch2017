@@ -1,6 +1,6 @@
 //
 //  CTEntityEditModal.h
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2017/04/09.
 //  Copyright © 2017年 citrus.tk. All rights reserved.
@@ -27,5 +27,8 @@
 
 // データ読み込み
 - (void)loadEntity:(NSManagedObject *)entityValue;
+
+// データクリアー
+- (void)clearData;
 
 @end

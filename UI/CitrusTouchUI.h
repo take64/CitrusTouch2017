@@ -1,6 +1,6 @@
 //
 //  CitrusTouchUI.h
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2017/03/28.
 //  Copyright © 2017年 citrus.tk. All rights reserved.
@@ -10,13 +10,13 @@
 #define CitrusTouchUI_h
 
 
-__attribute__((unused)) static CGFloat CT8(CGFloat hex)
+__attribute__((unused)) static CGFloat CT8(CGFloat oct)
 {
-    return hex * 8;
+    return oct * 8;
 }
-__attribute__((unused)) static NSString * CT8Str(CGFloat hex)
+__attribute__((unused)) static NSString * CT8Str(CGFloat oct)
 {
-    return [@(CT8(hex)) stringValue];
+    return [@(CT8(oct)) stringValue];
 }
 __attribute__((unused)) static NSString * CTStr(CGFloat floatValue)
 {

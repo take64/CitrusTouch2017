@@ -1,6 +1,6 @@
 //
 //  CTTheme.h
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2017/03/27.
 //  Copyright © 2017年 citrus.tk. All rights reserved.
@@ -33,6 +33,9 @@
     UIColor *tableCellFootBackColor;    // table cell foot back color
     UIColor *tableCellFootTextColor;    // table cell foot text color
     
+    // color theme
+    UIColor *themeColor0;               // theme color 0
+    
 }
 
 //
@@ -57,11 +60,11 @@
 @property (nonatomic, retain) UIColor *tableCellHeadTextColor;    // table cell head text color
 @property (nonatomic, retain) UIColor *tableCellFootBackColor;    // table cell foot back color
 @property (nonatomic, retain) UIColor *tableCellFootTextColor;    // table cell foot text color
+@property (nonatomic, retain) UIColor *themeColor0;               // theme color 0
 
 
 // application
 - (UIImage *)callAppIconImage;              // icon image
-
 
 // navigation color
 - (UIColor *)callNavigationBarTintColor;    // tint color
@@ -76,11 +79,14 @@
 - (UIColor *)callDrawerCellBodyBackColor;   // cell body back color
 - (UIColor *)callDrawerCellBodyTextColor;   // cell body text color
 
-
 // table setting
 - (UIColor *)callTableCellHeadBackColor;    // table cell head back color
 - (UIColor *)callTableCellHeadTextColor;    // table cell head text color
 - (UIColor *)callTableCellFootBackColor;    // table cell head back color
 - (UIColor *)callTableCellFootTextColor;    // table cell head text color
+
+// theme color
+- (UIColor *)callThemeColor0;               // theme color 0
+
 
 @end

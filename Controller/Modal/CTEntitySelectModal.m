@@ -1,6 +1,6 @@
 //
 //  CTEntitySelectModal.m
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2017/04/28.
 //  Copyright © 2017年 citrus.tk. All rights reserved.
@@ -278,9 +278,9 @@
 
 
 
-#pragma mark - extends
+#pragma mark - CTTableViewDelegate
 //
-// extends
+// CTTableViewDelegate
 //
 
 // セルヘッダタイトル取得

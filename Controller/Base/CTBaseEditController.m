@@ -1,6 +1,6 @@
 //
 //  CTBaseEditController.m
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2017/04/09.
 //  Copyright © 2017年 citrus.tk. All rights reserved.
@@ -423,6 +423,11 @@
                 defaultValue = @0;
                 settingValue = @([stringValue integerValue]);
             }
+            else if(valueClass == [NSDecimalNumber class])
+            {
+                defaultValue = [NSDecimalNumber zero];
+                settingValue = [CTDecimal decimalWithString:stringValue];
+            }
             settingValue = [CTEmptyVL compare:settingValue value1:settingValue value2:defaultValue];
             
             // 設定
@@ -489,10 +494,17 @@
     [[self navigationItem] setRightBarButtonItems:barButtonItems];
     
     // ツールバーボタン表示
-    barButtonItems = [@[] mutableCopy];
+    barButtonItems = [[self toolbarItems] mutableCopy];
+    if(barButtonItems == nil)
+    {
+        barButtonItems = [@[] mutableCopy];
+    }
     if([self visibleRemoveButton] == YES)
     {
-        [barButtonItems addObject:[self removeBarButton]];
+        if([barButtonItems indexOfObject:[self removeBarButton]] == NSNotFound)
+        {
+            [barButtonItems insertObject:[self removeBarButton] atIndex:0];
+        }
     }
     [self setToolbarItems:barButtonItems];
     [[self navigationController] setToolbarHidden:([barButtonItems count] == 0)];

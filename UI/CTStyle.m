@@ -88,7 +88,15 @@
 {
     for(NSString *keyValue in [[dictionaryValue copy] allKeys])
     {
-        [self addStyleKey:keyValue value:[dictionaryValue objectForKey:keyValue]];
+        id valueValue = [dictionaryValue objectForKey:keyValue];
+        if(valueValue == [NSNull null])
+        {
+            [self removeStyleKey:keyValue];
+        }
+        else
+        {
+            [self addStyleKey:keyValue value:valueValue];
+        }
     }
 }
 // 追加
@@ -165,18 +173,6 @@
     // 生成
     UIFont *_font;
     
-//    // ボールド
-//    if(_fontWeight != nil)
-//    {
-//        if(_fontFamily != nil)
-//        {
-//            _font = [UIFont fontWithName:_fontFamily size:_fontSize];
-//        }
-//        else
-//        {
-//            _font = [UIFont boldSystemFontOfSize:_fontSize];
-//        }
-//    }
     if(isFontBold == YES)
     {
         _font = [UIFont boldSystemFontOfSize:_fontSize];

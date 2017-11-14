@@ -1,6 +1,6 @@
 //
 //  CTOverlayProgressIndicator.h
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2013/02/01.
 //  Copyright (c) 2013年 citrus.tk. All rights reserved.

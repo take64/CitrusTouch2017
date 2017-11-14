@@ -1,6 +1,6 @@
 //
 //  CTBaseTableController.m
-//  CitrusTouch2017
+//  CitrusTouch3
 //
 //  Created by take64 on 2017/05/21.
 //  Copyright © 2017年 citrus.tk. All rights reserved.
@@ -34,6 +34,10 @@
         [self setCacheEnable:NO];
         [self setHeaderCaches:[@{} mutableCopy]];
         [self setFooterCaches:[@{} mutableCopy]];
+        
+        // 長押し
+        UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongTapCell:)];
+        [[self tableView] addGestureRecognizer:longPressGestureRecognizer];
     }
     return self;
 }
@@ -141,6 +145,30 @@
     {
         [[self footerCaches] setObject:viewValue forKey:@(section)];
     }
+}
+
+// セルの長押し
+- (void)onLongTapCell:(UILongPressGestureRecognizer*)gestureRecognizer
+{
+    // 長押しの開始以外はreturn
+    if ([gestureRecognizer state] != UIGestureRecognizerStateBegan)
+    {
+        return;
+    }
+    
+    // 位置特定
+    CGPoint point = [gestureRecognizer locationInView:[self tableView]];
+    NSIndexPath *indexPath = [[self tableView] indexPathForRowAtPoint:point];
+    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
+    // 処理を呼ぶ
+    [self longTapCell:cell indexPath:indexPath];
+    
+}
+
+// セルの長押し処理
+- (void)longTapCell:(UITableViewCell *)cellValue indexPath:(NSIndexPath *)indexPath
+{
+    
 }
 
 @end
