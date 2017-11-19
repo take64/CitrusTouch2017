@@ -853,4 +853,17 @@
     return height;
 }
 
+// 高さ計算(全て)
+- (CGFloat)calcHeightAll
+{
+    CTStyle *stylesheet = [self callStyle];
+    CGFloat height = [self calcHeight];
+
+    // paddingを足す
+    CTPadding padding = [stylesheet callPadding];
+    height += (padding.top + padding.bottom);
+
+    return height;
+}
+
 @end

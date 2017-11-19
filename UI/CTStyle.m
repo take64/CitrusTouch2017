@@ -242,6 +242,49 @@
                       }];
 }
 
+// パディング取得
+- (CTPadding)callPadding
+{
+    CTPadding element = {0, 0, 0, 0};
+    // マージン
+    NSString *_string = [self callStyleKey:@"padding"];
+    if(_string != nil)
+    {
+        NSArray *_components = [_string componentsSeparatedByString:@" "];
+        
+        if([_components count] == 4)
+        {
+            element.top    = [[_components objectAtIndex:0] floatValue];
+            element.right     = [[_components objectAtIndex:1] floatValue];
+            element.bottom   = [[_components objectAtIndex:2] floatValue];
+            element.left  = [[_components objectAtIndex:3] floatValue];
+        }
+        else if([_components count] == 2)
+        {
+            element.top    = [[_components objectAtIndex:0] floatValue];
+            element.right     = [[_components objectAtIndex:1] floatValue];
+            element.bottom   = element.top;
+            element.left  = element.right;
+        }
+        else if([_components count] == 1)
+        {
+            element.top    = [[_components objectAtIndex:0] floatValue];
+            element.right     = element.left;
+            element.bottom   = element.left;
+            element.left  = element.left;
+        }
+    }
+    return element;
+}
+
+// パディング設定
+- (void)setPadding:(CTPadding)padding
+{
+    [self addStyles:@{
+                      @"padding" :CTStringf(@"%f %f %f %f", padding.left, padding.top, padding.right, padding.bottom),
+                      }];
+}
+
 // フレーム取得
 - (CGRect)callFrame
 {
@@ -330,6 +373,7 @@
     }
     return _margins[2];
 }
+
 
 // ボーダー幅取得
 - (CGFloat)callBorderWidth

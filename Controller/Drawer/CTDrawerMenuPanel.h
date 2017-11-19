@@ -15,10 +15,12 @@
     // ヘッダ
     CTView *headView;
     UIImageView *headImageView;
-    
+
     // メニュー
     UITableView *menuTableView;
 }
+
+
 
 //
 // property
@@ -26,19 +28,5 @@
 @property (nonatomic, retain) CTView *headView;
 @property (nonatomic, retain) UIImageView *headImageView;
 @property (nonatomic, retain) UITableView *menuTableView;
-
-
-//
-// method
-//
-
-//// bind
-//- (void)bindImage:(UIImage *)imageValue;
-
-//// setter head background-color
-//- (void)setHeadBackgroundColor:(UIColor *)colorValue;
-//
-//// setter table view background-color
-//- (void)setTableViewBackgroundColor:(UIColor *)colorValue;
 
 @end

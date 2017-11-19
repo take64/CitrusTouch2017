@@ -74,5 +74,7 @@ typedef NS_OPTIONS(NSUInteger, CTControlState) {
 
 // 高さ計算
 - (CGFloat)calcHeight;
+// 高さ計算(全て)
+- (CGFloat)calcHeightAll;
 
 @end

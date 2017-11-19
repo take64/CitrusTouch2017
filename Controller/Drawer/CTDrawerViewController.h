@@ -17,19 +17,21 @@
 {
     // view controller
     UIViewController *mainViewController;
-    
+
     // menus
     NSArray<CTDrawerMenuSection *> *menuSections;
-    
+
     // menu button
     CTBarButtonItem *slideMenuButton;
-    
+
     // menu visible
     BOOL menuVisible;
-    
+
     // ヘッダビュー
     CTDrawerMenuPanel *menuPanel;
 }
+
+
 
 //
 // property
@@ -39,6 +41,7 @@
 @property (nonatomic, retain) CTBarButtonItem *slideMenuButton;
 @property (nonatomic, assign) BOOL menuVisible;
 @property (nonatomic, retain) CTDrawerMenuPanel *menuPanel;
+
 
 
 //

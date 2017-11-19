@@ -43,14 +43,14 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 - (void)loadView
 {
     [super loadView];
-    
+
     // ビュー
     [[self view] addSubview:[self callMenuPanel]];
-    
+
     // メニューを隠す
     [self setMenuVisible:YES];
     [self closeSlide];
-    
+
     // 再読み込み
     [[self callMenuTableView] reloadData];
 }
@@ -71,7 +71,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellID = @"CellID";
-    
+
     CTTableCellLabel *cell = [tableView dequeueReusableCellWithIdentifier:CellID];
     if(cell == nil)
     {
@@ -87,7 +87,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     {
         NSInteger section = [indexPath section];
         NSInteger row = [indexPath row];
-        
+
         CTDrawerMenuItem *menuItem = [[[[self menuSections] objectAtIndex:section] menuItems] objectAtIndex:row];
         [cell setContentText:[menuItem title]];
     }
@@ -131,13 +131,23 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // セルヘッダ高さ
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if([self tableView:tableView viewForHeaderInSection:section] == nil)
-    {
-        return 0;
-    }
-    return CT8(3);
+    return [CTTableViewTrait callTableHeaderHeightWithController:self tableView:tableView section:section];
+//    if([self tableView:tableView viewForHeaderInSection:section] == nil)
+//    {
+//        return 0;
+//    }
+//    return CT8(3);
 }
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
+// セルフッタ高さ
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return [CTTableViewTrait callTableFooterHeightWithController:self tableView:tableView section:section];
+//    if([self tableView:tableView viewForFooterInSection:section] == nil)
+//    {
+//        return 0;
+//    }
+//    return CT8(3);
+}
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath;
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section;
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section;
@@ -149,7 +159,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // セルフッタを返す
 - (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    return [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+    return [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];;
 }
 //- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath;
 //- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath;
@@ -163,7 +173,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     CTDrawerMenuItem *menuItem = [[[[self menuSections] objectAtIndex:[indexPath section]] menuItems] objectAtIndex:[indexPath row]];
     [self changeViewController:[menuItem controller]];
-    
+
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 //- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -254,20 +264,20 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         // part
         CTBarButtonItem *barButtonItem;
         UIButton *button;
-        
+
         // メニュー設定
         [self setMenuSections:menuSectionList];
-        
+
         // 初期化
         [self setMainViewController:controllerValue];
-        
+
         // エッジジェスチャー
         UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(onScreenEdgeMenuPanel:)];
         [panGesture setMinimumNumberOfTouches:1];
         [panGesture setEdges:UIRectEdgeLeft];
         [panGesture setDelegate:self];
         [[self view] addGestureRecognizer:panGesture];
-        
+
         // メニューボタン
         button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 32, 32)];
         [[[button widthAnchor] constraintEqualToConstant:32] setActive:YES];
@@ -278,7 +288,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         [self setSlideMenuButton:barButtonItem];
         [[[self mainViewController] navigationItem] setLeftBarButtonItem:[self slideMenuButton]];
     }
-    
+
     return self;
 }
 
@@ -299,7 +309,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     CGSize shadowOffset = CGSizeZero;
     CGFloat shadowRadius = 0;
     CGFloat shadowOpacity = 0;
-    
+
     // メニューが表示されていない時
     if([self menuVisible] == NO)
     {
@@ -323,7 +333,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
     [UIView setAnimationDuration:0.2];
     [UIView setAnimationDelegate:self];
-    
+
     // アニメーション内容
     [[[self callMenuPanel] layer] setShadowOffset:shadowOffset];
     [[[self callMenuPanel] layer] setShadowRadius:shadowRadius];
@@ -334,8 +344,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 
     // アニメーション終了
     [UIView commitAnimations];
-    
-    
+
     // メニュー表示フラグ切り替え
     [self setMenuVisible:![self menuVisible]];
 }
@@ -363,12 +372,12 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     // メニュースライド
     [self slideMenu];
-    
+
     if([self topViewController] != viewController)
     {
         [[[self topViewController] view] removeFromSuperview];
         [self setViewControllers:@[ viewController ] animated:NO];
-        
+
         // スライドボタンの移動
         [[[self topViewController] navigationItem] setLeftBarButtonItem:[self slideMenuButton]];
         [self setMenuVisible:NO];
@@ -379,14 +388,14 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 - (void)onSwipeMenuPanel:(UISwipeGestureRecognizer *) gesture
 {
     UISwipeGestureRecognizerDirection direction = [gesture direction];
-    
+
     switch (direction)
     {
         case UISwipeGestureRecognizerDirectionLeft:
             // スライドを閉じる
             [self closeSlide];
             break;
-            
+
         default:
             break;
     }
@@ -397,8 +406,6 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     [self openSlide];
 }
-
-
 
 
 

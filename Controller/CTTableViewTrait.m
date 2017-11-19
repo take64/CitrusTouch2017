@@ -41,6 +41,7 @@
         {
             headerFooterView = [[CTTableHeaderView alloc] initWithReuseIdentifier:queueID];
             [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
+            CTLog(@"%d", [headerFooterView margin]);
         }
     }
     
@@ -137,6 +138,28 @@
     }
     
     return result;
+}
+
+// call table header height
++ (CGFloat)callTableHeaderHeightWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView section:(NSInteger)section
+{
+    UIView *view = [self callTableHeaderViewWithController:tableDelegate tableView:tableView section:section];
+    if(view == nil)
+    {
+        return 0;
+    }
+    return [view frame].size.height;
+}
+
+// call table footer height
++ (CGFloat)callTableFooterHeightWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView section:(NSInteger)section
+{
+    UIView *view = [self callTableFooterViewWithController:tableDelegate tableView:tableView section:section];
+    if(view == nil)
+    {
+        return 0;
+    }
+    return [view frame].size.height;
 }
 
 @end
