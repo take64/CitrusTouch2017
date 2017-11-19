@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/05/03.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -18,5 +18,11 @@
 
 // call table header/footer margin size
 + (CGFloat)callTableSectionMarginSizeWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView;
+
+// call table header height
++ (CGFloat)callTableHeaderHeightWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView section:(NSInteger)section;
+
+// call table footer height
++ (CGFloat)callTableFooterHeightWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView section:(NSInteger)section;
 
 @end

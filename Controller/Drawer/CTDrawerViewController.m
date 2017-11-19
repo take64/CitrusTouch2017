@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/01/24.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTDrawerViewController.h"
@@ -14,7 +14,6 @@
 #import "CTBarButtonItem.h"
 #import "CTTableCellLabel.h"
 
-//static const CGFloat CTDrawerViewControllerMenuWidth = 256;
 static CGFloat CTDrawerViewControllerMenuWidth()
 {
     return CGRectGetWidth([[[UIApplication sharedApplication] keyWindow] frame]) * 0.8;
@@ -33,32 +32,25 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 //
 // synthesize
 //
-//@synthesize mainNavigationController;
 @synthesize mainViewController;
 @synthesize menuSections;
-//@synthesize tintColor;
-//@synthesize headColor;
-//@synthesize cellColor;
 @synthesize slideMenuButton;
 @synthesize menuVisible;
 @synthesize menuPanel;
 
 
 
-
 - (void)loadView
 {
     [super loadView];
-    
+
     // ビュー
-//    [[self view] addSubview:[[self mainNavigationController] view]];
     [[self view] addSubview:[self callMenuPanel]];
-    
-    
+
     // メニューを隠す
     [self setMenuVisible:YES];
     [self closeSlide];
-    
+
     // 再読み込み
     [[self callMenuTableView] reloadData];
 }
@@ -79,7 +71,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellID = @"CellID";
-    
+
     CTTableCellLabel *cell = [tableView dequeueReusableCellWithIdentifier:CellID];
     if(cell == nil)
     {
@@ -95,12 +87,9 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     {
         NSInteger section = [indexPath section];
         NSInteger row = [indexPath row];
-        
+
         CTDrawerMenuItem *menuItem = [[[[self menuSections] objectAtIndex:section] menuItems] objectAtIndex:row];
         [cell setContentText:[menuItem title]];
-//        [[cell textLabel] setText:[menuItem title]];
-//        [[cell textLabel] setTextColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyTextColor]];
-//        [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:16]];
     }
     return cell;
 }
@@ -142,14 +131,23 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // セルヘッダ高さ
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if([self tableView:tableView viewForHeaderInSection:section] == nil)
-    {
-        return 0;
-    }
-    
-    return CT8(3);
+    return [CTTableViewTrait callTableHeaderHeightWithController:self tableView:tableView section:section];
+//    if([self tableView:tableView viewForHeaderInSection:section] == nil)
+//    {
+//        return 0;
+//    }
+//    return CT8(3);
 }
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
+// セルフッタ高さ
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return [CTTableViewTrait callTableFooterHeightWithController:self tableView:tableView section:section];
+//    if([self tableView:tableView viewForFooterInSection:section] == nil)
+//    {
+//        return 0;
+//    }
+//    return CT8(3);
+}
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath;
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section;
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section;
@@ -161,7 +159,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // セルフッタを返す
 - (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    return [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
+    return [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];;
 }
 //- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath;
 //- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath;
@@ -175,7 +173,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     CTDrawerMenuItem *menuItem = [[[[self menuSections] objectAtIndex:[indexPath section]] menuItems] objectAtIndex:[indexPath row]];
     [self changeViewController:[menuItem controller]];
-    
+
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 //- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -227,6 +225,31 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 }
 
 
+#pragma mark - UIGestureRecognizerDelegate
+//
+// UIGestureRecognizerDelegate
+//
+
+//// called when a gesture recognizer attempts to transition out of UIGestureRecognizerStatePossible. returning NO causes it to transition to UIGestureRecognizerStateFailed
+//- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer;
+//// called when the recognition of one of gestureRecognizer or otherGestureRecognizer would be blocked by the other
+//// return YES to allow both to recognize simultaneously. the default implementation returns NO (by default no two gestures can be recognized simultaneously)
+////
+//// note: returning YES is guaranteed to allow simultaneous recognition. returning NO is not guaranteed to prevent simultaneous recognition, as the other gesture's delegate may return YES
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
+//// called once per attempt to recognize, so failure requirements can be determined lazily and may be set up between recognizers across view hierarchies
+//// return YES to set up a dynamic failure requirement between gestureRecognizer and otherGestureRecognizer
+////
+//// note: returning YES is guaranteed to set up the failure requirement. returning NO does not guarantee that there will not be a failure requirement as the other gesture's counterpart delegate or subclass methods may return YES
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer NS_AVAILABLE_IOS(7_0);
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer NS_AVAILABLE_IOS(7_0);
+//// called before touchesBegan:withEvent: is called on the gesture recognizer for a new touch. return NO to prevent the gesture recognizer from seeing this touch
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch;
+//// called before pressesBegan:withEvent: is called on the gesture recognizer for a new press. return NO to prevent the gesture recognizer from seeing this press
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceivePress:(UIPress *)press;
+
+
+
 #pragma mark - method
 //
 // method
@@ -241,27 +264,31 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         // part
         CTBarButtonItem *barButtonItem;
         UIButton *button;
-        
+
         // メニュー設定
         [self setMenuSections:menuSectionList];
-        
+
         // 初期化
         [self setMainViewController:controllerValue];
-        
-//        // ナヴィゲーション
-//        [[self navigationBar] setBarTintColor:[[CitrusTouchApplication callTheme] callNavigationBarTintColor]];
-//        [[self navigationBar] setTitleTextAttributes:@{
-//                                                       NSForegroundColorAttributeName :[[CitrusTouchApplication callTheme] callNavigationBarTextColor]
-//                                                       }];
-        
+
+        // エッジジェスチャー
+        UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(onScreenEdgeMenuPanel:)];
+        [panGesture setMinimumNumberOfTouches:1];
+        [panGesture setEdges:UIRectEdgeLeft];
+        [panGesture setDelegate:self];
+        [[self view] addGestureRecognizer:panGesture];
+
         // メニューボタン
         button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 32, 32)];
+        [[[button widthAnchor] constraintEqualToConstant:32] setActive:YES];
+        [[[button heightAnchor] constraintEqualToConstant:32] setActive:YES];
         [button setBackgroundImage:[[CitrusTouchApplication callTheme] callAppIconImage] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(slideMenu) forControlEvents:UIControlEventTouchUpInside];
         barButtonItem = [[CTBarButtonItem alloc] initWithCustomView:button];
         [self setSlideMenuButton:barButtonItem];
         [[[self mainViewController] navigationItem] setLeftBarButtonItem:[self slideMenuButton]];
     }
+
     return self;
 }
 
@@ -277,12 +304,12 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     // メニュー表示
     CGRect menuFrame = [[self callMenuPanel] frame];
-    
+
     // shadow
     CGSize shadowOffset = CGSizeZero;
     CGFloat shadowRadius = 0;
     CGFloat shadowOpacity = 0;
-    
+
     // メニューが表示されていない時
     if([self menuVisible] == NO)
     {
@@ -300,15 +327,13 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         shadowRadius = 0;
         shadowOpacity = 0;
     }
-    
-    
+
     // アニメーション開始
     [UIView beginAnimations:@"master" context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
     [UIView setAnimationDuration:0.2];
     [UIView setAnimationDelegate:self];
 
-    
     // アニメーション内容
     [[[self callMenuPanel] layer] setShadowOffset:shadowOffset];
     [[[self callMenuPanel] layer] setShadowRadius:shadowRadius];
@@ -316,12 +341,10 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     [[[self callMenuPanel] layer] setShadowColor:[[UIColor blackColor] CGColor]];
     [[[self callMenuPanel] layer] setShadowPath:[UIBezierPath bezierPathWithRect:[[self callMenuPanel] bounds]].CGPath];
     [[self callMenuPanel] setFrame:menuFrame];
-    
-    
+
     // アニメーション終了
     [UIView commitAnimations];
-    
-    
+
     // メニュー表示フラグ切り替え
     [self setMenuVisible:![self menuVisible]];
 }
@@ -334,6 +357,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         [self slideMenu];
     }
 }
+
 // スライドを閉じる
 - (void) closeSlide
 {
@@ -343,45 +367,45 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     }
 }
 
-
 // メインビュー変更
 - (void)changeViewController:(UIViewController *)viewController
 {
     // メニュースライド
     [self slideMenu];
-    
+
     if([self topViewController] != viewController)
     {
         [[[self topViewController] view] removeFromSuperview];
         [self setViewControllers:@[ viewController ] animated:NO];
-        
+
         // スライドボタンの移動
         [[[self topViewController] navigationItem] setLeftBarButtonItem:[self slideMenuButton]];
         [self setMenuVisible:NO];
     }
 }
 
-// スワイプ処理
-- (void)onSwipeMenuPanel:(UISwipeGestureRecognizer*) swipe
+// スワイプジェスチャー処理
+- (void)onSwipeMenuPanel:(UISwipeGestureRecognizer *) gesture
 {
-    UISwipeGestureRecognizerDirection direction = [swipe direction];
-    
+    UISwipeGestureRecognizerDirection direction = [gesture direction];
+
     switch (direction)
     {
         case UISwipeGestureRecognizerDirectionLeft:
-            if([self menuVisible] == YES)
-            {
-                [self slideMenu];
-            }
+            // スライドを閉じる
+            [self closeSlide];
             break;
-            
+
         default:
             break;
     }
 }
 
-
-
+// エッジジェスチャー処理
+- (void)onScreenEdgeMenuPanel:(UIScreenEdgePanGestureRecognizer *) gesture
+{
+    [self openSlide];
+}
 
 
 
@@ -407,13 +431,13 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     if([self menuPanel] == nil)
     {
         [self setMenuPanel:[[CTDrawerMenuPanel alloc] initWithFrame:CGRectMake((CTDrawerViewControllerMenuWidth() * -1), 0, CTDrawerViewControllerMenuWidth(), CTDrawerViewControllerMenuHeight())]];
-        
+
         // スワイプイベント
         UISwipeGestureRecognizer *swipe;
         swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(onSwipeMenuPanel:)];
         [swipe setNumberOfTouchesRequired:1];
         [swipe setDirection:UISwipeGestureRecognizerDirectionLeft];
-        [[[self menuPanel] headView] addGestureRecognizer:swipe];
+        [[self menuPanel] addGestureRecognizer:swipe];
     }
     return [self menuPanel];
 }

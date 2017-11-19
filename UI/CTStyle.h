@@ -14,6 +14,14 @@ typedef NS_ENUM(NSInteger, CTStyleVerticalAlignment) {
     CTStyleVerticalAlignmentBottom,
 };
 
+typedef struct {
+    CGFloat left;
+    CGFloat top;
+    CGFloat right;
+    CGFloat bottom;
+} CTPadding;
+
+
 @interface CTStyle : NSObject <NSCopying>
 {
     // スタイル
@@ -75,6 +83,12 @@ typedef NS_ENUM(NSInteger, CTStyleVerticalAlignment) {
 
 // ポイント設定
 - (void)setPoint:(CGPoint)point;
+
+// パディング取得
+- (CTPadding)callPadding;
+
+// パディング設定
+- (void)setPadding:(CTPadding)padding;
 
 // フレーム取得
 - (CGRect)callFrame;

@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 #import "CTControl.h"
 
@@ -34,10 +34,10 @@
     {
         frame = CGRectMake(0, 0, widthDefault, heightDefault);
     }
-    
+
     self = [super initWithFrame:frame];
-    if (self) {
-        
+    if (self)
+    {
         [self setBackgroundColor:[UIColor clearColor]];
         // 初期設定
         [[self callStyleNormal] addStyles:@{
@@ -47,13 +47,12 @@
                                             @"width"               :CTStr(frame.size.width),
                                             @"height"              :CTStr(frame.size.height),
                                             }];
-        
+
         // 値監視
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"width" options:NSKeyValueObservingOptionNew context:NULL];
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"height" options:NSKeyValueObservingOptionNew context:NULL];
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"top" options:NSKeyValueObservingOptionNew context:NULL];
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"left" options:NSKeyValueObservingOptionNew context:NULL];
-//        [[self text] addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
 }
@@ -109,11 +108,10 @@
 {
     // コンテクスト
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    
+
     // スタイルシート
     CTStyle *stylesheet = [[self callStyleNormal] copy];
-    
+
     switch ([self controlState])
     {
         case CTControlStateNormal:
@@ -127,24 +125,24 @@
         default:
             break;
     }
-    
+
     // 文字列要素
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     // パラグラフ
     NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
     [attributes addEntriesFromDictionary:@{NSParagraphStyleAttributeName:paragraph}];
-    
+
     CGContextSaveGState(context);
-    
+
     CGRect contentRect = rect;
-    
+
     // マージン
     NSString *_marginString = [stylesheet callStyleKey:@"margin"];
     CGFloat _margins[4] = {0, 0, 0, 0};
     if(_marginString != nil)
     {
         NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
-        
+
         if([_marginsComponents count] == 4)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
@@ -166,13 +164,13 @@
             _margins[2] = _margins[0];
             _margins[3] = _margins[0];
         }
-        
+
         contentRect = CGRectMake((contentRect.origin.x + _margins[3]),
                                  (contentRect.origin.y + _margins[0]),
                                  (contentRect.size.width - (_margins[3] + _margins[1])),
                                  (contentRect.size.height - (_margins[0] + _margins[2])));
     }
-    
+
     // パッディング
     CGRect paddedContentRect = contentRect;
     NSString *_paddingString = [stylesheet callStyleKey:@"padding"];
@@ -181,7 +179,7 @@
     {
         NSArray *_paddingsComponents = [_paddingString componentsSeparatedByString:@" "];
         long count = [_paddingsComponents count];
-        
+
         if(count == 4)
         {
             _paddings[0] = [[_paddingsComponents objectAtIndex:0] floatValue];
@@ -203,14 +201,13 @@
             _paddings[2] = _paddings[0];
             _paddings[3] = _paddings[0];
         }
-        
+
         paddedContentRect = CGRectMake((contentRect.origin.x + _paddings[3]),
                                        (contentRect.origin.y + _paddings[0]),
                                        (contentRect.size.width - (_paddings[3] + _paddings[1])),
                                        (contentRect.size.height - (_paddings[0] + _paddings[2])));
     }
-    
-    
+
     // 背景描画
     NSString *_backgroundColorString = [stylesheet callStyleKey:@"background-color"];
     if(_backgroundColorString != nil)
@@ -220,7 +217,7 @@
         const CGFloat *_colors = CGColorGetComponents(_colorref);
         CGContextSetRGBFillColor(context, _colors[0], _colors[1], _colors[2], _colors[3]);
     }
-    
+
     // ボーダー角丸
     NSString *_borderRadiusString = [stylesheet callStyleKey:@"border-radius"];
     CGFloat _borderRadiuses[4];
@@ -249,12 +246,6 @@
             _borderRadiuses[2] = _borderRadiuses[0];
             _borderRadiuses[3] = _borderRadiuses[0];
         }
-        //
-        //        // content
-        //        contentRect = CGRectMake(contentRect.origin.x + (_borderRadiuses[3] / 2),
-        //                                 contentRect.origin.y + (_borderRadiuses[0] / 2),
-        //                                 contentRect.size.width - ((_borderRadiuses[3] / 2) + (_borderRadiuses[1] / 2)),
-        //                                 contentRect.size.height - ((_borderRadiuses[2] / 2) + (_borderRadiuses[0] / 2)));
     }
     else
     {
@@ -265,26 +256,21 @@
     }
     [self addPathRadius:_borderRadiuses rect:contentRect];
     CGContextFillPath(context);
-    
     CGContextRestoreGState(context);
-    
-    
-    
-    
+
     // 影設定
     NSString *_boxShadowString = [stylesheet callStyleKey:@"box-shadow"];
     if(_boxShadowString != nil)
     {
         CGContextSaveGState(context);
         [self addPathRadius:_borderRadiuses rect:contentRect];
-        
+
         NSArray *_boxShadowComponents = [_boxShadowString componentsSeparatedByString:@" "];
         CGFloat  _boxShadowLeft    = [[_boxShadowComponents objectAtIndex:0] floatValue];
         CGFloat  _boxShadowTop     = [[_boxShadowComponents objectAtIndex:1] floatValue];
         CGFloat  _boxShadowShading = [[_boxShadowComponents objectAtIndex:2] floatValue];
         UIColor *_boxShadowColor   = [CTColor colorWithHEXString:[_boxShadowComponents objectAtIndex:3]];
-        
-        
+
         // 背景色処理
         if(_backgroundColorString != nil)
         {
@@ -292,14 +278,12 @@
             const CGFloat *colors = CGColorGetComponents(colorRef);
             CGContextSetRGBFillColor(context, colors[0], colors[1], colors[2], colors[3]);
         }
-        
+
         CGContextSetShadowWithColor(context, CGSizeMake(_boxShadowLeft, _boxShadowTop), _boxShadowShading, [_boxShadowColor CGColor]);
         CGContextFillPath(context);
-        
         CGContextRestoreGState(context);
     }
-    
-    
+
     // グラデーション
     NSString *_backgroundImageString = [stylesheet callStyleKey:@"background-image"];
     if([_backgroundImageString hasPrefix:@"linear-gradient"] == YES)
@@ -308,27 +292,27 @@
         CGContextSaveGState(context);
         [self addPathRadius:_borderRadiuses rect:contentRect];
         CGContextClip(context);
-        
+
         // トリム
         _backgroundImageString = [_backgroundImageString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
+
         // 文字列置換
         _backgroundImageString = [_backgroundImageString stringByReplacingOccurrencesOfString:@"linear-gradient(" withString:@""];
         _backgroundImageString = [_backgroundImageString stringByReplacingOccurrencesOfString:@"rgba(" withString:@""];
         _backgroundImageString = [_backgroundImageString stringByReplacingOccurrencesOfString:@")" withString:@","];
         _backgroundImageString = [_backgroundImageString stringByReplacingOccurrencesOfString:@" " withString:@""];
-        
+
         // 要素数の取得
         NSArray *component = [_backgroundImageString componentsSeparatedByString:@","];
         NSInteger size = [component count] - 1;
-        
+
         const long locationSize = (size / 5);
         const long componentSize = ((size / 5) * 4);
-        
+
         // 要素
         CGFloat locations[locationSize];
         CGFloat components[componentSize];
-        
+
         // 設定
         NSInteger count = 0;
         NSInteger locationCount = 0;
@@ -339,7 +323,7 @@
             {
                 break;
             }
-            
+
             if(((count + 1) % 5) == 0)
             {
                 locations[locationCount] = [column floatValue];
@@ -355,14 +339,13 @@
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
         CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, components, locations, locationSize);
         CGContextDrawLinearGradient(context, gradient, CGPointMake(0, contentRect.origin.y), CGPointMake(0, contentRect.origin.y + contentRect.size.height), 0);
-        
+
         CGContextRestoreGState(context);
-        
+
         CGColorSpaceRelease(colorSpace);
         CGGradientRelease(gradient);
     }
-    
-    
+
     // 枠線
     NSString *_borderWidthString = [stylesheet callStyleKey:@"border-width"];
     CGFloat _borderWidth = 0;
@@ -370,10 +353,9 @@
     {
         // 枠線幅
         _borderWidth = [_borderWidthString floatValue];
-        
+
         CGContextSaveGState(context);
-        
-        
+
         // 枠線色
         NSString *_borderColorString = [stylesheet callStyleKey:@"border-color"];
         UIColor *_borderColor;
@@ -384,26 +366,24 @@
         _borderColor = [CTColor colorWithHEXString:_borderColorString];
         CGColorRef _colorref = [_borderColor CGColor];
         const CGFloat *_colors = CGColorGetComponents(_colorref);
-        
-        
+
         CGContextSetRGBStrokeColor(context, _colors[0], _colors[1], _colors[2], _colors[3]);
         CGContextSetLineWidth(context, _borderWidth);
         CGContextSetLineCap(context, kCGLineCapRound);
-        
+
         // 描画範囲
         CGRect _drawRect = CGRectInset(contentRect, (_borderWidth / 2), (_borderWidth / 2));
         [self addPathRadius:_borderRadiuses rect:_drawRect offset:(_borderWidth / -1)];
         CGContextStrokePath(context);
-        
+
         CGContextRestoreGState(context);
     }
-    
-    
+
     // テキストレンダリング
     if([self text] != nil)
     {
         CGContextSaveGState(context);
-        
+
         // テキスト影
         NSString *_textShadowString = [stylesheet callStyleKey:@"text-shadow"];
         if(_textShadowString != nil)
@@ -415,8 +395,7 @@
             UIColor *_textShadowColor   = [CTColor colorWithHEXString:[_textShadowComponents objectAtIndex:3]];
             CGContextSetShadowWithColor(context, CGSizeMake(_textShadowLeft, _textShadowTop), _textShadowShading, [_textShadowColor CGColor]);
         }
-        
-        
+
         // 文字色
         NSString *_colorString = [stylesheet callStyleKey:@"color"];
         UIColor *_ctcolor;
@@ -429,8 +408,7 @@
             _ctcolor = [CTColor colorWithHEXString:@"FFFFFF"];
         }
         [attributes addEntriesFromDictionary:@{NSForegroundColorAttributeName:_ctcolor}];
-        
-        
+
         // ラインブレイク
         NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
         NSLineBreakMode lineBreakMode = 0;
@@ -439,9 +417,7 @@
             lineBreakMode = [self convertLineBreakMode:_lineBreak];
         }
         [paragraph setLineBreakMode:lineBreakMode];
-        
-        
-        
+
         // フォント計算
         UIFont *font;
         CGSize fontBounds;
@@ -458,7 +434,6 @@
                 if(fontBounds.height > paddedContentRect.size.height && fontSize > 1)
                 {
                     fontBounds.height = paddedContentRect.size.height;
-                    
                     [stylesheet addStyleKey:@"font-size" value:[@(fontSize - 0.5) stringValue]];
                 }
                 else
@@ -478,12 +453,10 @@
                 fontBounds.height = paddedContentRect.size.height;
             }
         }
-        
-        
-        
+
         // 文字寄せ
         CGRect titleFrame = CGRectMake(0, 0, (fontBounds.width), (fontBounds.height));
-        
+
         // text-align
         NSString *_textAlignString = [stylesheet callStyleKey:@"text-align"];
         NSTextAlignment _textAlignment;
@@ -504,7 +477,7 @@
         {
             _textAlignment = NSTextAlignmentCenter;
         }
-        
+
         // vertical-align
         NSString *_verticalAlignString = [stylesheet callStyleKey:@"vertical-align"];
         CTStyleVerticalAlignment _verticalAlignment;
@@ -525,7 +498,7 @@
         {
             _verticalAlignment = CTStyleVerticalAlignmentMiddle;
         }
-        
+
         // 横位置
         CGFloat titleFrameX = 0;
         if(_textAlignment == NSTextAlignmentCenter)
@@ -540,7 +513,7 @@
         {
             titleFrameX = (paddedContentRect.origin.x + paddedContentRect.size.width) - fontBounds.width;
         }
-        
+
         // 縦位置
         CGFloat titleFrameY = 0;
         if(_verticalAlignment == CTStyleVerticalAlignmentTop)
@@ -555,39 +528,12 @@
         {
             titleFrameY = (paddedContentRect.size.height - fontBounds.height) + paddedContentRect.origin.y;
         }
-        
         titleFrame.origin = CGPointMake(titleFrameX, titleFrameY);
-        
-//        if([_textAlignString isEqualToString:@"center"] == YES)
-//        {
-//            titleFrame.origin = CGPointMake((paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x,
-//                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
-//            _textAlignment = NSTextAlignmentCenter;
-//        }
-//        else if([_textAlignString isEqualToString:@"left"] == YES)
-//        {
-//            titleFrame.origin = CGPointMake(paddedContentRect.origin.x,
-//                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
-//            _textAlignment = NSTextAlignmentLeft;
-//        }
-//        else if([_textAlignString isEqualToString:@"right"] == YES)
-//        {
-//            titleFrame.origin = CGPointMake((paddedContentRect.origin.x + paddedContentRect.size.width) - fontBounds.width,
-//                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
-//            _textAlignment = NSTextAlignmentRight;
-//        }
-//        // AnalyzeのLogic error対策
-//        else
-//        {
-//            titleFrame.origin = CGPointMake((paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x,
-//                                            (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y);
-//            _textAlignment = NSTextAlignmentCenter;
-//        }
-        
+
         [paragraph setAlignment:_textAlignment];
-        
+
         [[self text] drawInRect:titleFrame withAttributes:attributes];
-        
+
         CGContextRestoreGState(context);
     }
 }
@@ -595,7 +541,7 @@
 - (void)setNeedsDisplay
 {
     [super setNeedsDisplay];
-    
+
     for(id childView in [self subviews])
     {
         if([childView isKindOfClass:[CTControl class]] == YES)
@@ -701,16 +647,10 @@
 {
     // ステート設定
     [self setControlState:_controlState];
-    
+
     // 強制描画
     [self setNeedsDisplay];
 }
-
-//// 再描画
-//- (void)redraw
-//{
-//    [self drawRect:[self bounds]];
-//}
 
 // ステート変更(enable)
 - (void)setEnabled:(BOOL)enabled
@@ -759,10 +699,10 @@
 - (void)addPathRadius:(const CGFloat *)radius rect:(CGRect)rect offset:(CGFloat)offset
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
+
     // 角丸rect
     CGRect cornerCircleRect  = rect;
-    
+
     // get points
     CGFloat minx = CGRectGetMinX(cornerCircleRect);
     CGFloat midx = CGRectGetMidX(cornerCircleRect);
@@ -770,7 +710,7 @@
     CGFloat miny = CGRectGetMinY(cornerCircleRect);
     CGFloat midy = CGRectGetMidY(cornerCircleRect);
     CGFloat maxy = CGRectGetMaxY(cornerCircleRect);
-    
+
     // 黒下地
     CGContextBeginPath(context);
     CGContextMoveToPoint(context, minx, midy);
@@ -785,7 +725,7 @@
 - (NSLineBreakMode)convertLineBreakMode:(NSString *)lineBreakString
 {
     NSLineBreakMode lineBreakMode = 0;
-    
+
     if([lineBreakString rangeOfString:@"truncating-middle"].location != NSNotFound)
     {
         lineBreakMode |= NSLineBreakByTruncatingMiddle;
@@ -814,7 +754,7 @@
     {
         lineBreakMode = NSLineBreakByTruncatingMiddle;  // Truncate middle of line:  "ab...yz"
     }
-    
+
     return lineBreakMode;
 }
 
@@ -826,13 +766,13 @@
     CTStyle *stylesheet = [self callStyle];
     CGFloat width = [stylesheet callSize].width;
     CGFloat height = 0;
-    
+
     // 文字列要素
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     // パラグラフ
     NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
     [attributes addEntriesFromDictionary:@{NSParagraphStyleAttributeName:paragraph}];
-    
+
     // ラインブレイク
     NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
     NSLineBreakMode lineBreakMode = 0;
@@ -841,15 +781,27 @@
         lineBreakMode = [self convertLineBreakMode:_lineBreak];
     }
     [paragraph setLineBreakMode:lineBreakMode];
-    
-    
+
     // フォント計算
     UIFont *font = [stylesheet callFont];
     [attributes addEntriesFromDictionary:@{NSFontAttributeName:font}];
     CGSize fontBounds = [[self text] boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine) attributes:attributes context:nil].size;
-    
+
     height = fontBounds.height;
-    
+
+    return height;
+}
+
+// 高さ計算(全て)
+- (CGFloat)calcHeightAll
+{
+    CTStyle *stylesheet = [self callStyle];
+    CGFloat height = [self calcHeight];
+
+    // paddingを足す
+    CTPadding padding = [stylesheet callPadding];
+    height += (padding.top + padding.bottom);
+
     return height;
 }
 

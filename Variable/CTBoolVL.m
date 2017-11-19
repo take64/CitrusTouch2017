@@ -1,9 +1,9 @@
 //
 //  CTBoolVL.m
-//  HanayuAccountBookPod
+//  CitrusTouch3
 //
-//  Created by kouhei.takemoto on 2017/05/25.
-//  Copyright © 2017年 citrus.live. All rights reserved.
+//  Created by take64 on 2017/05/25.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTBoolVL.h"
