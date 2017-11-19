@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/01/24.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTNavigationController.h"
@@ -13,7 +13,7 @@
 @class CTDrawerMenuSection;
 @class CTBarButtonItem;
 
-@interface CTDrawerViewController : CTNavigationController<UITableViewDataSource, UITableViewDelegate, CTTableViewDelegate>
+@interface CTDrawerViewController : CTNavigationController<UITableViewDataSource, UITableViewDelegate, CTTableViewDelegate, UIGestureRecognizerDelegate>
 {
     // view controller
     UIViewController *mainViewController;
