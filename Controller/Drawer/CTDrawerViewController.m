@@ -73,7 +73,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     static NSString *CellID = @"CellID";
 
     CTTableCellLabel *cell = [tableView dequeueReusableCellWithIdentifier:CellID];
-    if(cell == nil)
+    if (cell == nil)
     {
         cell = [[CTTableCellLabel alloc] initWithPrefix:nil reuseIdentifier:CellID];
         [cell setBackgroundColor:[[CitrusTouchApplication callTheme] callDrawerCellBodyBackColor]];
@@ -83,7 +83,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
                                               @"margin"     :@"0 0 0 8",
                                               }];
     }
-    if(cell != nil)
+    if (cell != nil)
     {
         NSInteger section = [indexPath section];
         NSInteger row = [indexPath row];
@@ -132,21 +132,11 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return [CTTableViewTrait callTableHeaderHeightWithController:self tableView:tableView section:section];
-//    if([self tableView:tableView viewForHeaderInSection:section] == nil)
-//    {
-//        return 0;
-//    }
-//    return CT8(3);
 }
 // セルフッタ高さ
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return [CTTableViewTrait callTableFooterHeightWithController:self tableView:tableView section:section];
-//    if([self tableView:tableView viewForFooterInSection:section] == nil)
-//    {
-//        return 0;
-//    }
-//    return CT8(3);
 }
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath;
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section;
@@ -259,7 +249,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 - (id)initWithController:(UIViewController *)controllerValue menuSections:(NSArray<CTDrawerMenuSection *> *)menuSectionList
 {
     self = [super initWithRootViewController:controllerValue];
-    if(self)
+    if (self)
     {
         // part
         CTBarButtonItem *barButtonItem;
@@ -311,7 +301,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     CGFloat shadowOpacity = 0;
 
     // メニューが表示されていない時
-    if([self menuVisible] == NO)
+    if ([self menuVisible] == NO)
     {
         // メニューを表示させる
         menuFrame.origin.x = 0;
@@ -352,7 +342,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // スライドを開ける
 - (void) openSlide
 {
-    if([self menuVisible] == NO)
+    if ([self menuVisible] == NO)
     {
         [self slideMenu];
     }
@@ -361,7 +351,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // スライドを閉じる
 - (void) closeSlide
 {
-    if([self menuVisible] == YES)
+    if ([self menuVisible] == YES)
     {
         [self slideMenu];
     }
@@ -373,7 +363,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     // メニュースライド
     [self slideMenu];
 
-    if([self topViewController] != viewController)
+    if ([self topViewController] != viewController)
     {
         [[[self topViewController] view] removeFromSuperview];
         [self setViewControllers:@[ viewController ] animated:NO];
@@ -417,7 +407,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // menu view controller
 - (UITableView *)callMenuTableView
 {
-    if([[[self callMenuPanel] menuTableView] delegate] == nil || [[[self callMenuPanel] menuTableView] dataSource] == nil)
+    if ([[[self callMenuPanel] menuTableView] delegate] == nil || [[[self callMenuPanel] menuTableView] dataSource] == nil)
     {
         [[[self callMenuPanel] menuTableView] setDataSource:self];
         [[[self callMenuPanel] menuTableView] setDelegate:self];
@@ -428,7 +418,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 // menu head
 - (CTDrawerMenuPanel *)callMenuPanel
 {
-    if([self menuPanel] == nil)
+    if ([self menuPanel] == nil)
     {
         [self setMenuPanel:[[CTDrawerMenuPanel alloc] initWithFrame:CGRectMake((CTDrawerViewControllerMenuWidth() * -1), 0, CTDrawerViewControllerMenuWidth(), CTDrawerViewControllerMenuHeight())]];
 

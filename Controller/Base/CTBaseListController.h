@@ -3,28 +3,37 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTBaseTableController.h"
 #import <CoreData/CoreData.h>
 
+#import "CitrusTouchUI.h"
+
 @interface CTBaseListController : CTBaseTableController <NSFetchedResultsControllerDelegate>
 {
-    // bar button
-    CTBarButtonItem *addBarButton;
-    CTBarButtonItem *editStartBarButton;
-    CTBarButtonItem *editEndBarButton;
-    CTBarButtonItem *selectBarButton;
+    // bar button item
+    CTBarButtonItem *barButtonItem;
+    // bar button inner item
+    CTButton *addButton;
+    CTButton *editStartButton;
+    CTButton *editEndButton;
+    CTButton *selectButton;
 }
+
+
 
 //
 // property
 //
-@property (nonatomic, retain) CTBarButtonItem *addBarButton;
-@property (nonatomic, retain) CTBarButtonItem *editStartBarButton;
-@property (nonatomic, retain) CTBarButtonItem *editEndBarButton;
-@property (nonatomic, retain) CTBarButtonItem *selectBarButton;
+@property (nonatomic, retain) CTBarButtonItem *barButtonItem;
+@property (nonatomic, retain) CTButton *addButton;
+@property (nonatomic, retain) CTButton *editStartButton;
+@property (nonatomic, retain) CTButton *editEndButton;
+@property (nonatomic, retain) CTButton *selectButton;
+
+
 
 //
 // method

@@ -19,7 +19,7 @@
 - (id) init
 {
     self = [super init];
-    if(self)
+    if (self)
     {
         [self set_styles:[NSMutableDictionary dictionaryWithCapacity:2]];
     }
@@ -38,7 +38,7 @@
 - (id) initWithStyles:(NSDictionary *)dictionaryValue
 {
     self = [self init];
-    if(self)
+    if (self)
     {
         [self addStyles:dictionaryValue];
     }
@@ -49,7 +49,7 @@
 - (id) initWithStyleDictionary:(NSDictionary *)dictionaryValue
 {
     self = [self init];
-    if(self)
+    if (self)
     {
         [self setStyleDictionary:dictionaryValue];
     }
@@ -59,20 +59,20 @@
 - (void)addStyleKey:(NSString *)keyValue value:(NSString *)dataValue
 {
 //    BOOL isRootExist = NO;
-//    for(NSString *rootKey in @[ @"top", @"left", @"width", @"height" ])
+//    for (NSString *rootKey in @[ @"top", @"left", @"width", @"height" ])
 //    {
-//        if([keyValue isEqualToString:rootKey] == YES)
+//        if ([keyValue isEqualToString:rootKey] == YES)
 //        {
 //            isRootExist = YES;
 //            break;
 //        }
 //    }
 //
-    if([[self _styles] objectForKey:keyValue] == nil)
+    if ([[self _styles] objectForKey:keyValue] == nil)
     {
         [[self _styles] setValue:dataValue forKey:keyValue];
     }
-    else if([[[self _styles] objectForKey:keyValue] isEqualToString:dataValue] == YES)
+    else if ([[[self _styles] objectForKey:keyValue] isEqualToString:dataValue] == YES)
     {
         // 同じなら変更しない
     }
@@ -86,10 +86,10 @@
 // 追加
 - (void)addStyles:(NSDictionary *)dictionaryValue
 {
-    for(NSString *keyValue in [[dictionaryValue copy] allKeys])
+    for (NSString *keyValue in [[dictionaryValue copy] allKeys])
     {
         id valueValue = [dictionaryValue objectForKey:keyValue];
-        if(valueValue == [NSNull null])
+        if (valueValue == [NSNull null])
         {
             [self removeStyleKey:keyValue];
         }
@@ -102,7 +102,7 @@
 // 追加
 - (void)addStyleDictionary:(NSDictionary *)dictionaryValue
 {
-    for(NSString *keyValue in [dictionaryValue allKeys])
+    for (NSString *keyValue in [dictionaryValue allKeys])
     {
         [self addStyleKey:keyValue value:[dictionaryValue objectForKey:keyValue]];
     }
@@ -110,7 +110,7 @@
 // 削除
 - (void)removeStyleKey:(NSString *)keyValue
 {
-    if([[self _styles] objectForKey:keyValue] != nil)
+    if ([[self _styles] objectForKey:keyValue] != nil)
     {
         [[self _styles] willChangeValueForKey:keyValue];
         [[self _styles] removeObjectForKey:keyValue];
@@ -147,7 +147,7 @@
     // フォントサイズ
     NSString *_fontSizeString = [[self _styles] objectForKey:@"font-size"];
     CGFloat _fontSize = 12;
-    if(_fontSizeString != nil)
+    if (_fontSizeString != nil)
     {
         _fontSize = [_fontSizeString floatValue];
     }
@@ -158,9 +158,9 @@
     // フォントボールド
     NSString *_fontWeight = [[self _styles] objectForKey:@"font-weight"];
     BOOL isFontBold = NO;
-    if(_fontWeight != nil)
+    if (_fontWeight != nil)
     {
-        if([_fontWeight isEqualToString:@"bold"] == YES)
+        if ([_fontWeight isEqualToString:@"bold"] == YES)
         {
             isFontBold = YES;
         }
@@ -168,7 +168,7 @@
     // 生成
     UIFont *_font;
 
-    if(isFontBold == YES)
+    if (isFontBold == YES)
     {
         _font = [UIFont boldSystemFontOfSize:_fontSize];
     }
@@ -187,11 +187,11 @@
 
     CGFloat _width = 0;
     CGFloat _height = 0;
-    if(_widthString != nil)
+    if (_widthString != nil)
     {
         _width = [_widthString floatValue];
     }
-    if(_heightString != nil)
+    if (_heightString != nil)
     {
         _height = [_heightString floatValue];
     }
@@ -216,11 +216,11 @@
 
     CGFloat _top = 0;
     CGFloat _left = 0;
-    if(_topString != nil)
+    if (_topString != nil)
     {
         _top = [_topString floatValue];
     }
-    if(_leftString != nil)
+    if (_leftString != nil)
     {
         _left = [_leftString floatValue];
     }
@@ -243,32 +243,32 @@
     CTPadding element = {0, 0, 0, 0};
     // パディング
     NSString *_string = [self callStyleKey:@"padding"];
-    if(_string != nil)
+    if (_string != nil)
     {
         NSArray *_components = [_string componentsSeparatedByString:@" "];
 
-        if([_components count] == 4)
+        if ([_components count] == 4)
         {
             element.top     = [[_components objectAtIndex:0] floatValue];
             element.right   = [[_components objectAtIndex:1] floatValue];
             element.bottom  = [[_components objectAtIndex:2] floatValue];
             element.left    = [[_components objectAtIndex:3] floatValue];
         }
-        else if([_components count] == 3)
+        else if ([_components count] == 3)
         {
             element.top     = [[_components objectAtIndex:0] floatValue];
             element.right   = [[_components objectAtIndex:1] floatValue];
             element.bottom  = [[_components objectAtIndex:2] floatValue];
             element.left    = element.right;
         }
-        else if([_components count] == 2)
+        else if ([_components count] == 2)
         {
             element.top     = [[_components objectAtIndex:0] floatValue];
             element.right   = [[_components objectAtIndex:1] floatValue];
             element.bottom  = element.top;
             element.left    = element.right;
         }
-        else if([_components count] == 1)
+        else if ([_components count] == 1)
         {
             element.top     = [[_components objectAtIndex:0] floatValue];
             element.right   = element.left;
@@ -312,25 +312,25 @@
     // マージン
     NSString *_marginString = [self callStyleKey:@"margin"];
     CGFloat _margins[4] = {0, 0, 0, 0};
-    if(_marginString != nil)
+    if (_marginString != nil)
     {
         NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
 
-        if([_marginsComponents count] == 4)
+        if ([_marginsComponents count] == 4)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
             _margins[2] = [[_marginsComponents objectAtIndex:2] floatValue];
             _margins[3] = [[_marginsComponents objectAtIndex:3] floatValue];
         }
-        else if([_marginsComponents count] == 2)
+        else if ([_marginsComponents count] == 2)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
             _margins[2] = _margins[0];
             _margins[3] = _margins[1];
         }
-        else if([_marginsComponents count] == 1)
+        else if ([_marginsComponents count] == 1)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = _margins[0];
@@ -347,25 +347,25 @@
     // マージン
     NSString *_marginString = [self callStyleKey:@"margin"];
     CGFloat _margins[4] = {0, 0, 0, 0};
-    if(_marginString != nil)
+    if (_marginString != nil)
     {
         NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
 
-        if([_marginsComponents count] == 4)
+        if ([_marginsComponents count] == 4)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
             _margins[2] = [[_marginsComponents objectAtIndex:2] floatValue];
             _margins[3] = [[_marginsComponents objectAtIndex:3] floatValue];
         }
-        else if([_marginsComponents count] == 2)
+        else if ([_marginsComponents count] == 2)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
             _margins[2] = _margins[0];
             _margins[3] = _margins[1];
         }
-        else if([_marginsComponents count] == 1)
+        else if ([_marginsComponents count] == 1)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = _margins[0];
@@ -382,7 +382,7 @@
 {
     NSString *_borderWidthString = [self callStyleKey:@"border-width"];
     CGFloat _borderWidth = 0;
-    if(_borderWidthString != nil)
+    if (_borderWidthString != nil)
     {
         // 枠線幅
         _borderWidth = [_borderWidthString floatValue];
@@ -399,7 +399,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     CTStyle *result = [[self class] allocWithZone:zone];
-    if(result)
+    if (result)
     {
         [result set_styles:[[self _styles] mutableCopyWithZone:zone]];
     }

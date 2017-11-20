@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #ifndef CitrusTouchUI_h
@@ -30,6 +30,7 @@ __attribute__((unused)) static NSString * CTStr(CGFloat floatValue)
 #import "CTControl.h"
 #import "CTLabel.h"
 #import "CTButton.h"
+#import "CTButtonGroup.h"
 #import "CTImageButton.h"
 
 #import "CTView.h"
