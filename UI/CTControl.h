@@ -34,6 +34,8 @@ typedef NS_OPTIONS(NSUInteger, CTControlState) {
     NSMutableDictionary *userInfo;
 }
 
+
+
 //
 // property
 //
@@ -44,15 +46,14 @@ typedef NS_OPTIONS(NSUInteger, CTControlState) {
 @property (nonatomic, assign) CTControlState controlState;
 @property (nonatomic, retain) NSMutableDictionary *userInfo;
 
+
+
 //
 // method
 //
 
 // 初期化
 - (id)initWithText:(NSString *)textString;
-
-//// 初期化
-//- (id) initWithStyle:(CTStyle *)styleValue;
 
 // 状態変更
 - (void)modifyControlState:(CTControlState)_controlState;
@@ -71,10 +72,12 @@ typedef NS_OPTIONS(NSUInteger, CTControlState) {
 - (void)setStyleHighlighted:(CTStyle *)styleValue;
 - (void)setStyleDisabled:(CTStyle *)styleValue;
 
-
 // 高さ計算
 - (CGFloat)calcHeight;
 // 高さ計算(全て)
 - (CGFloat)calcHeightAll;
+
+// 自動テキストサイズ計算
+- (CGSize)calcTextAutoSize;
 
 @end

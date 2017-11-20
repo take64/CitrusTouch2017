@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTBaseListController.h"
@@ -14,47 +14,17 @@
 
 @implementation CTBaseListController
 
+
+
 //
 // synthesize
 //
-@synthesize addBarButton;
-@synthesize editStartBarButton;
-@synthesize editEndBarButton;
-@synthesize selectBarButton;
+@synthesize barButtonItem;
+@synthesize addButton;
+@synthesize editStartButton;
+@synthesize editEndButton;
+@synthesize selectButton;
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if(self)
-    {
-        // part
-        CTBarButtonItem *barButtonItem;
-        
-        // バーボタン(追加)
-        barButtonItem = [[CTBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onTapBarButtonAdd)];
-        [self setAddBarButton:barButtonItem];
-        // バーボタン(編集開始)
-        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"編集" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonEditStart)];
-        [self setEditStartBarButton:barButtonItem];
-        // バーボタン(編集開始)
-        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"完了" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonEditEnd)];
-        [self setEditEndBarButton:barButtonItem];
-        // バーボタン(選択)
-        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"選択" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonSelect)];
-        [self setSelectBarButton:barButtonItem];
-    }
-    return self;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    // バーボタン再描画
-    [self redrawBarButton];
-    
-    [[self tableView] reloadData];
-}
 
 
 #pragma mark - UITableViewDataSource
@@ -113,6 +83,7 @@
 }
 
 
+
 #pragma mark - UITableViewDelegate
 //
 // UITableViewDelegate
@@ -122,16 +93,15 @@
 //// Display customization
 //
 //- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
-
 //// セルヘッダビュー
 //- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 //{
-//    if([tableView style] == UITableViewStylePlain)
+//    if ([tableView style] == UITableViewStylePlain)
 //    {
 //        [view setTintColor:[[CitrusTouchApplication callTheme] callTableCellHeadBackColor]];
 //        [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callTableCellHeadTextColor]];
 //    }
-//    else if([tableView style] == UITableViewStyleGrouped)
+//    else if ([tableView style] == UITableViewStyleGrouped)
 //    {
 //        [[(UITableViewHeaderFooterView *)view backgroundView] setBackgroundColor:[[CitrusTouchApplication callTheme] callTableCellHeadBackColor]];
 //        [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callTableCellHeadTextColor]];
@@ -143,7 +113,6 @@
 //// セルヘッダビュー
 //- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section
 //{
-//    
 ////    CGRect rect = [[(UITableViewHeaderFooterView *)view textLabel] frame];
 ////    rect.origin.y += 8;
 ////    [[(UITableViewHeaderFooterView *)view textLabel] setFrame:rect];
@@ -156,7 +125,7 @@
 //// セルヘッダ高さ
 //- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 //{
-//    if([self tableView:tableView viewForHeaderInSection:section] == nil)
+//    if ([self tableView:tableView viewForHeaderInSection:section] == nil)
 //    {
 //        return 0;
 //    }
@@ -166,7 +135,7 @@
 //- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 //{
 //    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
-//    if(footerView == nil)
+//    if (footerView == nil)
 //    {
 //        return 0;
 //    }
@@ -234,9 +203,9 @@
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
 {
     // セクションを変更してはいけない
-    if([self allowMoveSectionModify] == NO)
+    if ([self allowMoveSectionModify] == NO)
     {
-        if([sourceIndexPath section] != [proposedDestinationIndexPath section])
+        if ([sourceIndexPath section] != [proposedDestinationIndexPath section])
         {
             return sourceIndexPath;
         }
@@ -292,6 +261,57 @@
 }
 
 
+
+#pragma mark - extends
+//
+// extends
+//
+
+// init
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self)
+    {
+        // part
+        CTButton *button;
+        CTBarButtonItem *barButtonItem;
+
+        // ボタングループ
+        CTButtonGroup *buttonGroup = [[CTButtonGroup alloc] initWithFrame:CGRectZero];
+        button = [buttonGroup addButtonWithTitle:@"追加" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonAdd];
+        }];
+        [self setAddButton:button];
+        button = [buttonGroup addButtonWithTitle:@"編集" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonEditStart];
+        }];
+        [self setEditStartButton:button];
+        button = [buttonGroup addButtonWithTitle:@"完了" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonEditEnd];
+        }];
+        [self setEditEndButton:button];
+        button = [buttonGroup addButtonWithTitle:@"選択" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonSelect];
+        }];
+        [self setSelectButton:button];
+        barButtonItem = [[CTBarButtonItem alloc] initWithCustomView:buttonGroup];
+        [self setBarButtonItem:barButtonItem];
+    }
+    return self;
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    // バーボタン再描画
+    [self redrawBarButton];
+
+    [[self tableView] reloadData];
+}
+
+
+
 #pragma mark - method
 //
 // method
@@ -336,7 +356,7 @@
 - (void)onTapBarButtonEditStart
 {
     [[self tableView] setEditing:YES animated:YES];
-    
+
     // ボーボタン再描画
     [self redrawBarButton];
 }
@@ -345,7 +365,7 @@
 - (void)onTapBarButtonEditEnd
 {
     [[self tableView] setEditing:NO animated:YES];
-    
+
     // ボーボタン再描画
     [self redrawBarButton];
 }
@@ -353,8 +373,8 @@
 // ボタン押下時(選択)
 - (void)onTapBarButtonSelect
 {
-    
 }
+
 
 
 #pragma mark - private
@@ -365,30 +385,19 @@
 // バーボタン再描画
 - (void)redrawBarButton
 {
-    // バーボタン表示
-    NSMutableArray *barButtonItems = [@[] mutableCopy];
-    if([self visibleAddButton] == YES)
-    {
-        [barButtonItems addObject:[self addBarButton]];
-    }
-    if([self visibleEditButton] == YES)
-    {
-        if([[self tableView] isEditing] == YES)
-        {
-            // 編集中
-            [barButtonItems addObject:[self editEndBarButton]];
-        }
-        else
-        {
-            // 平常時
-            [barButtonItems addObject:[self editStartBarButton]];
-        }
-    }if([self visibleSelectButton] == YES)
-    {
-        [barButtonItems addObject:[self selectBarButton]];
-    }
-    [[self navigationItem] setRightBarButtonItems:barButtonItems];
+    // 追加ボタン
+    [[self addButton] setHidden:([self visibleAddButton] == NO)];
+    // 編集(平常時)ボタン
+    [[self editStartButton] setHidden:(([self visibleEditButton] == YES && [[self tableView] isEditing] == NO) == NO)];
+    // 編集(編集中)ボタン
+    [[self editEndButton] setHidden:(([self visibleEditButton] == YES && [[self tableView] isEditing] == YES) == NO)];
+    // 選択ボタン
+    [[self selectButton] setHidden:([self visibleSelectButton] == NO)];
+
+    // ボタン設定
+    [[self navigationItem] setRightBarButtonItem:[self barButtonItem]];
 }
 
 
 @end
+

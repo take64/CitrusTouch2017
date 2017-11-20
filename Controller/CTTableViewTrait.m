@@ -41,7 +41,7 @@
         {
             headerFooterView = [[CTTableHeaderView alloc] initWithReuseIdentifier:queueID];
             [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
-            CTLog(@"%d", [headerFooterView margin]);
+            CTLog(@"%ff", [headerFooterView margin]);
         }
     }
 
