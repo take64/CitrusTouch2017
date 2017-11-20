@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/01/25.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTDrawerMenuPanel.h"
@@ -35,11 +35,11 @@
         // パネルサイズ
         CGFloat panelWidth = CGRectGetWidth(frame);
         CGFloat panelHeight = CGRectGetHeight(frame);
-        
+
         // ヘッダサイズ
         CGFloat headWidth = CGRectGetWidth(frame);
         CGFloat headHeight = headWidth;
-        
+
         // 画像サイズ
         CGFloat imageWidth = 64;
         CGFloat imageHeight = imageWidth;

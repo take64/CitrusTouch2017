@@ -151,10 +151,10 @@
     {
         _fontSize = [_fontSizeString floatValue];
     }
-    
+
 //    // フォントファミリー
 //    NSString *_fontFamily = [[self _styles] objectForKey:@"font-family"];
-//    
+
     // フォントボールド
     NSString *_fontWeight = [[self _styles] objectForKey:@"font-weight"];
     BOOL isFontBold = NO;
@@ -165,14 +165,9 @@
             isFontBold = YES;
         }
     }
-//
-//    // フォントイタリック
-//    NSString *_fontStyle = [[self _styles] objectForKey:@"font-style"];
-    
-    
     // 生成
     UIFont *_font;
-    
+
     if(isFontBold == YES)
     {
         _font = [UIFont boldSystemFontOfSize:_fontSize];
@@ -181,7 +176,7 @@
     {
         _font = [UIFont systemFontOfSize:_fontSize];
     }
-    
+
     return _font;
 }
 // サイズ取得
@@ -189,7 +184,7 @@
 {
     NSString *_widthString = [[self _styles] objectForKey:@"width"];
     NSString *_heightString = [[self _styles] objectForKey:@"height"];
-    
+
     CGFloat _width = 0;
     CGFloat _height = 0;
     if(_widthString != nil)
@@ -200,7 +195,7 @@
     {
         _height = [_heightString floatValue];
     }
-    
+
     return CGSizeMake(_width, _height);
 }
 
@@ -218,7 +213,7 @@
 {
     NSString *_topString = [[self _styles] objectForKey:@"top"];
     NSString *_leftString = [[self _styles] objectForKey:@"left"];
-    
+
     CGFloat _top = 0;
     CGFloat _left = 0;
     if(_topString != nil)
@@ -229,7 +224,7 @@
     {
         _left = [_leftString floatValue];
     }
-    
+
     return CGPointMake(_left, _top);
 }
 
@@ -246,32 +241,39 @@
 - (CTPadding)callPadding
 {
     CTPadding element = {0, 0, 0, 0};
-    // マージン
+    // パディング
     NSString *_string = [self callStyleKey:@"padding"];
     if(_string != nil)
     {
         NSArray *_components = [_string componentsSeparatedByString:@" "];
-        
+
         if([_components count] == 4)
         {
-            element.top    = [[_components objectAtIndex:0] floatValue];
-            element.right     = [[_components objectAtIndex:1] floatValue];
-            element.bottom   = [[_components objectAtIndex:2] floatValue];
-            element.left  = [[_components objectAtIndex:3] floatValue];
+            element.top     = [[_components objectAtIndex:0] floatValue];
+            element.right   = [[_components objectAtIndex:1] floatValue];
+            element.bottom  = [[_components objectAtIndex:2] floatValue];
+            element.left    = [[_components objectAtIndex:3] floatValue];
+        }
+        else if([_components count] == 3)
+        {
+            element.top     = [[_components objectAtIndex:0] floatValue];
+            element.right   = [[_components objectAtIndex:1] floatValue];
+            element.bottom  = [[_components objectAtIndex:2] floatValue];
+            element.left    = element.right;
         }
         else if([_components count] == 2)
         {
-            element.top    = [[_components objectAtIndex:0] floatValue];
-            element.right     = [[_components objectAtIndex:1] floatValue];
-            element.bottom   = element.top;
-            element.left  = element.right;
+            element.top     = [[_components objectAtIndex:0] floatValue];
+            element.right   = [[_components objectAtIndex:1] floatValue];
+            element.bottom  = element.top;
+            element.left    = element.right;
         }
         else if([_components count] == 1)
         {
-            element.top    = [[_components objectAtIndex:0] floatValue];
-            element.right     = element.left;
-            element.bottom   = element.left;
-            element.left  = element.left;
+            element.top     = [[_components objectAtIndex:0] floatValue];
+            element.right   = element.left;
+            element.bottom  = element.left;
+            element.left    = element.left;
         }
     }
     return element;
@@ -290,7 +292,7 @@
 {
     CGPoint _point = [self callPoint];
     CGSize _size = [self callSize];
-    
+
     CGRect _rect = CGRectZero;
     _rect.origin = _point;
     _rect.size = _size;
@@ -313,7 +315,7 @@
     if(_marginString != nil)
     {
         NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
-        
+
         if([_marginsComponents count] == 4)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
@@ -348,7 +350,7 @@
     if(_marginString != nil)
     {
         NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
-        
+
         if([_marginsComponents count] == 4)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];

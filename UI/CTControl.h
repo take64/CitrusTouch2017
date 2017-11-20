@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -23,13 +23,13 @@ typedef NS_OPTIONS(NSUInteger, CTControlState) {
     CTStyle *ctstyleNormal;
     CTStyle *ctstyleHighlighted;
     CTStyle *ctstyleDisabled;
-    
+
     // 文字列
     NSString *text;
-    
+
     // ステート
     CTControlState controlState;
-    
+
     // 連携情報
     NSMutableDictionary *userInfo;
 }
