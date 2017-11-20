@@ -23,7 +23,7 @@
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 {
     self = [super initWithReuseIdentifier:reuseIdentifier];
-    if(self)
+    if (self)
     {
         // parts
         CTLabel *_label;
@@ -100,7 +100,7 @@
     CGRect rect = [self frame];
     rect.size.height = [viewValue frame].size.height;
     // margin
-    if([self isKindOfClass:[CTTableFooterView class]] == YES)
+    if ([self isKindOfClass:[CTTableFooterView class]] == YES)
     {
         rect.size.height += [self margin];
     }

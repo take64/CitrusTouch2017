@@ -15,14 +15,14 @@
 {
     // head title
     NSString *titleString = @"";
-    if([tableDelegate respondsToSelector:@selector(callHeaderTitleWithSection:)] == YES)
+    if ([tableDelegate respondsToSelector:@selector(callHeaderTitleWithSection:)] == YES)
     {
         titleString = [tableDelegate callHeaderTitleWithSection:section];
     }
 
     // head view
     UIView *titleView = nil;
-    if([tableDelegate respondsToSelector:@selector(callHeaderViewWithSection:)] == YES)
+    if ([tableDelegate respondsToSelector:@selector(callHeaderViewWithSection:)] == YES)
     {
         titleView = [tableDelegate callHeaderViewWithSection:section];
     }
@@ -34,10 +34,10 @@
     CTTableHeaderView *headerFooterView = (CTTableHeaderView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:queueID];
 
     // data exists
-    if([titleString length] > 0 || titleView != nil)
+    if ([titleString length] > 0 || titleView != nil)
     {
         // generate
-        if(headerFooterView == nil)
+        if (headerFooterView == nil)
         {
             headerFooterView = [[CTTableHeaderView alloc] initWithReuseIdentifier:queueID];
             [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
@@ -46,16 +46,16 @@
     }
 
     // bind
-    if(headerFooterView != nil)
+    if (headerFooterView != nil)
     {
         // title string exist
-        if([titleString length] > 0)
+        if ([titleString length] > 0)
         {
             [headerFooterView bindTitle:titleString];
         }
 
         // title view exist
-        if(titleView != nil)
+        if (titleView != nil)
         {
             [headerFooterView bindView:titleView];
         }
@@ -69,14 +69,14 @@
 {
     // head title
     NSString *titleString = @"";
-    if([tableDelegate respondsToSelector:@selector(callFooterTitleWithSection:)] == YES)
+    if ([tableDelegate respondsToSelector:@selector(callFooterTitleWithSection:)] == YES)
     {
         titleString = [tableDelegate callFooterTitleWithSection:section];
     }
 
     // head view
     UIView *titleView = nil;
-    if([tableDelegate respondsToSelector:@selector(callFooterViewWithSection:)] == YES)
+    if ([tableDelegate respondsToSelector:@selector(callFooterViewWithSection:)] == YES)
     {
         titleView = [tableDelegate callFooterViewWithSection:section];
     }
@@ -88,10 +88,10 @@
     CTTableFooterView *headerFooterView = (CTTableFooterView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:queueID];
 
     // data exists
-    if([titleString length] > 0 || titleView != nil)
+    if ([titleString length] > 0 || titleView != nil)
     {
         // generate
-        if(headerFooterView == nil)
+        if (headerFooterView == nil)
         {
             headerFooterView = [[CTTableFooterView alloc] initWithReuseIdentifier:queueID];
             [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
@@ -99,16 +99,16 @@
     }
 
     // bind
-    if(headerFooterView != nil)
+    if (headerFooterView != nil)
     {
         // title string exist
-        if([titleString length] > 0)
+        if ([titleString length] > 0)
         {
             [headerFooterView bindTitle:titleString];
         }
 
         // title view exist
-        if(titleView != nil)
+        if (titleView != nil)
         {
             [headerFooterView bindView:titleView];
         }
@@ -122,16 +122,16 @@
 + (CGFloat)callTableSectionMarginSizeWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView
 {
     CTTableViewMode mode = CTTableViewModeList;
-    if([tableDelegate respondsToSelector:@selector(callTableViewMode)] == YES)
+    if ([tableDelegate respondsToSelector:@selector(callTableViewMode)] == YES)
     {
         mode = [tableDelegate callTableViewMode];
     }
 
     CGFloat result = .0f;
-    if(mode == CTTableViewModeEdit)
+    if (mode == CTTableViewModeEdit)
     {
         result = CT8(1);
-        if([tableView style] == UITableViewStyleGrouped)
+        if ([tableView style] == UITableViewStyleGrouped)
         {
             result += CT8(1);
         }
@@ -144,7 +144,7 @@
 + (CGFloat)callTableHeaderHeightWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView section:(NSInteger)section
 {
     UIView *view = [self callTableHeaderViewWithController:tableDelegate tableView:tableView section:section];
-    if(view == nil)
+    if (view == nil)
     {
         return 0;
     }
@@ -155,7 +155,7 @@
 + (CGFloat)callTableFooterHeightWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView section:(NSInteger)section
 {
     UIView *view = [self callTableFooterViewWithController:tableDelegate tableView:tableView section:section];
-    if(view == nil)
+    if (view == nil)
     {
         return 0;
     }

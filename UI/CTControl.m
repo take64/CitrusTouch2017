@@ -30,7 +30,7 @@
     // デフォルト処理
     CGFloat widthDefault = 64;
     CGFloat heightDefault = 48;
-    if(CGRectIsEmpty(frame) == YES)
+    if (CGRectIsEmpty(frame) == YES)
     {
         frame = CGRectMake(0, 0, widthDefault, heightDefault);
     }
@@ -61,7 +61,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     // width 変更時
-    if([keyPath isEqualToString:@"width"] == YES)
+    if ([keyPath isEqualToString:@"width"] == YES)
     {
         CGRect _frame = [self frame];
         CGSize _size = _frame.size;
@@ -70,7 +70,7 @@
         [self setFrame:_frame];
     }
     // height 変更時
-    else if([keyPath isEqualToString:@"height"] == YES)
+    else if ([keyPath isEqualToString:@"height"] == YES)
     {
         CGRect _frame = [self frame];
         CGSize _size = _frame.size;
@@ -79,7 +79,7 @@
         [self setFrame:_frame];
     }
     // top 変更時
-    else if([keyPath isEqualToString:@"top"] == YES)
+    else if ([keyPath isEqualToString:@"top"] == YES)
     {
         CGRect _frame = [self frame];
         CGPoint _origin = _frame.origin;
@@ -88,7 +88,7 @@
         [self setFrame:_frame];
     }
     // left 変更時
-    else if([keyPath isEqualToString:@"left"] == YES)
+    else if ([keyPath isEqualToString:@"left"] == YES)
     {
         CGRect _frame = [self frame];
         CGPoint _origin = _frame.origin;
@@ -97,7 +97,7 @@
         [self setFrame:_frame];
     }
 //    // text 変更時
-//    else if([keyPath isEqualToString:@"text"] == YES)
+//    else if ([keyPath isEqualToString:@"text"] == YES)
 //    {
 //        [self setNeedsDisplay];
 //    }
@@ -139,25 +139,25 @@
     // マージン
     NSString *_marginString = [stylesheet callStyleKey:@"margin"];
     CGFloat _margins[4] = {0, 0, 0, 0};
-    if(_marginString != nil)
+    if (_marginString != nil)
     {
         NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
 
-        if([_marginsComponents count] == 4)
+        if ([_marginsComponents count] == 4)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
             _margins[2] = [[_marginsComponents objectAtIndex:2] floatValue];
             _margins[3] = [[_marginsComponents objectAtIndex:3] floatValue];
         }
-        else if([_marginsComponents count] == 2)
+        else if ([_marginsComponents count] == 2)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
             _margins[2] = _margins[0];
             _margins[3] = _margins[1];
         }
-        else if([_marginsComponents count] == 1)
+        else if ([_marginsComponents count] == 1)
         {
             _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
             _margins[1] = _margins[0];
@@ -175,26 +175,26 @@
     CGRect paddedContentRect = contentRect;
     NSString *_paddingString = [stylesheet callStyleKey:@"padding"];
     CGFloat _paddings[4] = {0, 0, 0, 0};
-    if(_paddingString != nil)
+    if (_paddingString != nil)
     {
         NSArray *_paddingsComponents = [_paddingString componentsSeparatedByString:@" "];
         long count = [_paddingsComponents count];
 
-        if(count == 4)
+        if (count == 4)
         {
             _paddings[0] = [[_paddingsComponents objectAtIndex:0] floatValue];
             _paddings[1] = [[_paddingsComponents objectAtIndex:1] floatValue];
             _paddings[2] = [[_paddingsComponents objectAtIndex:2] floatValue];
             _paddings[3] = [[_paddingsComponents objectAtIndex:3] floatValue];
         }
-        else if(count == 2)
+        else if (count == 2)
         {
             _paddings[0] = [[_paddingsComponents objectAtIndex:0] floatValue];
             _paddings[1] = [[_paddingsComponents objectAtIndex:1] floatValue];
             _paddings[2] = _margins[0];
             _paddings[3] = _paddings[1];
         }
-        else if(count == 1)
+        else if (count == 1)
         {
             _paddings[0] = [[_paddingsComponents objectAtIndex:0] floatValue];
             _paddings[1] = _paddings[0];
@@ -210,7 +210,7 @@
 
     // 背景描画
     NSString *_backgroundColorString = [stylesheet callStyleKey:@"background-color"];
-    if(_backgroundColorString != nil)
+    if (_backgroundColorString != nil)
     {
         UIColor *_ctcolor = [CTColor colorWithHEXString:_backgroundColorString];
         CGColorRef _colorref = [_ctcolor CGColor];
@@ -221,25 +221,25 @@
     // ボーダー角丸
     NSString *_borderRadiusString = [stylesheet callStyleKey:@"border-radius"];
     CGFloat _borderRadiuses[4];
-    if(_borderRadiusString != nil)
+    if (_borderRadiusString != nil)
     {
         NSArray *_borderRadiusComponents = [_borderRadiusString componentsSeparatedByString:@" "];
         long count = [_borderRadiusComponents count];
-        if(count == 4)
+        if (count == 4)
         {
             _borderRadiuses[0] = [[_borderRadiusComponents objectAtIndex:0] floatValue];
             _borderRadiuses[1] = [[_borderRadiusComponents objectAtIndex:1] floatValue];
             _borderRadiuses[2] = [[_borderRadiusComponents objectAtIndex:2] floatValue];
             _borderRadiuses[3] = [[_borderRadiusComponents objectAtIndex:3] floatValue];
         }
-        else if(count == 2)
+        else if (count == 2)
         {
             _borderRadiuses[0] = [[_borderRadiusComponents objectAtIndex:0] floatValue];
             _borderRadiuses[1] = [[_borderRadiusComponents objectAtIndex:1] floatValue];
             _borderRadiuses[2] = _borderRadiuses[0];
             _borderRadiuses[3] = _borderRadiuses[1];
         }
-        else if(count == 1)
+        else if (count == 1)
         {
             _borderRadiuses[0] = [[_borderRadiusComponents objectAtIndex:0] floatValue];
             _borderRadiuses[1] = _borderRadiuses[0];
@@ -260,7 +260,7 @@
 
     // 影設定
     NSString *_boxShadowString = [stylesheet callStyleKey:@"box-shadow"];
-    if(_boxShadowString != nil)
+    if (_boxShadowString != nil)
     {
         CGContextSaveGState(context);
         [self addPathRadius:_borderRadiuses rect:contentRect];
@@ -272,7 +272,7 @@
         UIColor *_boxShadowColor   = [CTColor colorWithHEXString:[_boxShadowComponents objectAtIndex:3]];
 
         // 背景色処理
-        if(_backgroundColorString != nil)
+        if (_backgroundColorString != nil)
         {
             CGColorRef colorRef = [[CTColor colorWithHEXString:_backgroundColorString] CGColor];
             const CGFloat *colors = CGColorGetComponents(colorRef);
@@ -286,7 +286,7 @@
 
     // グラデーション
     NSString *_backgroundImageString = [stylesheet callStyleKey:@"background-image"];
-    if([_backgroundImageString hasPrefix:@"linear-gradient"] == YES)
+    if ([_backgroundImageString hasPrefix:@"linear-gradient"] == YES)
     {
         // 描画範囲
         CGContextSaveGState(context);
@@ -317,14 +317,14 @@
         NSInteger count = 0;
         NSInteger locationCount = 0;
         NSInteger componentCount = 0;
-        for(NSString *column in component)
+        for (NSString *column in component)
         {
-            if(count >= size)
+            if (count >= size)
             {
                 break;
             }
 
-            if(((count + 1) % 5) == 0)
+            if (((count + 1) % 5) == 0)
             {
                 locations[locationCount] = [column floatValue];
                 locationCount++;
@@ -349,7 +349,7 @@
     // 枠線
     NSString *_borderWidthString = [stylesheet callStyleKey:@"border-width"];
     CGFloat _borderWidth = 0;
-    if(_borderWidthString != nil)
+    if (_borderWidthString != nil)
     {
         // 枠線幅
         _borderWidth = [_borderWidthString floatValue];
@@ -359,7 +359,7 @@
         // 枠線色
         NSString *_borderColorString = [stylesheet callStyleKey:@"border-color"];
         UIColor *_borderColor;
-        if(_borderColorString == nil)
+        if (_borderColorString == nil)
         {
             _borderColorString = @"000000";
         }
@@ -380,13 +380,13 @@
     }
 
     // テキストレンダリング
-    if([self text] != nil)
+    if ([self text] != nil)
     {
         CGContextSaveGState(context);
 
         // テキスト影
         NSString *_textShadowString = [stylesheet callStyleKey:@"text-shadow"];
-        if(_textShadowString != nil)
+        if (_textShadowString != nil)
         {
             NSArray *_textShadowComponents = [_textShadowString componentsSeparatedByString:@" "];
             CGFloat  _textShadowLeft    = [[_textShadowComponents objectAtIndex:0] floatValue];
@@ -399,7 +399,7 @@
         // 文字色
         NSString *_colorString = [stylesheet callStyleKey:@"color"];
         UIColor *_ctcolor;
-        if(_colorString != nil)
+        if (_colorString != nil)
         {
             _ctcolor = [CTColor colorWithHEXString:_colorString];
         }
@@ -412,7 +412,7 @@
         // ラインブレイク
         NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
         NSLineBreakMode lineBreakMode = 0;
-        if(_lineBreak != nil)
+        if (_lineBreak != nil)
         {
             lineBreakMode = [self convertLineBreakMode:_lineBreak];
         }
@@ -421,7 +421,7 @@
         // フォント計算
         UIFont *font;
         CGSize fontBounds;
-        if([[stylesheet callStyleKey:@"adjust-font"] isEqualToString:@"true"] == YES)
+        if ([[stylesheet callStyleKey:@"adjust-font"] isEqualToString:@"true"] == YES)
         {
             BOOL adjust = NO;
             while (adjust == NO)
@@ -431,7 +431,7 @@
                 fontBounds = [[self text] boundingRectWithSize:CGSizeMake(paddedContentRect.size.width, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine) attributes:attributes context:nil].size;
                 fontBounds.width = paddedContentRect.size.width;
                 double fontSize = [[stylesheet callStyleKey:@"font-size"] doubleValue];
-                if(fontBounds.height > paddedContentRect.size.height && fontSize > 1)
+                if (fontBounds.height > paddedContentRect.size.height && fontSize > 1)
                 {
                     fontBounds.height = paddedContentRect.size.height;
                     [stylesheet addStyleKey:@"font-size" value:[@(fontSize - 0.5) stringValue]];
@@ -448,7 +448,7 @@
             [attributes addEntriesFromDictionary:@{NSFontAttributeName:font}];
             fontBounds = [[self text] boundingRectWithSize:paddedContentRect.size options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine) attributes:attributes context:nil].size;
             fontBounds.width = paddedContentRect.size.width;
-            if(fontBounds.height > paddedContentRect.size.height)
+            if (fontBounds.height > paddedContentRect.size.height)
             {
                 fontBounds.height = paddedContentRect.size.height;
             }
@@ -460,15 +460,15 @@
         // text-align
         NSString *_textAlignString = [stylesheet callStyleKey:@"text-align"];
         NSTextAlignment _textAlignment;
-        if(_textAlignString == nil && [_textAlignString isEqualToString:@"center"] == YES)
+        if (_textAlignString == nil && [_textAlignString isEqualToString:@"center"] == YES)
         {
             _textAlignment = NSTextAlignmentCenter;
         }
-        else if([_textAlignString isEqualToString:@"left"] == YES)
+        else if ([_textAlignString isEqualToString:@"left"] == YES)
         {
             _textAlignment = NSTextAlignmentLeft;
         }
-        else if([_textAlignString isEqualToString:@"right"] == YES)
+        else if ([_textAlignString isEqualToString:@"right"] == YES)
         {
             _textAlignment = NSTextAlignmentRight;
         }
@@ -481,15 +481,15 @@
         // vertical-align
         NSString *_verticalAlignString = [stylesheet callStyleKey:@"vertical-align"];
         CTStyleVerticalAlignment _verticalAlignment;
-        if(_verticalAlignString == nil && [_verticalAlignString isEqualToString:@"middle"] == YES)
+        if (_verticalAlignString == nil && [_verticalAlignString isEqualToString:@"middle"] == YES)
         {
             _verticalAlignment = CTStyleVerticalAlignmentMiddle;
         }
-        else if([_verticalAlignString isEqualToString:@"top"] == YES)
+        else if ([_verticalAlignString isEqualToString:@"top"] == YES)
         {
             _verticalAlignment = CTStyleVerticalAlignmentTop;
         }
-        else if([_verticalAlignString isEqualToString:@"bottom"] == YES)
+        else if ([_verticalAlignString isEqualToString:@"bottom"] == YES)
         {
             _verticalAlignment = CTStyleVerticalAlignmentBottom;
         }
@@ -501,30 +501,30 @@
 
         // 横位置
         CGFloat titleFrameX = 0;
-        if(_textAlignment == NSTextAlignmentCenter)
+        if (_textAlignment == NSTextAlignmentCenter)
         {
             titleFrameX = (paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x;
         }
-        else if(_textAlignment == NSTextAlignmentLeft)
+        else if (_textAlignment == NSTextAlignmentLeft)
         {
             titleFrameX = paddedContentRect.origin.x;
         }
-        else if(_textAlignment == NSTextAlignmentRight)
+        else if (_textAlignment == NSTextAlignmentRight)
         {
             titleFrameX = (paddedContentRect.origin.x + paddedContentRect.size.width) - fontBounds.width;
         }
 
         // 縦位置
         CGFloat titleFrameY = 0;
-        if(_verticalAlignment == CTStyleVerticalAlignmentTop)
+        if (_verticalAlignment == CTStyleVerticalAlignmentTop)
         {
             titleFrameY = paddedContentRect.origin.y;
         }
-        else if(_verticalAlignment == CTStyleVerticalAlignmentMiddle)
+        else if (_verticalAlignment == CTStyleVerticalAlignmentMiddle)
         {
             titleFrameY = (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y;
         }
-        else if(_verticalAlignment == CTStyleVerticalAlignmentBottom)
+        else if (_verticalAlignment == CTStyleVerticalAlignmentBottom)
         {
             titleFrameY = (paddedContentRect.size.height - fontBounds.height) + paddedContentRect.origin.y;
         }
@@ -542,9 +542,9 @@
 {
     [super setNeedsDisplay];
 
-    for(id childView in [self subviews])
+    for (id childView in [self subviews])
     {
-        if([childView isKindOfClass:[CTControl class]] == YES)
+        if ([childView isKindOfClass:[CTControl class]] == YES)
         {
             [(CTControl *)childView setNeedsDisplay];
         }
@@ -563,7 +563,7 @@
 - (id)initWithText:(NSString *)textString
 {
     self = [self initWithFrame:CGRectZero];
-    if(self)
+    if (self)
     {
         // タイトル
         [self setText:textString];
@@ -586,7 +586,7 @@
 }
 - (CTStyle *)callStyleNormal
 {
-    if([self ctstyleNormal] == nil)
+    if ([self ctstyleNormal] == nil)
     {
         [self setCtstyleNormal:[[CTStyle alloc] init]];
     }
@@ -594,9 +594,9 @@
 }
 - (CTStyle *)callStyleHighlighted
 {
-    if([self ctstyleHighlighted] == nil)
+    if ([self ctstyleHighlighted] == nil)
     {
-        if([self ctstyleNormal] != nil)
+        if ([self ctstyleNormal] != nil)
         {
             NSMutableDictionary *tmpStyles = [[[self ctstyleNormal] _styles] mutableCopy];
             [self setCtstyleHighlighted:[[CTStyle alloc] initWithStyles:tmpStyles]];
@@ -610,9 +610,9 @@
 }
 - (CTStyle *)callStyleDisabled
 {
-    if([self ctstyleDisabled] == nil)
+    if ([self ctstyleDisabled] == nil)
     {
-        if([self ctstyleNormal] != nil)
+        if ([self ctstyleNormal] != nil)
         {
             NSMutableDictionary *tmpStyles = [[[self ctstyleNormal] _styles] mutableCopy];
             [self setCtstyleDisabled:[[CTStyle alloc] initWithStyles:tmpStyles]];
@@ -656,7 +656,7 @@
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
-    if(enabled == YES)
+    if (enabled == YES)
     {
         [self modifyControlState:CTControlStateNormal];
     }
@@ -670,7 +670,7 @@
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    if(highlighted == YES)
+    if (highlighted == YES)
     {
         [self modifyControlState:CTControlStateHighlighted];
     }
@@ -726,31 +726,31 @@
 {
     NSLineBreakMode lineBreakMode = 0;
 
-    if([lineBreakString rangeOfString:@"truncating-middle"].location != NSNotFound)
+    if ([lineBreakString rangeOfString:@"truncating-middle"].location != NSNotFound)
     {
         lineBreakMode |= NSLineBreakByTruncatingMiddle;
     }
-    if([lineBreakString isEqualToString:@"word-wrapping"] == YES)
+    if ([lineBreakString isEqualToString:@"word-wrapping"] == YES)
     {
         lineBreakMode = NSLineBreakByWordWrapping;// Wrap at word boundaries, default
     }
-    else if([lineBreakString isEqualToString:@"char-wrapping"] == YES)
+    else if ([lineBreakString isEqualToString:@"char-wrapping"] == YES)
     {
         lineBreakMode = NSLineBreakByCharWrapping; // Wrap at character boundaries
     }
-    else if([lineBreakString isEqualToString:@"clipping"] == YES)
+    else if ([lineBreakString isEqualToString:@"clipping"] == YES)
     {
         lineBreakMode = NSLineBreakByClipping; // Simply clip
     }
-    else if([lineBreakString isEqualToString:@"truncating-head"] == YES)
+    else if ([lineBreakString isEqualToString:@"truncating-head"] == YES)
     {
         lineBreakMode = NSLineBreakByTruncatingHead; // Truncate at head of line: "...wxyz"
     }
-    else if([lineBreakString isEqualToString:@"truncating-tail"] == YES)
+    else if ([lineBreakString isEqualToString:@"truncating-tail"] == YES)
     {
         lineBreakMode = NSLineBreakByTruncatingTail; // Truncate at head of line: "...wxyz"
     }
-    else if([lineBreakString isEqualToString:@"truncating-middle"] == YES)
+    else if ([lineBreakString isEqualToString:@"truncating-middle"] == YES)
     {
         lineBreakMode = NSLineBreakByTruncatingMiddle;  // Truncate middle of line:  "ab...yz"
     }
@@ -776,7 +776,7 @@
     // ラインブレイク
     NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
     NSLineBreakMode lineBreakMode = 0;
-    if(_lineBreak != nil)
+    if (_lineBreak != nil)
     {
         lineBreakMode = [self convertLineBreakMode:_lineBreak];
     }
