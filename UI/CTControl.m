@@ -63,42 +63,32 @@
 // キー値監視
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    CGRect _frame = [self frame];
+    CGSize _size = _frame.size;
+    CGPoint _origin = _frame.origin;
     // width 変更時
     if ([keyPath isEqualToString:@"width"] == YES)
     {
-        CGRect _frame = [self frame];
-        CGSize _size = _frame.size;
         _size.width = [[[self callStyleNormal] callStyleKey:@"width"] floatValue];
-        _frame.size = _size;
-        [self setFrame:_frame];
     }
     // height 変更時
     else if ([keyPath isEqualToString:@"height"] == YES)
     {
-        CGRect _frame = [self frame];
-        CGSize _size = _frame.size;
         _size.height = [[[self callStyleNormal] callStyleKey:@"height"] floatValue];
-        _frame.size = _size;
-        [self setFrame:_frame];
     }
     // top 変更時
     else if ([keyPath isEqualToString:@"top"] == YES)
     {
-        CGRect _frame = [self frame];
-        CGPoint _origin = _frame.origin;
         _origin.y = [[[self callStyleNormal] callStyleKey:@"top"] floatValue];
-        _frame.origin = _origin;
-        [self setFrame:_frame];
     }
     // left 変更時
     else if ([keyPath isEqualToString:@"left"] == YES)
     {
-        CGRect _frame = [self frame];
-        CGPoint _origin = _frame.origin;
         _origin.x = [[[self callStyleNormal] callStyleKey:@"left"] floatValue];
-        _frame.origin = _origin;
-        [self setFrame:_frame];
     }
+    _frame.size = _size;
+    _frame.origin = _origin;
+    [self setFrame:_frame];
 }
 
 // 描画
@@ -135,72 +125,19 @@
     CGRect contentRect = rect;
 
     // マージン
-    NSString *_marginString = [stylesheet callStyleKey:@"margin"];
-    CGFloat _margins[4] = {0, 0, 0, 0};
-    if (_marginString != nil)
-    {
-        NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
-        if ([_marginsComponents count] == 4)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
-            _margins[2] = [[_marginsComponents objectAtIndex:2] floatValue];
-            _margins[3] = [[_marginsComponents objectAtIndex:3] floatValue];
-        }
-        else if ([_marginsComponents count] == 2)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
-            _margins[2] = _margins[0];
-            _margins[3] = _margins[1];
-        }
-        else if ([_marginsComponents count] == 1)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = _margins[0];
-            _margins[2] = _margins[0];
-            _margins[3] = _margins[0];
-        }
-        contentRect = CGRectMake((contentRect.origin.x + _margins[3]),
-                                 (contentRect.origin.y + _margins[0]),
-                                 (contentRect.size.width - (_margins[3] + _margins[1])),
-                                 (contentRect.size.height - (_margins[0] + _margins[2])));
-    }
+    CTMargin margin = [stylesheet callMargin];
+    contentRect = CGRectMake((contentRect.origin.x + margin.left),
+                             (contentRect.origin.y + margin.top),
+                             (contentRect.size.width  - (margin.left + margin.right)),
+                             (contentRect.size.height - (margin.top + margin.bottom)));
 
     // パッディング
     CGRect paddedContentRect = contentRect;
-    NSString *_paddingString = [stylesheet callStyleKey:@"padding"];
-    CGFloat _paddings[4] = {0, 0, 0, 0};
-    if (_paddingString != nil)
-    {
-        NSArray *_paddingsComponents = [_paddingString componentsSeparatedByString:@" "];
-        long count = [_paddingsComponents count];
-        if (count == 4)
-        {
-            _paddings[0] = [[_paddingsComponents objectAtIndex:0] floatValue];
-            _paddings[1] = [[_paddingsComponents objectAtIndex:1] floatValue];
-            _paddings[2] = [[_paddingsComponents objectAtIndex:2] floatValue];
-            _paddings[3] = [[_paddingsComponents objectAtIndex:3] floatValue];
-        }
-        else if (count == 2)
-        {
-            _paddings[0] = [[_paddingsComponents objectAtIndex:0] floatValue];
-            _paddings[1] = [[_paddingsComponents objectAtIndex:1] floatValue];
-            _paddings[2] = _margins[0];
-            _paddings[3] = _paddings[1];
-        }
-        else if (count == 1)
-        {
-            _paddings[0] = [[_paddingsComponents objectAtIndex:0] floatValue];
-            _paddings[1] = _paddings[0];
-            _paddings[2] = _paddings[0];
-            _paddings[3] = _paddings[0];
-        }
-        paddedContentRect = CGRectMake((contentRect.origin.x + _paddings[3]),
-                                       (contentRect.origin.y + _paddings[0]),
-                                       (contentRect.size.width - (_paddings[3] + _paddings[1])),
-                                       (contentRect.size.height - (_paddings[0] + _paddings[2])));
-    }
+    CTPadding padding = [stylesheet callPadding];
+    paddedContentRect = CGRectMake((contentRect.origin.x + padding.left),
+                                   (contentRect.origin.y + padding.top),
+                                   (contentRect.size.width  - (padding.left + padding.right)),
+                                   (contentRect.size.height - (padding.top + padding.bottom)));
 
     // 背景描画
     NSString *_backgroundColorString = [stylesheet callStyleKey:@"background-color"];
@@ -213,44 +150,9 @@
     }
 
     // ボーダー角丸
-    NSString *_borderRadiusString = [stylesheet callStyleKey:@"border-radius"];
-    CGFloat _borderRadiuses[4];
-    if (_borderRadiusString != nil)
-    {
-        NSArray *_borderRadiusComponents = [_borderRadiusString componentsSeparatedByString:@" "];
-        long count = [_borderRadiusComponents count];
-        if (count == 4)
-        {
-            _borderRadiuses[0] = [[_borderRadiusComponents objectAtIndex:0] floatValue];
-            _borderRadiuses[1] = [[_borderRadiusComponents objectAtIndex:1] floatValue];
-            _borderRadiuses[2] = [[_borderRadiusComponents objectAtIndex:2] floatValue];
-            _borderRadiuses[3] = [[_borderRadiusComponents objectAtIndex:3] floatValue];
-        }
-        else if (count == 2)
-        {
-            _borderRadiuses[0] = [[_borderRadiusComponents objectAtIndex:0] floatValue];
-            _borderRadiuses[1] = [[_borderRadiusComponents objectAtIndex:1] floatValue];
-            _borderRadiuses[2] = _borderRadiuses[0];
-            _borderRadiuses[3] = _borderRadiuses[1];
-        }
-        else if (count == 1)
-        {
-            _borderRadiuses[0] = [[_borderRadiusComponents objectAtIndex:0] floatValue];
-            _borderRadiuses[1] = _borderRadiuses[0];
-            _borderRadiuses[2] = _borderRadiuses[0];
-            _borderRadiuses[3] = _borderRadiuses[0];
-        }
-    }
-    else
-    {
-        _borderRadiuses[0] = 0;
-        _borderRadiuses[1] = 0;
-        _borderRadiuses[2] = 0;
-        _borderRadiuses[3] = 0;
-    }
-    [self addPathRadius:_borderRadiuses rect:contentRect];
+    CTRadius borderRadius = [stylesheet callBorderRadius];
+    [self addPathRadius:borderRadius rect:contentRect];
     CGContextFillPath(context);
-
     CGContextRestoreGState(context);
 
     // 影設定
@@ -258,7 +160,7 @@
     if (_boxShadowString != nil)
     {
         CGContextSaveGState(context);
-        [self addPathRadius:_borderRadiuses rect:contentRect];
+        [self addPathRadius:borderRadius rect:contentRect];
 
         NSArray *_boxShadowComponents = [_boxShadowString componentsSeparatedByString:@" "];
         CGFloat  _boxShadowLeft    = [[_boxShadowComponents objectAtIndex:0] floatValue];
@@ -286,7 +188,7 @@
     {
         // 描画範囲
         CGContextSaveGState(context);
-        [self addPathRadius:_borderRadiuses rect:contentRect];
+        [self addPathRadius:borderRadius rect:contentRect];
         CGContextClip(context);
 
         // トリム
@@ -369,7 +271,7 @@
 
         // 描画範囲
         CGRect _drawRect = CGRectInset(contentRect, (_borderWidth / 2), (_borderWidth / 2));
-        [self addPathRadius:_borderRadiuses rect:_drawRect offset:(_borderWidth / -1)];
+        [self addPathRadius:borderRadius rect:_drawRect offset:(_borderWidth / -1)];
         CGContextStrokePath(context);
 
         CGContextRestoreGState(context);
@@ -406,12 +308,7 @@
         [attributes addEntriesFromDictionary:@{NSForegroundColorAttributeName:_ctcolor}];
 
         // ラインブレイク
-        NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
-        NSLineBreakMode lineBreakMode = 0;
-        if (_lineBreak != nil)
-        {
-            lineBreakMode = [self convertLineBreakMode:_lineBreak];
-        }
+        NSLineBreakMode lineBreakMode = [stylesheet callLineBreakMode];
         [paragraph setLineBreakMode:lineBreakMode];
 
         // フォント計算
@@ -594,15 +491,7 @@
 {
     if ([self ctstyleHighlighted] == nil)
     {
-        if ([self ctstyleNormal] != nil)
-        {
-            NSMutableDictionary *tmpStyles = [[[self ctstyleNormal] _styles] mutableCopy];
-            [self setCtstyleHighlighted:[[CTStyle alloc] initWithStyles:tmpStyles]];
-        }
-        else
-        {
-            [self setCtstyleHighlighted:[[CTStyle alloc] init]];
-        }
+        [self setCtstyleHighlighted:[[self callStyleNormal] copy]];
     }
     return [self ctstyleHighlighted];
 }
@@ -610,15 +499,7 @@
 {
     if ([self ctstyleDisabled] == nil)
     {
-        if ([self ctstyleNormal] != nil)
-        {
-            NSMutableDictionary *tmpStyles = [[[self ctstyleNormal] _styles] mutableCopy];
-            [self setCtstyleDisabled:[[CTStyle alloc] initWithStyles:tmpStyles]];
-        }
-        else
-        {
-            [self setCtstyleDisabled:[[CTStyle alloc] init]];
-        }
+        [self setCtstyleDisabled:[[self callStyleNormal] copy]];
     }
     return [self ctstyleDisabled];
 }
@@ -678,6 +559,37 @@
     }
 }
 
+// 自動テキストサイズ計算
+- (CGSize)calcTextAutoSize
+{
+    CGSize bounds = CGSizeZero;
+    CTStyle *stylesheet = [self callStyle];
+    CGFloat width = [stylesheet callSize].width;
+
+    // フォント要素
+    NSMutableDictionary *attributes = [stylesheet callFontAttributes];
+
+    // サイズ計算
+    CGSize fontBounds = [[self text] boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine) attributes:attributes context:nil].size;
+    bounds.width = ceil(fontBounds.width);
+    bounds.height = ceil(fontBounds.height);
+
+    return bounds;
+}
+
+// 自動テキストサイズ計算(パディング込み)
+- (CGSize)calcTextAutoSizeWithPadding
+{
+    CGSize bounds = [self calcTextAutoSize];
+    CTStyle *stylesheet = [self callStyle];
+
+    // パディング追加
+    CTPadding padding = [stylesheet callPadding];
+    bounds.width += (padding.left + padding.right);
+    bounds.height += (padding.top + padding.bottom);
+
+    return bounds;
+}
 
 
 #pragma mark - private
@@ -686,13 +598,13 @@
 //
 
 // 角丸のパスを生成
-- (void)addPathRadius:(const CGFloat *)radius rect:(CGRect)rect
+- (void)addPathRadius:(CTRadius)radius rect:(CGRect)rect
 {
     [self addPathRadius:radius rect:rect offset:0];
 }
 
 // 角丸のパスを生成
-- (void)addPathRadius:(const CGFloat *)radius rect:(CGRect)rect offset:(CGFloat)offset
+- (void)addPathRadius:(CTRadius)radius rect:(CGRect)rect offset:(CGFloat)offset
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
 
@@ -710,131 +622,11 @@
     // 黒下地
     CGContextBeginPath(context);
     CGContextMoveToPoint(context, minx, midy);
-    CGContextAddArcToPoint(context, minx, miny, midx, miny, radius[0] + offset);
-    CGContextAddArcToPoint(context, maxx, miny, maxx, midy, radius[1] + offset);
-    CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius[2] + offset);
-    CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius[3] + offset);
+    CGContextAddArcToPoint(context, minx, miny, midx, miny, radius.left_top     + offset);
+    CGContextAddArcToPoint(context, maxx, miny, maxx, midy, radius.right_top    + offset);
+    CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius.right_bottom + offset);
+    CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius.left_bottom  + offset);
     CGContextClosePath(context);
-}
-
-// line-break の変換
-- (NSLineBreakMode)convertLineBreakMode:(NSString *)lineBreakString
-{
-    NSLineBreakMode lineBreakMode = 0;
-
-    if ([lineBreakString rangeOfString:@"truncating-middle"].location != NSNotFound)
-    {
-        lineBreakMode |= NSLineBreakByTruncatingMiddle;
-    }
-    if ([lineBreakString isEqualToString:@"word-wrapping"] == YES)
-    {
-        lineBreakMode = NSLineBreakByWordWrapping;// Wrap at word boundaries, default
-    }
-    else if ([lineBreakString isEqualToString:@"char-wrapping"] == YES)
-    {
-        lineBreakMode = NSLineBreakByCharWrapping; // Wrap at character boundaries
-    }
-    else if ([lineBreakString isEqualToString:@"clipping"] == YES)
-    {
-        lineBreakMode = NSLineBreakByClipping; // Simply clip
-    }
-    else if ([lineBreakString isEqualToString:@"truncating-head"] == YES)
-    {
-        lineBreakMode = NSLineBreakByTruncatingHead; // Truncate at head of line: "...wxyz"
-    }
-    else if ([lineBreakString isEqualToString:@"truncating-tail"] == YES)
-    {
-        lineBreakMode = NSLineBreakByTruncatingTail; // Truncate at head of line: "...wxyz"
-    }
-    else if ([lineBreakString isEqualToString:@"truncating-middle"] == YES)
-    {
-        lineBreakMode = NSLineBreakByTruncatingMiddle;  // Truncate middle of line:  "ab...yz"
-    }
-
-    return lineBreakMode;
-}
-
-// 高さ計算
-- (CGFloat)calcHeight
-{
-    CTStyle *stylesheet = [self callStyle];
-    CGFloat width = [stylesheet callSize].width;
-    CGFloat height = 0;
-
-    // 文字列要素
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
-    // パラグラフ
-    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
-    [attributes addEntriesFromDictionary:@{NSParagraphStyleAttributeName:paragraph}];
-
-    // ラインブレイク
-    NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
-    NSLineBreakMode lineBreakMode = 0;
-    if (_lineBreak != nil)
-    {
-        lineBreakMode = [self convertLineBreakMode:_lineBreak];
-    }
-    [paragraph setLineBreakMode:lineBreakMode];
-
-    // フォント計算
-    UIFont *font = [stylesheet callFont];
-    [attributes addEntriesFromDictionary:@{NSFontAttributeName:font}];
-    CGSize fontBounds = [[self text] boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine) attributes:attributes context:nil].size;
-
-    height = fontBounds.height;
-
-    return height;
-}
-
-// 高さ計算(全て)
-- (CGFloat)calcHeightAll
-{
-    CTStyle *stylesheet = [self callStyle];
-    CGFloat height = [self calcHeight];
-
-    // paddingを足す
-    CTPadding padding = [stylesheet callPadding];
-    height += (padding.top + padding.bottom);
-
-    return height;
-}
-
-// 自動テキストサイズ計算
-- (CGSize)calcTextAutoSize
-{
-    CGSize bounds = CGSizeZero;
-    CTStyle *stylesheet = [self callStyle];
-    CGFloat width = [stylesheet callSize].width;
-
-    // 文字列要素
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
-    // パラグラフ
-    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
-    [attributes addEntriesFromDictionary:@{NSParagraphStyleAttributeName:paragraph}];
-
-    // ラインブレイク
-    NSString *_lineBreak = [stylesheet callStyleKey:@"line-break"];
-    NSLineBreakMode lineBreakMode = 0;
-    if (_lineBreak != nil)
-    {
-        lineBreakMode = [self convertLineBreakMode:_lineBreak];
-    }
-    [paragraph setLineBreakMode:lineBreakMode];
-
-    // フォント計算
-    UIFont *font = [stylesheet callFont];
-    [attributes addEntriesFromDictionary:@{NSFontAttributeName:font}];
-    // サイズ計算
-    CGSize fontBounds = [[self text] boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine) attributes:attributes context:nil].size;
-    bounds.width = ceil(fontBounds.width);
-    bounds.height = ceil(fontBounds.height);
-
-    // パディング追加
-    CTPadding padding = [stylesheet callPadding];
-    bounds.width += (padding.left + padding.right);
-    bounds.height += (padding.top + padding.bottom);
-
-    return bounds;
 }
 
 @end

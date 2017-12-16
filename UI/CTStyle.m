@@ -181,6 +181,24 @@
     return _font;
 }
 
+// フォント要素取得
+- (NSMutableDictionary *)callFontAttributes
+{
+    // 文字列要素
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    // パラグラフ
+    NSMutableParagraphStyle *paragraph = [[NSMutableParagraphStyle alloc] init];
+    [attributes addEntriesFromDictionary:@{NSParagraphStyleAttributeName:paragraph}];
+    // ラインブレイク
+    NSLineBreakMode lineBreakMode = [self callLineBreakMode];
+    [paragraph setLineBreakMode:lineBreakMode];
+    // フォント計算
+    UIFont *font = [self callFont];
+    [attributes addEntriesFromDictionary:@{NSFontAttributeName:font}];
+
+    return attributes;
+}
+
 // サイズ取得
 - (CGSize)callSize
 {
@@ -267,6 +285,20 @@
                       }];
 }
 
+// 角丸取得
+- (CTRadius)callBorderRadius
+{
+    return [self callRadius:@"border-radius"];
+}
+
+// 角丸設定
+- (void)setBorderRadius:(CTRadius)radius
+{
+    [self addStyles:@{
+                      @"border-radius" :[self callRadiusFormat:radius],
+                      }];
+}
+
 // フレーム取得
 - (CGRect)callFrame
 {
@@ -311,6 +343,47 @@
     return _borderWidth;
 }
 
+// 改行モードの取得
+- (NSLineBreakMode)callLineBreakMode
+{
+    NSString *lineBreak = [self callStyleKey:@"line-break"];
+    NSLineBreakMode lineBreakMode = NSLineBreakByWordWrapping;
+    // 定義されていなければデフォルト返却
+    if (lineBreak == nil)
+    {
+        return lineBreakMode;
+    }
+
+    if ([lineBreak rangeOfString:@"truncating-middle"].location != NSNotFound)
+    {
+        lineBreakMode |= NSLineBreakByTruncatingMiddle;
+    }
+    if ([lineBreak isEqualToString:@"word-wrapping"] == YES)
+    {
+        lineBreakMode = NSLineBreakByWordWrapping;// Wrap at word boundaries, default
+    }
+    else if ([lineBreak isEqualToString:@"char-wrapping"] == YES)
+    {
+        lineBreakMode = NSLineBreakByCharWrapping; // Wrap at character boundaries
+    }
+    else if ([lineBreak isEqualToString:@"clipping"] == YES)
+    {
+        lineBreakMode = NSLineBreakByClipping; // Simply clip
+    }
+    else if ([lineBreak isEqualToString:@"truncating-head"] == YES)
+    {
+        lineBreakMode = NSLineBreakByTruncatingHead; // Truncate at head of line: "...wxyz"
+    }
+    else if ([lineBreak isEqualToString:@"truncating-tail"] == YES)
+    {
+        lineBreakMode = NSLineBreakByTruncatingTail; // Truncate at head of line: "...wxyz"
+    }
+    else if ([lineBreak isEqualToString:@"truncating-middle"] == YES)
+    {
+        lineBreakMode = NSLineBreakByTruncatingMiddle;  // Truncate middle of line:  "ab...yz"
+    }
+    return lineBreakMode;
+}
 
 
 #pragma mark - private
@@ -365,6 +438,52 @@
     return CTStringf(@"%f %f %f %f", sizing.top, sizing.right, sizing.bottom, sizing.left);
 }
 
+// 角丸構造体の取得
+- (CTRadius)callRadius:(NSString *)keyName
+{
+    CTRadius element = {0, 0, 0, 0};
+    NSString *_string = [self callStyleKey:keyName];
+    if (_string != nil)
+    {
+        NSArray *_components = [_string componentsSeparatedByString:@" "];
+        NSUInteger count = [_components count];
+        if (count == 4)
+        {
+            element.left_top    = [[_components objectAtIndex:0] floatValue];
+            element.right_top   = [[_components objectAtIndex:1] floatValue];
+            element.right_bottom= [[_components objectAtIndex:2] floatValue];
+            element.left_bottom = [[_components objectAtIndex:3] floatValue];
+        }
+        else if (count == 3)
+        {
+            element.left_top    = [[_components objectAtIndex:0] floatValue];
+            element.right_top   = [[_components objectAtIndex:1] floatValue];
+            element.right_bottom= [[_components objectAtIndex:2] floatValue];
+            element.left_bottom = element.right_top;
+        }
+        else if (count == 2)
+        {
+            element.left_top    = [[_components objectAtIndex:0] floatValue];
+            element.right_top   = [[_components objectAtIndex:1] floatValue];
+            element.right_bottom= element.left_top;
+            element.left_bottom = element.right_top;
+        }
+        else if (count == 1)
+        {
+            element.left_top    = [[_components objectAtIndex:0] floatValue];
+            element.right_top   = element.left_top;
+            element.right_bottom= element.left_top;
+            element.left_bottom = element.right_top;
+        }
+    }
+    return element;
+}
+
+// 角丸構造体文字列の取得
+- (NSString *)callRadiusFormat:(CTRadius)radius
+{
+    return CTStringf(@"%f %f %f %f", radius.left_top, radius.right_top, radius.right_bottom, radius.left_bottom);
+}
 
 
 #pragma mark - NSCopying

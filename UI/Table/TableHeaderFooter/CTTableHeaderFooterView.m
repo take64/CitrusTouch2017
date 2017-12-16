@@ -100,7 +100,7 @@
     // サイズ調整
     CGRect rect = [self frame];
     rect.size.height = [[self label] frame].origin.y
-                     + [[self label] calcHeightAll]
+                     + [[self label] calcTextAutoSizeWithPadding].height
                      + [[self label] frame].origin.y
                      + [self margin];
     [self setFrame:rect];

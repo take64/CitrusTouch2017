@@ -40,6 +40,14 @@ __attribute__((unused)) static CGRect CGRectDiff(CGRect source, CGRect diff)
     return rect;
 }
 
+// radius
+typedef struct {
+    CGFloat left_top;
+    CGFloat right_top;
+    CGFloat right_bottom;
+    CGFloat left_bottom;
+} CTRadius;
+
 
 @interface CTStyle : NSObject <NSCopying>
 {
@@ -91,6 +99,9 @@ __attribute__((unused)) static CGRect CGRectDiff(CGRect source, CGRect diff)
 // フォント取得
 - (UIFont *)callFont;
 
+// フォント要素取得
+- (NSMutableDictionary *)callFontAttributes;
+
 // サイズ取得
 - (CGSize)callSize;
 
@@ -115,6 +126,12 @@ __attribute__((unused)) static CGRect CGRectDiff(CGRect source, CGRect diff)
 // マージン設定
 - (void)setMargin:(CTMargin)margin;
 
+// 角丸取得
+- (CTRadius)callBorderRadius;
+
+// 角丸設定
+- (void)setBorderRadius:(CTRadius)radius;
+
 // フレーム取得
 - (CGRect)callFrame;
 
@@ -128,5 +145,8 @@ __attribute__((unused)) static CGRect CGRectDiff(CGRect source, CGRect diff)
 
 // ボーダー幅取得
 - (CGFloat)callBorderWidth;
+
+// 改行モードの取得
+- (NSLineBreakMode)callLineBreakMode;
 
 @end
