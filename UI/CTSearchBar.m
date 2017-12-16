@@ -32,6 +32,7 @@
         [self setToolbar:[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 44)]];
         [[self toolbar] setBarStyle:UIBarStyleBlackOpaque];
         [[self toolbar] setBarTintColor:[[CitrusTouchApplication callTheme] callNavigationBarTintColor]];
+        [[self toolbar] setTranslucent:YES];
 
         // ツールバーパーツ
         UIBarButtonItem *barSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];

@@ -26,6 +26,9 @@
 // method
 //
 
+// ボタングループの生成
++ (instancetype)bottunGroup;
+
 // ボタンの追加
 - (void)addButton:(CTButton *)buttonValue;
 
