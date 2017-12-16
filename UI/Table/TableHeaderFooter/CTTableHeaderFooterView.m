@@ -10,6 +10,8 @@
 
 @implementation CTTableHeaderFooterView
 
+
+
 //
 // synthesize
 //
@@ -18,6 +20,11 @@
 @synthesize margin;
 
 
+
+#pragma mark - extends
+//
+// extends
+//
 
 // init
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier;
@@ -62,6 +69,22 @@
 //
 // method
 //
+
+// bind title or view
+- (void)bindTitle:(NSString *)titleString orView:(UIView *)viewValue
+{
+    // title string exist
+    if ([titleString length] > 0)
+    {
+        [self bindTitle:titleString];
+    }
+
+    // title view exist
+    if (viewValue != nil)
+    {
+        [self bindView:viewValue];
+    }
+}
 
 // bind title
 - (void)bindTitle:(NSString *)titleString

@@ -10,6 +10,11 @@
 
 @implementation CTTableViewTrait
 
+#pragma mark - method
+//
+// method
+//
+
 // call table header view
 + (UIView *)callTableHeaderViewWithController:(id<CTTableViewDelegate>)tableDelegate tableView:(UITableView *)tableView section:(NSInteger)section
 {
@@ -47,17 +52,8 @@
     // bind
     if (headerFooterView != nil)
     {
-        // title string exist
-        if ([titleString length] > 0)
-        {
-            [headerFooterView bindTitle:titleString];
-        }
-
-        // title view exist
-        if (titleView != nil)
-        {
-            [headerFooterView bindView:titleView];
-        }
+        // bind title string or view exist
+        [headerFooterView bindTitle:titleString orView:titleView];
     }
 
     return headerFooterView;
@@ -100,17 +96,8 @@
     // bind
     if (headerFooterView != nil)
     {
-        // title string exist
-        if ([titleString length] > 0)
-        {
-            [headerFooterView bindTitle:titleString];
-        }
-
-        // title view exist
-        if (titleView != nil)
-        {
-            [headerFooterView bindView:titleView];
-        }
+        // bind title string or view exist
+        [headerFooterView bindTitle:titleString orView:titleView];
     }
 
     return headerFooterView;
