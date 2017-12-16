@@ -94,53 +94,19 @@
 //
 //- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 //// セルヘッダビュー
-//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-//{
-//    if ([tableView style] == UITableViewStylePlain)
-//    {
-//        [view setTintColor:[[CitrusTouchApplication callTheme] callTableCellHeadBackColor]];
-//        [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callTableCellHeadTextColor]];
-//    }
-//    else if ([tableView style] == UITableViewStyleGrouped)
-//    {
-//        [[(UITableViewHeaderFooterView *)view backgroundView] setBackgroundColor:[[CitrusTouchApplication callTheme] callTableCellHeadBackColor]];
-//        [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callTableCellHeadTextColor]];
-////        [[(UITableViewHeaderFooterView *)view textLabel] setAutoresizingMask:(UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin)];
-//    }
-//}
+//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section;
 //- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section NS_AVAILABLE_IOS(6_0);
 //- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath NS_AVAILABLE_IOS(6_0);
 //// セルヘッダビュー
-//- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section
-//{
-////    CGRect rect = [[(UITableViewHeaderFooterView *)view textLabel] frame];
-////    rect.origin.y += 8;
-////    [[(UITableViewHeaderFooterView *)view textLabel] setFrame:rect];
-//}
+//- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section;
 //- (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section NS_AVAILABLE_IOS(6_0);
 //
 //// Variable height support
 //
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 //// セルヘッダ高さ
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//    if ([self tableView:tableView viewForHeaderInSection:section] == nil)
-//    {
-//        return 0;
-//    }
-//
-//    return CT8(3);
-//}
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
-//    if (footerView == nil)
-//    {
-//        return 0;
-//    }
-//    return [footerView frame].size.height;
-//}
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section;
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
 //
 //// Use the estimatedHeight methods to quickly calcuate guessed values which will allow for fast load times of the table.
 //// If these methods are implemented, the above -tableView:heightForXXX calls will be deferred until views are ready to be displayed, so more expensive logic can be placed there.
@@ -275,7 +241,6 @@
     {
         // part
         CTButton *button;
-        CTBarButtonItem *barButtonItem;
 
         // ボタングループ
         CTButtonGroup *buttonGroup = [[CTButtonGroup alloc] initWithFrame:CGRectZero];
@@ -295,8 +260,7 @@
             [self onTapBarButtonSelect];
         }];
         [self setSelectButton:button];
-        barButtonItem = [[CTBarButtonItem alloc] initWithCustomView:buttonGroup];
-        [self setBarButtonItem:barButtonItem];
+        [self setBarButtonItem:[buttonGroup toBarButtonItem]];
     }
     return self;
 }
