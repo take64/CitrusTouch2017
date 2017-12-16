@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTFetchListController.h"
@@ -14,40 +14,56 @@
 
 @implementation CTFetchListController
 
+
+
 //
 // synthesize
 //
 @synthesize fetchedResultsController;
 
 
+
+#pragma mark - extends
+//
+// extends
+//
+
 // init
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
-    if(self)
+    if (self)
     {
-        
     }
     return self;
 }
 
-- (void) viewDidAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
     // フェッチ
     [[self callFetchedResultsController] setDelegate:self];
     [[self callFetchedResultsController] performFetch:nil];
-    
+
     [[self tableView] reloadData];
 }
-- (void) viewWillDisappear:(BOOL)animated
+
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     // フェッチ
     [[self callFetchedResultsController] setDelegate:nil];
 }
+
+// セルヘッダタイトル取得
+- (NSString *)callHeaderTitleWithSection:(NSInteger)section
+{
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[[self callFetchedResultsController] sections] objectAtIndex:section];
+    return [sectionInfo name];
+}
+
 
 
 #pragma mark - UITableViewDataSource
@@ -72,12 +88,7 @@
 }
 
 //// ヘッダタイトル
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    id <NSFetchedResultsSectionInfo> sectionInfo = [[[self callFetchedResultsController] sections] objectAtIndex:section];
-//    return [sectionInfo name];
-//}
-
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 //- (nullable NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section;
 //
 //// Editing
@@ -211,22 +222,20 @@
         case NSFetchedResultsChangeInsert:
             [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
         case NSFetchedResultsChangeDelete:
             [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
         case NSFetchedResultsChangeUpdate:
             [self bindCell:(CTTableCell *)[[self tableView] cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
             [[self tableView] reloadRowsAtIndexPaths:@[ indexPath ] withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
         case NSFetchedResultsChangeMove:
             [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
+
 // セクション変更後
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
@@ -243,12 +252,14 @@
             break;
     }
 }
+
 // 変更前
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     [[self tableView] beginUpdates];
 }
-// 変更語
+
+// 変更後
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     [[self tableView] endUpdates];
@@ -256,18 +267,6 @@
 //- (NSString *)controller:(NSFetchedResultsController *)controller sectionIndexTitleForSectionName:(NSString *)sectionName;
 
 
-
-#pragma mark - extends
-//
-// extends
-//
-
-// セルヘッダタイトル取得
-- (NSString *)callHeaderTitleWithSection:(NSInteger)section
-{
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[[self callFetchedResultsController] sections] objectAtIndex:section];
-    return [sectionInfo name];
-}
 
 #pragma mark - private
 //
