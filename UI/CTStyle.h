@@ -8,18 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
+// vertical allignment
 typedef NS_ENUM(NSInteger, CTStyleVerticalAlignment) {
     CTStyleVerticalAlignmentTop,
     CTStyleVerticalAlignmentMiddle,
     CTStyleVerticalAlignmentBottom,
 };
 
+// sizing
 typedef struct {
     CGFloat left;
     CGFloat top;
     CGFloat right;
     CGFloat bottom;
-} CTPadding;
+} CTSizing;
+
+// padding
+typedef CTSizing CTPadding;
+
+// margin
+typedef CTSizing CTMargin;
 
 
 @interface CTStyle : NSObject <NSCopying>
@@ -89,6 +97,12 @@ typedef struct {
 
 // パディング設定
 - (void)setPadding:(CTPadding)padding;
+
+// マージン取得
+- (CTMargin)callMargin;
+
+// マージン設定
+- (void)setMargin:(CTMargin)margin;
 
 // フレーム取得
 - (CGRect)callFrame;

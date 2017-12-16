@@ -3,7 +3,7 @@
 //  CitrusTouch
 //
 //  Created by take64 on 2012/09/30.
-//  Copyright (c) 2012年 citrus.tk. All rights reserved.
+//  Copyright (c) 2012 citrus.tk. All rights reserved.
 //
 
 #import "CTStyle.h"
@@ -16,6 +16,12 @@
 @synthesize _styles;
 
 
+#pragma mark - extends
+//
+// extends
+//
+
+// init
 - (id) init
 {
     self = [super init];
@@ -27,12 +33,11 @@
 }
 
 
-#pragma mark -
-#pragma mark method
+
+#pragma mark - method
 //
 // method
 //
-
 
 // 初期化
 - (id) initWithStyles:(NSDictionary *)dictionaryValue
@@ -55,19 +60,10 @@
     }
     return self;
 }
+
 // 追加
 - (void)addStyleKey:(NSString *)keyValue value:(NSString *)dataValue
 {
-//    BOOL isRootExist = NO;
-//    for (NSString *rootKey in @[ @"top", @"left", @"width", @"height" ])
-//    {
-//        if ([keyValue isEqualToString:rootKey] == YES)
-//        {
-//            isRootExist = YES;
-//            break;
-//        }
-//    }
-//
     if ([[self _styles] objectForKey:keyValue] == nil)
     {
         [[self _styles] setValue:dataValue forKey:keyValue];
@@ -83,6 +79,7 @@
         [[self _styles] didChangeValueForKey:keyValue];
     }
 }
+
 // 追加
 - (void)addStyles:(NSDictionary *)dictionaryValue
 {
@@ -99,6 +96,7 @@
         }
     }
 }
+
 // 追加
 - (void)addStyleDictionary:(NSDictionary *)dictionaryValue
 {
@@ -107,6 +105,7 @@
         [self addStyleKey:keyValue value:[dictionaryValue objectForKey:keyValue]];
     }
 }
+
 // 削除
 - (void)removeStyleKey:(NSString *)keyValue
 {
@@ -121,26 +120,31 @@
         [[self _styles] removeObjectForKey:keyValue];
     }
 }
+
 // 取得
 - (NSString *)callStyleKey:(NSString *)keyValue
 {
     return [[self _styles] objectForKey:keyValue];
 }
+
 // 設定
 - (void)setStyleKey:(NSString *)keyValue value:(NSString *)dataValue
 {
     [self addStyleKey:keyValue value:dataValue];
 }
+
 // 設定
 - (void)setStyleDictionary:(NSDictionary *)dictionaryValue
 {
     [self addStyleDictionary:dictionaryValue];
 }
+
 // 全取得
 - (NSMutableDictionary *)callAllStyles
 {
     return [self _styles];
 }
+
 // フォント取得
 - (UIFont *)callFont
 {
@@ -151,9 +155,6 @@
     {
         _fontSize = [_fontSizeString floatValue];
     }
-
-//    // フォントファミリー
-//    NSString *_fontFamily = [[self _styles] objectForKey:@"font-family"];
 
     // フォントボールド
     NSString *_fontWeight = [[self _styles] objectForKey:@"font-weight"];
@@ -179,6 +180,7 @@
 
     return _font;
 }
+
 // サイズ取得
 - (CGSize)callSize
 {
@@ -240,50 +242,28 @@
 // パディング取得
 - (CTPadding)callPadding
 {
-    CTPadding element = {0, 0, 0, 0};
-    // パディング
-    NSString *_string = [self callStyleKey:@"padding"];
-    if (_string != nil)
-    {
-        NSArray *_components = [_string componentsSeparatedByString:@" "];
-
-        if ([_components count] == 4)
-        {
-            element.top     = [[_components objectAtIndex:0] floatValue];
-            element.right   = [[_components objectAtIndex:1] floatValue];
-            element.bottom  = [[_components objectAtIndex:2] floatValue];
-            element.left    = [[_components objectAtIndex:3] floatValue];
-        }
-        else if ([_components count] == 3)
-        {
-            element.top     = [[_components objectAtIndex:0] floatValue];
-            element.right   = [[_components objectAtIndex:1] floatValue];
-            element.bottom  = [[_components objectAtIndex:2] floatValue];
-            element.left    = element.right;
-        }
-        else if ([_components count] == 2)
-        {
-            element.top     = [[_components objectAtIndex:0] floatValue];
-            element.right   = [[_components objectAtIndex:1] floatValue];
-            element.bottom  = element.top;
-            element.left    = element.right;
-        }
-        else if ([_components count] == 1)
-        {
-            element.top     = [[_components objectAtIndex:0] floatValue];
-            element.right   = element.left;
-            element.bottom  = element.left;
-            element.left    = element.left;
-        }
-    }
-    return element;
+    return [self callSizing:@"padding"];
 }
 
 // パディング設定
 - (void)setPadding:(CTPadding)padding
 {
     [self addStyles:@{
-                      @"padding" :CTStringf(@"%f %f %f %f", padding.left, padding.top, padding.right, padding.bottom),
+                      @"padding" :[self callSizingFormat:padding],
+                      }];
+}
+
+// マージン取得
+- (CTMargin)callMargin
+{
+    return [self callSizing:@"margin"];
+}
+
+// マージン設定
+- (void)setMargin:(CTMargin)margin
+{
+    [self addStyles:@{
+                      @"margin" :[self callSizingFormat:margin],
                       }];
 }
 
@@ -309,73 +289,14 @@
 // マージン取得(右)
 - (CGFloat)callMarginRight
 {
-    // マージン
-    NSString *_marginString = [self callStyleKey:@"margin"];
-    CGFloat _margins[4] = {0, 0, 0, 0};
-    if (_marginString != nil)
-    {
-        NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
-
-        if ([_marginsComponents count] == 4)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
-            _margins[2] = [[_marginsComponents objectAtIndex:2] floatValue];
-            _margins[3] = [[_marginsComponents objectAtIndex:3] floatValue];
-        }
-        else if ([_marginsComponents count] == 2)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
-            _margins[2] = _margins[0];
-            _margins[3] = _margins[1];
-        }
-        else if ([_marginsComponents count] == 1)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = _margins[0];
-            _margins[2] = _margins[0];
-            _margins[3] = _margins[0];
-        }
-    }
-    return _margins[1];
+    return [self callMargin].right;
 }
 
 // マージン取得(下)
 - (CGFloat)callMarginBottom
 {
-    // マージン
-    NSString *_marginString = [self callStyleKey:@"margin"];
-    CGFloat _margins[4] = {0, 0, 0, 0};
-    if (_marginString != nil)
-    {
-        NSArray *_marginsComponents = [_marginString componentsSeparatedByString:@" "];
-
-        if ([_marginsComponents count] == 4)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
-            _margins[2] = [[_marginsComponents objectAtIndex:2] floatValue];
-            _margins[3] = [[_marginsComponents objectAtIndex:3] floatValue];
-        }
-        else if ([_marginsComponents count] == 2)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = [[_marginsComponents objectAtIndex:1] floatValue];
-            _margins[2] = _margins[0];
-            _margins[3] = _margins[1];
-        }
-        else if ([_marginsComponents count] == 1)
-        {
-            _margins[0] = [[_marginsComponents objectAtIndex:0] floatValue];
-            _margins[1] = _margins[0];
-            _margins[2] = _margins[0];
-            _margins[3] = _margins[0];
-        }
-    }
-    return _margins[2];
+    return [self callMargin].bottom;
 }
-
 
 // ボーダー幅取得
 - (CGFloat)callBorderWidth
@@ -388,6 +309,60 @@
         _borderWidth = [_borderWidthString floatValue];
     }
     return _borderWidth;
+}
+
+
+
+#pragma mark - private
+//
+// private
+//
+
+// サイズ構造体の取得
+- (CTSizing)callSizing:(NSString *)keyName
+{
+    CTSizing element = {0, 0, 0, 0};
+    NSString *_string = [self callStyleKey:keyName];
+    if (_string != nil)
+    {
+        NSArray *_components = [_string componentsSeparatedByString:@" "];
+        NSUInteger count = [_components count];
+        if (count == 4)
+        {
+            element.top     = [[_components objectAtIndex:0] floatValue];
+            element.right   = [[_components objectAtIndex:1] floatValue];
+            element.bottom  = [[_components objectAtIndex:2] floatValue];
+            element.left    = [[_components objectAtIndex:3] floatValue];
+        }
+        else if (count == 3)
+        {
+            element.top     = [[_components objectAtIndex:0] floatValue];
+            element.right   = [[_components objectAtIndex:1] floatValue];
+            element.bottom  = [[_components objectAtIndex:2] floatValue];
+            element.left    = element.top;
+        }
+        else if (count == 2)
+        {
+            element.top     = [[_components objectAtIndex:0] floatValue];
+            element.right   = [[_components objectAtIndex:1] floatValue];
+            element.bottom  = element.top;
+            element.left    = element.right;
+        }
+        else if (count == 1)
+        {
+            element.top     = [[_components objectAtIndex:0] floatValue];
+            element.right   = element.top;
+            element.bottom  = element.top;
+            element.left    = element.top;
+        }
+    }
+    return element;
+}
+
+// サイズ構造体文字列の取得
+- (NSString *)callSizingFormat:(CTSizing)sizing
+{
+    return CTStringf(@"%f %f %f %f", sizing.top, sizing.right, sizing.bottom, sizing.left);
 }
 
 
