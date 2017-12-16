@@ -43,11 +43,14 @@
         [self setSelectedItems:[@[] mutableCopy]];
 
         // part
-        CTBarButtonItem *barButtonItem;
+        CTButtonGroup *buttonGroup;
 
         // バーボタン(閉じる)
-        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"閉じる" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonClose)];
-        [[self navigationItem] setLeftBarButtonItems:@[ barButtonItem ]];
+        buttonGroup = [CTButtonGroup bottunGroup];
+        [buttonGroup addButtonWithTitle:@"閉じる" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonClose];
+        }];
+        [[self navigationItem] setLeftBarButtonItems:@[ [buttonGroup toBarButtonItem] ]];
     }
     return self;
 }
