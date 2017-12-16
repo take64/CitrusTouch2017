@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/01.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTDate.h"
@@ -21,16 +21,16 @@
     sqlite3_open(":memory:", &db);
     sqlite3_stmt *statement = NULL;
     sqlite3_prepare_v2(db, "SELECT strftime('%s', ?);", -1, &statement, NULL);
-    
+
     sqlite3_bind_text(statement, 1, stringValue.UTF8String, -1, SQLITE_STATIC);
     sqlite3_step(statement);
     sqlite3_int64 timestamp = sqlite3_column_int64(statement, 0);
-    
+
     NSDate *dateValue = [NSDate dateWithTimeIntervalSince1970:timestamp];
-    
+
     sqlite3_clear_bindings(statement);
     sqlite3_reset(statement);
-    
+
     return dateValue;
 }
 
@@ -54,7 +54,7 @@
     [formatter setTimeZone:timeZoneValue];
     [formatter setDateFormat:formatString];
     NSDate *date = [formatter dateFromString:stringValue];
-    
+
     return date;
 }
 
@@ -78,7 +78,7 @@
     [formatter setTimeZone:timeZoneValue];
     [formatter setLocale:localeValue];
     [formatter setDateFormat:formatString];
-    
+
     // 変換
     return [formatter stringFromDate:dateValue];
 }
@@ -111,11 +111,11 @@
 + (NSDate *)dateRemoveHHIISSWithDate:(NSDate *)dateValue locale:(NSLocale *)localeValue timeZone:(NSTimeZone *)timeZoneValue
 {
     NSCalendar *calendar = [self callCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday) fromDate:dateValue];
+    NSDateComponents *components = [self componentsWithDate:dateValue];
     [components setHour:0];
     [components setMinute:0];
     [components setSecond:0];
-    
+
     return [calendar dateFromComponents:components];
 }
 
@@ -123,51 +123,42 @@
 + (NSDate *)todayDate
 {
     NSCalendar *calendar = [self callCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday) fromDate:[NSDate date]];
+    NSDateComponents *components = [self componentsWithDate:[NSDate date]];
     [components setHour:0];
     [components setMinute:0];
     [components setSecond:0];
-    
+
     return [calendar dateFromComponents:components];
 }
 
 // 日付から年を取得
 + (NSInteger)yearWithDate:(NSDate *)dateValue
 {
-    NSCalendar *calendar = [self callCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday) fromDate:dateValue];
-    
-    return [components year];
+    return [[self componentsWithDate:dateValue] year];
 }
 
 // 日付から月を取得
 + (NSInteger)monthWithDate:(NSDate *)dateValue
 {
-    NSCalendar *calendar = [self callCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday) fromDate:dateValue];
-    
-    return [components month];
+    return [[self componentsWithDate:dateValue] month];
 }
 
 // 日付から日を取得
 + (NSInteger)dayWithDate:(NSDate *)dateValue
 {
-    NSCalendar *calendar = [self callCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday) fromDate:dateValue];
-    
-    return [components day];
+    return [[self componentsWithDate:dateValue] day];
 }
 
 // 月の初めを取得
 + (NSDate *)monthFirstWithDate:(NSDate *)dateValue
 {
     NSCalendar *calendar = [self callCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday) fromDate:dateValue];
+    NSDateComponents *components = [self componentsWithDate:dateValue];
     [components setDay:1];
     [components setHour:0];
     [components setMinute:0];
     [components setSecond:0];
-    
+
     return [calendar dateFromComponents:components];
 }
 
@@ -176,7 +167,7 @@
 {
     NSCalendar *calendar = [self callCalendar];
     NSDateComponents *components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday) fromDate:dateValue];
-    
+
     return components;
 }
 
@@ -190,7 +181,7 @@
 + (NSCalendar *)callCalendar
 {
     static NSCalendar *calendar;
-    if(calendar == nil)
+    if (calendar == nil)
     {
         calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         [calendar setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ja_JP"]];
@@ -203,7 +194,7 @@
 + (NSDate *)prevMonthFirstDateWithDate:(NSDate *)dateValue
 {
     NSDateComponents *components = [CTDate componentsWithDate:dateValue];
-    NSDate *resultDate = [CTDate dateWithYear:[components year] month:[components month] - 1 day:1 hour:0 minute:0 second:0];
+    NSDate *resultDate = [self dateWithYear:[components year] month:[components month] - 1 day:1 hour:0 minute:0 second:0];
     return resultDate;
 }
 
@@ -211,14 +202,8 @@
 + (NSDate *)nextMonthFirstDateWithDate:(NSDate *)dateValue
 {
     NSDateComponents *components = [CTDate componentsWithDate:dateValue];
-    NSDate *resultDate = [CTDate dateWithYear:[components year] month:[components month] + 1 day:1 hour:0 minute:0 second:0];
+    NSDate *resultDate = [self dateWithYear:[components year] month:[components month] + 1 day:1 hour:0 minute:0 second:0];
     return resultDate;
 }
-
-//// NSDateから日付だけのNSDateを取得
-//+ (NSDate *) dateOnlyWithDate:(NSDate *)dateValue
-//{
-//    return [self dateWithString:[self stringWithDate:dateValue format:@"yyyy/MM/dd"] format:@"yyyy/MM/dd"];
-//}
 
 @end

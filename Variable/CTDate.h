@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/01.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -74,8 +74,5 @@
 
 // 翌月の月初めを取得
 + (NSDate *)nextMonthFirstDateWithDate:(NSDate *)dateValue;
-
-//// 月の終わりを取得
-//+ (NSDate *)monthLastWithDate:(NSDate *)dateValue;
 
 @end
