@@ -19,9 +19,9 @@
 
 
 
-#pragma mark - method
+#pragma mark - extends
 //
-// method
+// extends
 //
 
 // init
@@ -34,6 +34,19 @@
         [[[self heightAnchor] constraintEqualToConstant:0] setActive:NO];
     }
     return self;
+}
+
+
+
+#pragma mark - method
+//
+// method
+//
+
+// ボタングループの生成
++ (instancetype)bottunGroup
+{
+    return [[[self class] alloc] initWithFrame:CGRectZero];
 }
 
 // ボタンの追加
@@ -66,6 +79,11 @@
     return button;
 }
 
+// CTBarButtonItemへ変換
+- (CTBarButtonItem *)toBarButtonItem
+{
+    return [[CTBarButtonItem alloc] initWithCustomView:self];
+}
 
 
 #pragma mark - private

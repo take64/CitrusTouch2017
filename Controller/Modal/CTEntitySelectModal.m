@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/28.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTEntitySelectModal.h"
@@ -14,19 +14,26 @@
 
 @implementation CTEntitySelectModal
 
+
+
 //
 // synthesize
 //
 @synthesize fetchedResultsController;
 
 
+
+#pragma mark - extends
+//
+// extends
+//
+
 // init
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
-    if(self)
+    if (self)
     {
-        
     }
     return self;
 }
@@ -34,20 +41,22 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
     // フェッチ
     [[self callFetchedResultsController] setDelegate:self];
     [[self callFetchedResultsController] performFetch:nil];
-    
+
     [[self tableView] reloadData];
 }
+
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     // フェッチ
     [[self callFetchedResultsController] setDelegate:nil];
 }
+
 
 
 #pragma mark - UITableViewDataSource
@@ -66,13 +75,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellId = @"CellId";
-    
+
     CTTableCellLabel *cell = [tableView dequeueReusableCellWithIdentifier:CellId];
-    if(cell == nil)
+    if (cell == nil)
     {
         cell = [[CTTableCellLabel alloc] initWithReuseIdentifier:CellId];
     }
-    if(cell != nil)
+    if (cell != nil)
     {
         [self bindCell:cell atIndexPath:indexPath];
     }
@@ -86,12 +95,7 @@
 }
 
 //// ヘッダタイトル
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    id <NSFetchedResultsSectionInfo> sectionInfo = [[[self callFetchedResultsController] sections] objectAtIndex:section];
-//    return [sectionInfo name];
-//}
-
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 //- (nullable NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section;
 //
 //// Editing
@@ -175,7 +179,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSManagedObject *managedObject = [[self callFetchedResultsController] objectAtIndexPath:indexPath];
-    [self setSelectedList:[@[ managedObject ] mutableCopy]];
+    [self setSelectedItems:[@[ managedObject ] mutableCopy]];
     [self hide];
 }
 //- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(3_0);
@@ -232,22 +236,23 @@
         case NSFetchedResultsChangeInsert:
             [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
+
         case NSFetchedResultsChangeDelete:
             [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
+
         case NSFetchedResultsChangeUpdate:
             [self bindCell:(CTTableCell *)[[self tableView] cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
             [[self tableView] reloadRowsAtIndexPaths:@[ indexPath ] withRowAnimation:UITableViewRowAnimationFade];
             break;
-            
+
         case NSFetchedResultsChangeMove:
             [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
     }
 }
+
 // セクション変更後
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
 {
@@ -264,11 +269,13 @@
             break;
     }
 }
+
 // 変更前
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
     [[self tableView] beginUpdates];
 }
+
 // 変更語
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
@@ -289,6 +296,8 @@
     id <NSFetchedResultsSectionInfo> sectionInfo = [[[self callFetchedResultsController] sections] objectAtIndex:section];
     return [sectionInfo name];
 }
+
+
 
 #pragma mark - private
 //

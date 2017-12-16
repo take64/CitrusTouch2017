@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTBaseEditController.h"
@@ -16,16 +16,20 @@
 {
     // navigation controller
     CTNavigationController *_navigationController;
-    
+
     // block
     CitrusTouchModalBlock modalComplete;
 }
+
+
 
 //
 // property
 //
 @property (nonatomic, retain) CTNavigationController *_navigationController;
 @property (nonatomic, copy)   CitrusTouchModalBlock modalComplete;
+
+
 
 //
 // method
@@ -39,6 +43,5 @@
 
 // 非表示
 - (void)hide;
-
 
 @end
