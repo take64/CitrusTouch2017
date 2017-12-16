@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/31.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CitrusTouchApplication.h"
@@ -22,7 +22,7 @@
 - (id)init
 {
     self = [super init];
-    if(self)
+    if (self)
     {
         [self setTheme:[[CTTheme alloc] init]];
     }
@@ -33,7 +33,7 @@
 + (CTTheme *)callTheme
 {
     CTTheme *_theme = [[CitrusTouchApplication sharedApplication] theme];
-    if(_theme == nil)
+    if (_theme == nil)
     {
         _theme = [[CTTheme alloc] init];
     }
@@ -45,7 +45,7 @@
 + (CTCoreDataManager *)callCoreDataManager
 {
     CTCoreDataManager *_coreDataManager = [[CitrusTouchApplication sharedApplication] coreDataManager];
-    if(_coreDataManager == nil)
+    if (_coreDataManager == nil)
     {
         CTLog(@"error : CitrusTouchApplication.callCoreDataManager");
     }
@@ -56,7 +56,7 @@
 + (NSManagedObjectContext *)callCoreDataContext
 {
     NSManagedObjectContext *_coreDataContext = [[CitrusTouchApplication sharedApplication] coreDataContext];
-    if(_coreDataContext == nil)
+    if (_coreDataContext == nil)
     {
         CTLog(@"error : CitrusTouchApplication.callCoreDataContext");
     }
@@ -66,7 +66,9 @@
 
 
 #pragma mark - singleton
+//
 // singleton
+//
 + (instancetype)sharedApplication
 {
     static id singleton = nil;

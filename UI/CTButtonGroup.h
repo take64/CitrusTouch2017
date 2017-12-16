@@ -32,4 +32,7 @@
 // ボタンの追加(文字列から)
 - (CTButton *)addButtonWithTitle:(NSString *)titleString complete:(CTButtonTappedBlock)completeBlock;
 
+// CTBarButtonItemへ変換
+- (CTBarButtonItem *)toBarButtonItem;
+
 @end

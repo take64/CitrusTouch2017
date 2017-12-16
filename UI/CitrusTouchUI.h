@@ -34,9 +34,9 @@ __attribute__((unused)) static NSString * CTStr(CGFloat floatValue)
 #import "CTImageButton.h"
 
 #import "CTView.h"
-
 #import "CTTextView.h"
 
+#import "CTSearchBar.h"
 
 // overlay
 #import "CTOverlayProgressIndicator.h"

@@ -66,6 +66,11 @@
     return button;
 }
 
+// CTBarButtonItemへ変換
+- (CTBarButtonItem *)toBarButtonItem
+{
+    return [[CTBarButtonItem alloc] initWithCustomView:self];
+}
 
 
 #pragma mark - private
