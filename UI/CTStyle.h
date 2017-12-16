@@ -29,6 +29,17 @@ typedef CTSizing CTPadding;
 // margin
 typedef CTSizing CTMargin;
 
+// CTRectの差分加算
+__attribute__((unused)) static CGRect CGRectDiff(CGRect source, CGRect diff)
+{
+    CGRect rect = CGRectZero;
+    rect.origin.x   = source.origin.x     + diff.origin.x;
+    rect.origin.y   = source.origin.y     + diff.origin.y;
+    rect.size.width = source.size.width   + diff.size.width;
+    rect.size.height= source.size.height  + diff.size.height;
+    return rect;
+}
+
 
 @interface CTStyle : NSObject <NSCopying>
 {

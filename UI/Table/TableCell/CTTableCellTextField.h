@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTTableCell.h"
@@ -14,7 +14,7 @@
 {
     // テキストフィールド
     CTTableCellTextFieldInnerTextField *textField;
-    
+
     // 処理用ツールバー
     UIToolbar *toolbar;
     UISegmentedControl *prevNextSegmented;
@@ -22,6 +22,8 @@
     CTTableCellTextField *nextCell;
     UIResponder *responder;
 }
+
+
 
 //
 // property
@@ -57,11 +59,7 @@
 // レスポンダ設定(次へ)
 - (void)setNextCellResponder:(CTTableCell *)tableCell;
 
-//// レスポンダ設定(前へ)
-//- (void)setPrevCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath;
-//
-//// レスポンダ設定(次へ)
-//- (void)setNextCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath;
-
+// textFieldのoffset
+- (CGRect)callOffset;
 
 @end
