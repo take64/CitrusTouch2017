@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTBaseEditModal.h"
@@ -17,6 +17,8 @@
 
 @implementation CTBaseEditModal
 
+
+
 //
 // synthesize
 //
@@ -24,6 +26,13 @@
 @synthesize modalComplete;
 
 
+
+#pragma mark - extends
+//
+// extends
+//
+
+// 初期化
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -31,41 +40,31 @@
     {
         // modal style
         [self setModalPresentationStyle:UIModalPresentationPageSheet];
-        
+
         // part
-        CTBarButtonItem *barButtonItem;
-        
+        CTButtonGroup *buttonGroup;
+
         // バーボタン(閉じる)
-        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"閉じる" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonClose)];
-        [[self navigationItem] setLeftBarButtonItems:@[ barButtonItem ]];
+        buttonGroup = [CTButtonGroup bottunGroup];
+        [buttonGroup addButtonWithTitle:@"閉じる" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonClose];
+        }];
+        [[self navigationItem] setLeftBarButtonItems:@[ [buttonGroup toBarButtonItem] ]];
     }
     return self;
 }
+
+
 
 #pragma mark - UIViewControllerTransitioningDelegate
 //
 // UIViewControllerTransitioningDelegate
 //
 
-//- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
-//{
-//    
-//}
-//
-//- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
-//{
-//    
-//}
-//
-//- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id <UIViewControllerAnimatedTransitioning>)animator
-//{
-//    
-//}
-//
+//- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source;
+//- (nullable id <UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed;
+//- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id <UIViewControllerAnimatedTransitioning>)animator;
 //- (nullable id <UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id <UIViewControllerAnimatedTransitioning>)animator
-//{
-//    
-//}
 
 - (nullable UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented presentingViewController:(nullable UIViewController *)presenting sourceViewController:(UIViewController *)source
 {
@@ -83,19 +82,11 @@
 // 表示
 - (void)showWithParent:(UIViewController *)parent
 {
-    if(parent != nil)
+    if (parent != nil)
     {
-//        [present presentModalViewController:<#(nonnull UIViewController *)#> animated:<#(BOOL)#>]
-//        UIPresentationController *presentation = [[UIPresentationController alloc] initWithPresentedViewController:parent presentingViewController:[self callNavigationController]];
-        
         CTBasePresentationController *presentation NS_VALID_UNTIL_END_OF_SCOPE;
         presentation = [[CTBasePresentationController alloc] initWithPresentedViewController:[self callNavigationController] presentingViewController:parent];
-        
-//        [self setPresent]
-        
-//        [self setTransitioningDelegate:presentation];
         [[self callNavigationController] setTransitioningDelegate:presentation];
-        
         [parent presentViewController:[self callNavigationController] animated:YES completion:nil];
     }
 }
@@ -114,12 +105,13 @@
 {
     [self dismissViewControllerAnimated:YES completion:^(void){
         // 画面閉じ完了がある場合
-        if(self.modalComplete != nil)
+        if (self.modalComplete != nil)
         {
             self.modalComplete(self);
         }
     }];
 }
+
 
 
 #pragma mark - private
@@ -134,6 +126,7 @@
 }
 
 
+
 #pragma mark - singleton
 //
 // singleton
@@ -142,7 +135,7 @@
 // call navigation controller
 - (CTNavigationController *)callNavigationController
 {
-    if([self _navigationController] == nil)
+    if ([self _navigationController] == nil)
     {
         CTNavigationController *navigation = [[CTNavigationController alloc] initWithRootViewController:self];
         [navigation setTransitioningDelegate:self];

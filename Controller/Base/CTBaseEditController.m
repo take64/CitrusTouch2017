@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/09.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTBaseEditController.h"
@@ -15,6 +15,8 @@
 @end
 
 @implementation CTBaseEditController
+
+
 
 //
 // synthesize
@@ -28,30 +30,43 @@
 @synthesize relations;
 @synthesize removeAlertController;
 
+
+
+#pragma mark - extends
+//
+// extends
+//
+
 // init
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
-    if(self)
+    if (self)
     {
         // part
-        CTBarButtonItem *barButtonItem;
-        
+        CTButtonGroup *buttonGroup;
+
         // テーブル線タイプ
         [[self tableView] setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
-        
+
         // セクション内セル数
         [self setRowOfSection:@[]];
-        
+
         // ヘッダタイトル
         [self setHeadTitles:@[]];
-        
+
         // バーボタン(保存)
-        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonSave)];
-        [self setSaveBarButton:barButtonItem];
+        buttonGroup = [CTButtonGroup bottunGroup];
+        [buttonGroup addButtonWithTitle:@"保存" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonSave];
+        }];
+        [self setSaveBarButton:[buttonGroup toBarButtonItem]];
         // バーボタン(削除)
-        barButtonItem = [[CTBarButtonItem alloc] initWithTitle:@"削除" style:UIBarButtonItemStyleDone target:self action:@selector(onTapBarButtonRemove)];
-        [self setRemoveBarButton:barButtonItem];
+        buttonGroup = [CTButtonGroup bottunGroup];
+        [buttonGroup addButtonWithTitle:@"削除" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonRemove];
+        }];
+        [self setRemoveBarButton:[buttonGroup toBarButtonItem]];
     }
     return self;
 }
@@ -59,18 +74,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     // バーボタン再描画
     [self redrawBarButton];
-    
-//    [[self tableView] reloadData];
 }
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//    
-//    [[self tableView] reloadData];
-//}
+
 
 
 #pragma mark - UITableViewDataSource
@@ -94,11 +102,7 @@
 }
 
 //// ヘッダタイトル
-//- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    return [[self headTitles] objectAtIndex:section];
-//}
-
+//- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 //- (nullable NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section;
 //
 //// Editing
@@ -129,6 +133,7 @@
 //- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath;
 
 
+
 #pragma mark - UITableViewDelegate
 //
 // UITableViewDelegate
@@ -150,63 +155,9 @@
 //
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 //// セルヘッダ高さ
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-////    NSNumber *height = [[self heightHeaders] objectForKey:@(section)];
-////    if(height != nil)
-////    {
-////        return [height floatValue];
-////    }
-////    return 0;
-////    UIView *headerView = [CTTableViewTrait callTableHeaderViewWithController:self tableView:tableView section:section];
-//    UIView *headerView = [self tableView:tableView viewForHeaderInSection:section];
-//    if(headerView == nil)
-//    {
-//        return 0;
-//    }
-////    CTLog(@"section = %ld, height = %f", (long)section, [headerView frame].size.height);
-//    return [headerView frame].size.height;
-//}
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section;
 //// セルフッタ高さ
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-////    NSNumber *height = [[self heightFooters] objectForKey:@(section)];
-////    if(height != nil)
-////    {
-////        CTLog(@"aa section = %ld, height = %f", section, [height floatValue]);
-////        return [height floatValue]+24;
-////    }
-////    CTLog(@"aa section = %ld, height = %f", section, [height floatValue]);
-////    return 0;
-////    UIView *footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[CTTableHeaderFooterView reuseIdentifierWithSection:section]];
-////    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
-////    if(footerView != nil)
-////    {
-////        return [footerView frame].size.height;
-////    }
-////    return 0;
-//    
-//    UIView *footerView = [self tableView:tableView viewForFooterInSection:section];
-////    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
-//    if(footerView == nil)
-//    {
-//        return 0;
-//    }
-//    return [footerView frame].size.height;
-//    
-////    [self table]
-//    
-//////    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
-////    UIView *footerView = [self tableView:tableView viewForFooterInSection:section];
-////    if(footerView == nil)
-////    {
-////        CTLog(@"section = %ld, height = %f", (long)section, .0f);
-////        return 0;
-////    }
-////    CTLog(@"section = %ld, height = %f", (long)section, [footerView frame].size.height);
-////    return [footerView frame].size.height;
-////    return 40;
-//}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section;
 //
 //// Use the estimatedHeight methods to quickly calcuate guessed values which will allow for fast load times of the table.
 //// If these methods are implemented, the above -tableView:heightForXXX calls will be deferred until views are ready to be displayed, so more expensive logic can be placed there.
@@ -217,49 +168,11 @@
 //// Section header & footer information. Views are preferred over title should you decide to provide both
 //
 //// セルヘッダを返す
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    // head title
-//    NSString *titleString = [self callHeaderTitleWithSection:section];
-//    
-//    // head title exist
-//    if([titleString length] > 0)
-//    {
-//        // head id
-//        NSString *HeadID = [CTTableHeaderFooterView reuseHeaderIdentifierWithSection:section];
-//        
-//        // dequeue
-//        CTTableHeaderFooterView *headerFooterView = (CTTableHeaderFooterView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:HeadID];
-//        
-//        // generate
-//        if(headerFooterView == nil)
-//        {
-//            headerFooterView = [[CTTableHeaderFooterView alloc] initWithReuseIdentifier:HeadID];
-//        }
-//        
-//        // bind
-//        if(headerFooterView != nil)
-//        {
-//            [headerFooterView bindTitle:titleString];
-//        }
-//        
-//        return headerFooterView;
-//    }
-//    
-//    return nil;
-//}
+//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section;
 //// セルヘッダを返す
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    UIView *headerView = [CTTableViewTrait callTableHeaderViewWithController:self tableView:tableView section:section];
-//    return headerView;
-//}
+//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section;
 //// セルフッタを返す
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    UIView *footerView = [CTTableViewTrait callTableFooterViewWithController:self tableView:tableView section:section];
-//    return footerView;
-//}
+//- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;
 //- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section;   // custom view for footer. will be adjusted to default or specified footer height
 //
 //// Accessories (disclosures).
@@ -330,7 +243,7 @@
 // セルヘッダタイトル取得
 - (NSString *)callHeaderTitleWithSection:(NSInteger)section
 {
-    if([[self headTitles] count] >= (section + 1))
+    if ([[self headTitles] count] >= (section + 1))
     {
         return [[self headTitles] objectAtIndex:section];
     }
@@ -362,6 +275,7 @@
 }
 
 
+
 #pragma mark - method
 //
 // method
@@ -389,72 +303,70 @@
 - (void)onTapBarButtonRemove
 {
     [self presentViewController:[self callRemoveAlertController] animated:YES completion:nil];
-//    [[self callRemoveAlertController] showViewController:self sender:self];
 }
 
 // フィールド内容変更時
 - (void)onChangeField
 {
-    
 }
 
 // フィールド内容変更処理
 - (void)changeFieldWithIndexPath:(NSIndexPath *)indexPath cellClass:(Class)cellClass valueClass:(Class)valueClass
 {
-    if([[self tableView] cellForRowAtIndexPath:indexPath] != nil)
+    if ([[self tableView] cellForRowAtIndexPath:indexPath] != nil)
     {
         // CTTableCellTextField
-        if(cellClass == [CTTableCellTextField class])
+        if (cellClass == [CTTableCellTextField class])
         {
             // 入力値
             NSString *stringValue = [(CTTableCellTextField *) [[self tableView] cellForRowAtIndexPath:indexPath] contentText];
-            
+
             // default
             id defaultValue = [NSNull null];
             id settingValue = [NSNull null];
             // convert class
-            if(valueClass == [NSString class])
+            if (valueClass == [NSString class])
             {
                 defaultValue = @"";
                 settingValue = stringValue;
             }
-            else if(valueClass == [NSNumber class])
+            else if (valueClass == [NSNumber class])
             {
                 defaultValue = @0;
                 settingValue = @([stringValue integerValue]);
             }
-            else if(valueClass == [NSDecimalNumber class])
+            else if (valueClass == [NSDecimalNumber class])
             {
                 defaultValue = [NSDecimalNumber zero];
                 settingValue = [CTDecimal decimalWithString:stringValue];
             }
             settingValue = [CTEmptyVL compare:settingValue value1:settingValue value2:defaultValue];
-            
+
             // 設定
             [[self temporary] setObject:settingValue forKey:indexPath];
         }
         // CTTableCellTextView
-        else if(cellClass == [CTTableCellTextView class])
+        else if (cellClass == [CTTableCellTextView class])
         {
             // 入力値
             NSString *stringValue = [(CTTableCellTextView *) [[self tableView] cellForRowAtIndexPath:indexPath] contentText];
-            
+
             // default
             id defaultValue = [NSNull null];
             id settingValue = [NSNull null];
             // convert class
-            if(valueClass == [NSString class])
+            if (valueClass == [NSString class])
             {
                 defaultValue = @"";
                 settingValue = stringValue;
             }
-            else if(valueClass == [NSNumber class])
+            else if (valueClass == [NSNumber class])
             {
                 defaultValue = @0;
                 settingValue = @([stringValue integerValue]);
             }
             settingValue = [CTEmptyVL compare:settingValue value1:settingValue value2:defaultValue];
-            
+
             // 設定
             [[self temporary] setObject:settingValue forKey:indexPath];
         }
@@ -464,13 +376,11 @@
 // 保存処理
 - (void)save
 {
-    
 }
 
 // 削除処理
 - (void)remove
 {
-    
 }
 
 
@@ -484,24 +394,24 @@
 - (void)redrawBarButton
 {
     NSMutableArray<CTBarButtonItem *> *barButtonItems;
-    
+
     // バーボタン表示
     barButtonItems = [@[] mutableCopy];
-    if([self visibleSaveButton] == YES)
+    if ([self visibleSaveButton] == YES)
     {
         [barButtonItems addObject:[self saveBarButton]];
     }
     [[self navigationItem] setRightBarButtonItems:barButtonItems];
-    
+
     // ツールバーボタン表示
     barButtonItems = [[self toolbarItems] mutableCopy];
-    if(barButtonItems == nil)
+    if (barButtonItems == nil)
     {
         barButtonItems = [@[] mutableCopy];
     }
-    if([self visibleRemoveButton] == YES)
+    if ([self visibleRemoveButton] == YES)
     {
-        if([barButtonItems indexOfObject:[self removeBarButton]] == NSNotFound)
+        if ([barButtonItems indexOfObject:[self removeBarButton]] == NSNotFound)
         {
             [barButtonItems insertObject:[self removeBarButton] atIndex:0];
         }
@@ -514,7 +424,7 @@
 // 削除アラート
 - (UIAlertController *)callRemoveAlertController
 {
-    if([self removeAlertController] == nil)
+    if ([self removeAlertController] == nil)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"削除してよろしいですか？" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         [alert addAction:[UIAlertAction actionWithTitle:@"削除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
