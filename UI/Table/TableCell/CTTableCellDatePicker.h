@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/22.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTTableCellTextField.h"
@@ -18,16 +18,18 @@ typedef NS_ENUM(NSInteger, CTTableCellDatePickerMode) {
 {
     // ピッカー
     UIDatePicker *datePicker;
-    
+
     // フォーマット
     NSDateFormatter *dateFormatter;
-    
+
     // ピッカーモード
     CTTableCellDatePickerMode pickerMode;
-    
+
     // パッキングビュー
     UIView *inputPackingView;
 }
+
+
 
 //
 // property
@@ -36,6 +38,7 @@ typedef NS_ENUM(NSInteger, CTTableCellDatePickerMode) {
 @property (nonatomic, retain) NSDateFormatter *dateFormatter;
 @property (nonatomic) CTTableCellDatePickerMode pickerMode;
 @property (nonatomic, retain) UIView *inputPackingView;
+
 
 
 //

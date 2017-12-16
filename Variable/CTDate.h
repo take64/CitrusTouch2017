@@ -66,6 +66,9 @@
 // コンポーネントの取得
 + (NSDateComponents *)componentsWithDate:(NSDate *)dateValue;
 
+// コンポーネントから日付を取得
++ (NSDate *)dateWithComponents:(NSDateComponents *)componentsValue;
+
 // 日付の取得
 + (NSDate *)dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day hour:(NSInteger)hour minute:(NSInteger)minute second:(NSInteger)second;
 

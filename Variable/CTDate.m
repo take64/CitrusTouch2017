@@ -171,6 +171,12 @@
     return components;
 }
 
+// コンポーネントから日付を取得
++ (NSDate *)dateWithComponents:(NSDateComponents *)componentsValue
+{
+    return [[self callCalendar] dateFromComponents:componentsValue];
+}
+
 // 日付の取得
 + (NSDate *)dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day hour:(NSInteger)hour minute:(NSInteger)minute second:(NSInteger)second
 {
