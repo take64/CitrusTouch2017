@@ -16,6 +16,7 @@
 @synthesize _styles;
 
 
+
 #pragma mark - extends
 //
 // extends
@@ -297,6 +298,56 @@
     [self addStyles:@{
                       @"border-radius" :[self callRadiusFormat:radius],
                       }];
+}
+
+// 横文字寄せ取得
+- (NSTextAlignment)callTextAlignment
+{
+    NSString *textAlignString = [self callStyleKey:@"text-align"];
+    NSTextAlignment textAlignment;
+    if (textAlignString == nil && [textAlignString isEqualToString:@"center"] == YES)
+    {
+        textAlignment = NSTextAlignmentCenter;
+    }
+    else if ([textAlignString isEqualToString:@"left"] == YES)
+    {
+        textAlignment = NSTextAlignmentLeft;
+    }
+    else if ([textAlignString isEqualToString:@"right"] == YES)
+    {
+        textAlignment = NSTextAlignmentRight;
+    }
+    // AnalyzeのLogic error対策
+    else
+    {
+        textAlignment = NSTextAlignmentCenter;
+    }
+    return textAlignment;
+}
+
+// 縦文字寄せ取得
+- (CTStyleVerticalAlignment)callVerticalAlignment
+{
+    NSString *verticalAlignString = [self callStyleKey:@"vertical-align"];
+    CTStyleVerticalAlignment verticalAlignment;
+    if (verticalAlignString == nil && [verticalAlignString isEqualToString:@"middle"] == YES)
+    {
+        verticalAlignment = CTStyleVerticalAlignmentMiddle;
+    }
+    else if ([verticalAlignString isEqualToString:@"top"] == YES)
+    {
+        verticalAlignment = CTStyleVerticalAlignmentTop;
+    }
+    else if ([verticalAlignString isEqualToString:@"bottom"] == YES)
+    {
+        verticalAlignment = CTStyleVerticalAlignmentBottom;
+    }
+    // AnalyzeのLogic error対策
+    else
+    {
+        verticalAlignment = CTStyleVerticalAlignmentMiddle;
+    }
+    return verticalAlignment;
 }
 
 // フレーム取得

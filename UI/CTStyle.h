@@ -132,6 +132,12 @@ typedef struct {
 // 角丸設定
 - (void)setBorderRadius:(CTRadius)radius;
 
+// 横文字寄せ取得
+- (NSTextAlignment)callTextAlignment;
+
+// 縦文字寄せ取得
+- (CTStyleVerticalAlignment)callVerticalAlignment;
+
 // フレーム取得
 - (CGRect)callFrame;
 
