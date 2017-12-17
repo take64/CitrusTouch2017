@@ -240,7 +240,7 @@
             // バー更新
             BOOL animated = (progress == 0 ? NO : YES);
             CTLog(@"percentage : %f", progress);
-            [[self progressBar] setProgress:progress animated:animated];
+            [[self progressBar] setProgress:progress animated:animated]; 
             // パーセンテージ更新
             [self setPercentage:[NSString stringWithFormat:@"%.2f %%", (progress * 100)]];
 
