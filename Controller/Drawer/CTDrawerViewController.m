@@ -85,10 +85,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     }
     if (cell != nil)
     {
-        NSInteger section = [indexPath section];
-        NSInteger row = [indexPath row];
-
-        CTDrawerMenuItem *menuItem = [[[[self menuSections] objectAtIndex:section] menuItems] objectAtIndex:row];
+        CTDrawerMenuItem *menuItem = [[[[self menuSections] objectAtIndex:[indexPath section]] menuItems] objectAtIndex:[indexPath row]];
         [cell setContentText:[menuItem title]];
     }
     return cell;
@@ -98,10 +95,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 {
     return [[self menuSections] count];
 }
-//- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    return [[[self menuSections] objectAtIndex:section] title];
-//}
+//- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;
 //- (nullable NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section;
 //- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath;
 //- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -118,11 +112,7 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 //
 
 //- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
-//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-//{
-//    [view setTintColor:[[CitrusTouchApplication callTheme] callDrawerCellHeadBackColor]];
-//    [[(UITableViewHeaderFooterView *)view textLabel] setTextColor:[[CitrusTouchApplication callTheme] callDrawerCellHeadTextColor]];
-//}
+//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section;
 //- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section;
 //- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath;
 //- (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section;
@@ -251,10 +241,6 @@ static CGFloat CTDrawerViewControllerMenuHeight()
     self = [super initWithRootViewController:controllerValue];
     if (self)
     {
-        // part
-        CTBarButtonItem *barButtonItem;
-        UIButton *button;
-
         // メニュー設定
         [self setMenuSections:menuSectionList];
 
@@ -262,23 +248,13 @@ static CGFloat CTDrawerViewControllerMenuHeight()
         [self setMainViewController:controllerValue];
 
         // エッジジェスチャー
-        UIScreenEdgePanGestureRecognizer *panGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(onScreenEdgeMenuPanel:)];
-        [panGesture setMinimumNumberOfTouches:1];
-        [panGesture setEdges:UIRectEdgeLeft];
-        [panGesture setDelegate:self];
-        [[self view] addGestureRecognizer:panGesture];
+        [[self view] addGestureRecognizer:[self generateScreenEdgePanGesture]];
 
-        // メニューボタン
-        button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 32, 32)];
-        [[[button widthAnchor] constraintEqualToConstant:32] setActive:YES];
-        [[[button heightAnchor] constraintEqualToConstant:32] setActive:YES];
-        [button setBackgroundImage:[[CitrusTouchApplication callTheme] callAppIconImage] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(slideMenu) forControlEvents:UIControlEventTouchUpInside];
-        barButtonItem = [[CTBarButtonItem alloc] initWithCustomView:button];
+        // メニューアイコンボタン
+        CTBarButtonItem *barButtonItem = [self generateMenuIconBarButton];
         [self setSlideMenuButton:barButtonItem];
         [[[self mainViewController] navigationItem] setLeftBarButtonItem:[self slideMenuButton]];
     }
-
     return self;
 }
 
@@ -395,6 +371,28 @@ static CGFloat CTDrawerViewControllerMenuHeight()
 - (void)onScreenEdgeMenuPanel:(UIScreenEdgePanGestureRecognizer *) gesture
 {
     [self openSlide];
+}
+
+// エッジジェスチャーの生成
+- (UIScreenEdgePanGestureRecognizer *)generateScreenEdgePanGesture
+{
+    UIScreenEdgePanGestureRecognizer *gesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(onScreenEdgeMenuPanel:)];
+    [gesture setMinimumNumberOfTouches:1];
+    [gesture setEdges:UIRectEdgeLeft];
+    [gesture setDelegate:self];
+    return gesture;
+}
+
+// メニューアイコンボタンの生成
+- (CTBarButtonItem *)generateMenuIconBarButton
+{
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 32, 32)];
+    [[[button widthAnchor] constraintEqualToConstant:32] setActive:YES];
+    [[[button heightAnchor] constraintEqualToConstant:32] setActive:YES];
+    [button setBackgroundImage:[[CitrusTouchApplication callTheme] callAppIconImage] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(slideMenu) forControlEvents:UIControlEventTouchUpInside];
+    CTBarButtonItem *barButtonItem = [[CTBarButtonItem alloc] initWithCustomView:button];
+    return barButtonItem;
 }
 
 
