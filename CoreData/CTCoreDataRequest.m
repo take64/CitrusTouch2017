@@ -3,12 +3,17 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/27.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTCoreDataRequest.h"
 
 @implementation CTCoreDataRequest
+
+#pragma mark - method
+//
+// method
+//
 
 // データ取得
 + (NSArray *)requestWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters sortColumns:(NSArray *)sortColumns fetchLimit:(NSInteger)fetchLimit fetchOffset:(NSInteger)fetchOffset;
@@ -17,49 +22,34 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
     [request setEntity:entity];
-    
+
     // 取得条件
     NSPredicate *predicate = [NSPredicate predicateWithFormat:whereQuery argumentArray:whereParameters];
     [request setPredicate:predicate];
-    
+
     // ソート
-    if(sortColumns != nil && [sortColumns count] > 0)
-    {
-        NSMutableArray *sortDescriptors = [NSMutableArray arrayWithCapacity:1];
-        NSSortDescriptor *sort;
-        for(NSDictionary *sortColumn in sortColumns)
-        {
-            for(NSString *keyString in sortColumn)
-            {
-                sort = [NSSortDescriptor sortDescriptorWithKey:keyString
-                                                     ascending:[(NSNumber *)[sortColumn objectForKey:keyString] boolValue]
-                        ];
-                [sortDescriptors addObject:sort];
-            }
-        }
-        [request setSortDescriptors:sortDescriptors];
-    }
-    
+    [self bindSortRequest:request sortColumns:sortColumns];
+
     // フェッチオフセット
     [request setFetchOffset:fetchOffset];
-    
+
     // フェッチリミット
-    if(fetchLimit > 0)
+    if (fetchLimit > 0)
     {
         [request setFetchLimit:fetchLimit];
     }
-    
+
     // 実取得
     NSError *error;
     NSArray *results = [context executeFetchRequest:request error:&error];
-    
+
     // エラー
-    if(error)
+    if (error)
     {
         NSLog(@"ERROR! CTCoreDataRequest.requestWithContext - %@",error);
         return nil;
     }
-    else if([results count] == 0)
+    else if ([results count] == 0)
     {
         return nil;
     }
@@ -79,7 +69,7 @@
 + (NSManagedObject *)objectWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters sortColumns:(NSArray *)sortColumns
 {
     NSArray *results = [self requestWithContext:context entityName:entityName whereQuery:whereQuery whereParameters:whereParameters sortColumns:sortColumns fetchLimit:1 fetchOffset:0];
-    if(results != nil)
+    if (results != nil)
     {
         return [results objectAtIndex:0];
     }
@@ -93,7 +83,7 @@
 + (NSArray *)listWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters sortColumns:(NSArray *)sortColumns
 {
     NSArray *results = [self requestWithContext:context entityName:entityName whereQuery:whereQuery whereParameters:whereParameters sortColumns:sortColumns fetchLimit:0 fetchOffset:0];
-    if(results != nil)
+    if (results != nil)
     {
         return results;
     }
@@ -106,39 +96,26 @@
 // フェッチ取得
 + (NSFetchedResultsController *)fetchWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName sectionNameKeyPath:(NSString *)sectionNameKeyPath cacheName:(NSString *)cacheName refreshCache:(BOOL)refrechCache whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters sortColumns:(NSArray *)sortColumns
 {
-    if(whereParameters != nil && ([whereParameters isKindOfClass:[NSArray class]] == YES || [whereParameters isKindOfClass:[NSMutableArray class]] == YES) && [whereParameters count] == 0)
+    if (whereParameters != nil && ([whereParameters isKindOfClass:[NSArray class]] == YES || [whereParameters isKindOfClass:[NSMutableArray class]] == YES) && [whereParameters count] == 0)
     {
         whereParameters = nil;
     }
-    
+
     // 座席Entityを取得
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
     [request setEntity:entity];
-    
+
     // 取得条件
     NSPredicate *predicate = [NSPredicate predicateWithFormat:whereQuery argumentArray:whereParameters];
     [request setPredicate:predicate];
-    
+
     // ソート
-    if(sortColumns != nil && [sortColumns count] > 0)
-    {
-        NSMutableArray *sortDescriptors = [NSMutableArray arrayWithCapacity:1];
-        NSSortDescriptor *sort;
-        for(NSDictionary *sortColumn in sortColumns)
-        {
-            for(NSString *keyString in sortColumn)
-            {
-                sort = [NSSortDescriptor sortDescriptorWithKey:keyString ascending:[(NSNumber *)[sortColumn objectForKey:keyString] boolValue]];
-                [sortDescriptors addObject:sort];
-            }
-        }
-        [request setSortDescriptors:sortDescriptors];
-    }
-    
+    [self bindSortRequest:request sortColumns:sortColumns];
+
     // 実取得
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:context sectionNameKeyPath:sectionNameKeyPath cacheName:nil];
-    
+
     return fetchedResultsController;
 }
 
@@ -183,11 +160,11 @@
 {
     // リクエスト
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    
+
     // 取得用 Entity 生成
     NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
     [request setEntity:entity];
-    
+
     // expression
     NSExpression *keyPathExpression = [NSExpression expressionForKeyPath:columnName];
     NSExpression *expression = [NSExpression expressionForFunction:functionName arguments:@[ keyPathExpression ]];
@@ -196,28 +173,28 @@
     [expressionDescription setName:@"result"];
     [expressionDescription setExpression:expression];
     [expressionDescription setExpressionResultType:NSInteger16AttributeType];
-    
+
     // result properties
     [request setResultType:NSDictionaryResultType];
     [request setPropertiesToFetch:[NSArray arrayWithObject:expressionDescription]];
-    
+
     // groupby
-    if(groupby != nil)
+    if (groupby != nil)
     {
         [request setPropertiesToGroupBy:groupby];
     }
-    
+
     // 取得条件
     NSPredicate *predicate = [NSPredicate predicateWithFormat:whereQuery argumentArray:whereParameters];
     [request setPredicate:predicate];
-    
+
     // データ取得
     NSError *error;
     NSArray *results = [context executeFetchRequest:request error:&error];
     NSNumber *result;
-    
+
     // エラー
-    if(error)
+    if (error)
     {
         NSLog(@"ERROR! CTCoreDataRequest.function - %@",error);
         result = @0;
@@ -226,8 +203,39 @@
     {
         result = [[results objectAtIndex:0] valueForKey:@"result"];
     }
-    
     return result;
+}
+
+
+
+#pragma mark - private
+//
+// private
+//
+
+// ソート情報の追加
++ (void)bindSortRequest:(NSFetchRequest *)request sortColumns:(NSArray *)sortColumns
+{
+    // ソート情報がなければ終了
+    if (sortColumns == nil || [sortColumns count] == 0)
+    {
+        return;
+    }
+
+    // ソート情報の追加
+    NSMutableArray *sortDescriptors = [NSMutableArray arrayWithCapacity:1];
+    NSSortDescriptor *sort;
+    for (NSDictionary *sortColumn in sortColumns)
+    {
+        for (NSString *keyString in sortColumn)
+        {
+            sort = [NSSortDescriptor sortDescriptorWithKey:keyString
+                                                 ascending:[(NSNumber *)[sortColumn objectForKey:keyString] boolValue]
+                    ];
+            [sortDescriptors addObject:sort];
+        }
+    }
+    [request setSortDescriptors:sortDescriptors];
 }
 
 @end

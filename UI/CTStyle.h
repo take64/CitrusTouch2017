@@ -8,18 +8,45 @@
 
 #import <Foundation/Foundation.h>
 
+// vertical allignment
 typedef NS_ENUM(NSInteger, CTStyleVerticalAlignment) {
     CTStyleVerticalAlignmentTop,
     CTStyleVerticalAlignmentMiddle,
     CTStyleVerticalAlignmentBottom,
 };
 
+// sizing
 typedef struct {
     CGFloat left;
     CGFloat top;
     CGFloat right;
     CGFloat bottom;
-} CTPadding;
+} CTSizing;
+
+// padding
+typedef CTSizing CTPadding;
+
+// margin
+typedef CTSizing CTMargin;
+
+// CTRectの差分加算
+__attribute__((unused)) static CGRect CGRectDiff(CGRect source, CGRect diff)
+{
+    CGRect rect = CGRectZero;
+    rect.origin.x   = source.origin.x     + diff.origin.x;
+    rect.origin.y   = source.origin.y     + diff.origin.y;
+    rect.size.width = source.size.width   + diff.size.width;
+    rect.size.height= source.size.height  + diff.size.height;
+    return rect;
+}
+
+// radius
+typedef struct {
+    CGFloat left_top;
+    CGFloat right_top;
+    CGFloat right_bottom;
+    CGFloat left_bottom;
+} CTRadius;
 
 
 @interface CTStyle : NSObject <NSCopying>
@@ -72,6 +99,9 @@ typedef struct {
 // フォント取得
 - (UIFont *)callFont;
 
+// フォント要素取得
+- (NSMutableDictionary *)callFontAttributes;
+
 // サイズ取得
 - (CGSize)callSize;
 
@@ -90,6 +120,18 @@ typedef struct {
 // パディング設定
 - (void)setPadding:(CTPadding)padding;
 
+// マージン取得
+- (CTMargin)callMargin;
+
+// マージン設定
+- (void)setMargin:(CTMargin)margin;
+
+// 角丸取得
+- (CTRadius)callBorderRadius;
+
+// 角丸設定
+- (void)setBorderRadius:(CTRadius)radius;
+
 // フレーム取得
 - (CGRect)callFrame;
 
@@ -103,5 +145,8 @@ typedef struct {
 
 // ボーダー幅取得
 - (CGFloat)callBorderWidth;
+
+// 改行モードの取得
+- (NSLineBreakMode)callLineBreakMode;
 
 @end

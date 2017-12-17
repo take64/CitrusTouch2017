@@ -72,12 +72,9 @@ typedef NS_OPTIONS(NSUInteger, CTControlState) {
 - (void)setStyleHighlighted:(CTStyle *)styleValue;
 - (void)setStyleDisabled:(CTStyle *)styleValue;
 
-// 高さ計算
-- (CGFloat)calcHeight;
-// 高さ計算(全て)
-- (CGFloat)calcHeightAll;
-
 // 自動テキストサイズ計算
 - (CGSize)calcTextAutoSize;
+// 自動テキストサイズ計算(パディング込み)
+- (CGSize)calcTextAutoSizeWithPadding;
 
 @end

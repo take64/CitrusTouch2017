@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2013/02/01.
-//  Copyright (c) 2013年 citrus.tk. All rights reserved.
+//  Copyright (c) 2013 citrus.tk. All rights reserved.
 //
 
 #import "CTControl.h"
@@ -14,31 +14,33 @@
 {
     // アクティビティインジケーター
     UIActivityIndicatorView *activityIndicator;
-    
+
     // プログレスバー
     UIProgressView *progressBar;
-    
+
     // タイトル
     CTLabel *titleLabel;
-    
+
     // タイトル
     CTLabel *messageLabel;
-    
+
     // 進捗％
     CTLabel *percentageLabel;
-    
+
     // 分母値
     NSNumber *denominator;
-    
+
     // 分子値
     NSNumber *numerator;
-    
+
     // 親ビュー
     UIView *parentView;
-    
+
     // 描画
     dispatch_queue_t drawQueue;
 }
+
+
 
 //
 // property
@@ -54,13 +56,13 @@
 @property (nonatomic)         dispatch_queue_t drawQueue;
 
 
+
 //
 // method
 //
 
 // 初期化
 - (id)initWithParentView:(UIView *)parentViewValue;
-
 
 // 表示
 - (void)show;

@@ -30,10 +30,8 @@
     {
         [[self textField] setFrame:[self contentFrame]];
 
-        CGRect textFieldRect = [[self textField] frame];
-        textFieldRect.size.width -= 8;
-        textFieldRect.origin.x += 8;
-        [[self textField] setFrame:textFieldRect];
+        // size offset
+        [[self textField] setFrame:CGRectDiff([[self textField] frame], [self callOffset])];
 
         // レイアウト済み
         [self setSubLayouted:YES];
@@ -261,6 +259,12 @@
         // リフレッシュ
         [self refreshPrevNextSegmented];
     }
+}
+
+// textFieldのoffset
+- (CGRect)callOffset
+{
+    return CGRectMake(CT8(1), 0, CT8(-1), 0);
 }
 
 @end

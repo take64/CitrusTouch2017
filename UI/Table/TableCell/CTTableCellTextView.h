@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/22.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTTableCell.h"
@@ -12,20 +12,18 @@
 {
     // テキストビュー
     CTTextView *textView;
-    
+
     // Did End Editing
     CitrusTouchBlock didEndEditingBlock;
-//    id didEndEditingTarget;
-//    SEL didEndEditingSelector;
 }
+
+
 
 //
 // property
 //
 @property (nonatomic, retain) CTTextView *textView;
 @property (nonatomic, copy)   CitrusTouchBlock didEndEditingBlock;
-//@property (nonatomic, assign) id didEndEditingTarget;
-//@property (nonatomic, assign) SEL didEndEditingSelector;
 
 
 
@@ -44,9 +42,5 @@
 
 // テキスト設定
 - (void)setContentText:(NSString *)stringValue;
-
-// テキスト編集完了時
-//- (void)setDidEndEditingBlock:(CitrusTouchBlock)didEndEditingBlock
-//- (void)setDidEndEditingTarget:(id)target selector:(SEL)selector;
 
 @end

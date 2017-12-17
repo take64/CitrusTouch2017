@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/01.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -66,6 +66,9 @@
 // コンポーネントの取得
 + (NSDateComponents *)componentsWithDate:(NSDate *)dateValue;
 
+// コンポーネントから日付を取得
++ (NSDate *)dateWithComponents:(NSDateComponents *)componentsValue;
+
 // 日付の取得
 + (NSDate *)dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day hour:(NSInteger)hour minute:(NSInteger)minute second:(NSInteger)second;
 
@@ -74,8 +77,5 @@
 
 // 翌月の月初めを取得
 + (NSDate *)nextMonthFirstDateWithDate:(NSDate *)dateValue;
-
-//// 月の終わりを取得
-//+ (NSDate *)monthLastWithDate:(NSDate *)dateValue;
 
 @end

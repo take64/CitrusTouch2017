@@ -107,7 +107,7 @@
         }
 
         // 自動ボタンサイズ
-        CGSize buttonSize = [button calcTextAutoSize];
+        CGSize buttonSize = [button calcTextAutoSizeWithPadding];
 
         // ボタンの横位置調整
         [[button callStyle] addStyles:@{

@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/15.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -12,10 +12,10 @@
 {
     // label
     CTLabel *label;
-    
+
     // view
     UIView *control;
-    
+
     // is margin
     CGFloat margin;
 }
@@ -31,6 +31,9 @@
 //
 // method
 //
+
+// bind title or view
+- (void)bindTitle:(NSString *)titleString orView:(UIView *)viewValue;
 
 // bind title
 - (void)bindTitle:(NSString *)titleString;
