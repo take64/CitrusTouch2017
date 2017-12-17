@@ -10,6 +10,8 @@
 
 @implementation CTTableCellTextField
 
+
+
 //
 // synthesize
 //
@@ -20,6 +22,12 @@
 @synthesize nextCell;
 @synthesize responder;
 
+
+
+#pragma mark - extends
+//
+// extends
+//
 
 - (void)layoutSubviews
 {
@@ -108,11 +116,11 @@
         [_textField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
         [_textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [_textField setReturnKeyType:UIReturnKeyDone];
-        [_textField setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin |
+        [_textField setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin  |
                                          UIViewAutoresizingFlexibleRightMargin |
-                                         UIViewAutoresizingFlexibleTopMargin |
-                                         UIViewAutoresizingFlexibleBottomMargin |
-                                         UIViewAutoresizingFlexibleWidth	|
+                                         UIViewAutoresizingFlexibleTopMargin   |
+                                         UIViewAutoresizingFlexibleBottomMargin|
+                                         UIViewAutoresizingFlexibleWidth	   |
                                          UIViewAutoresizingFlexibleHeight)];
         [_textField setDelegate:self];
         [[self contentView] addSubview:_textField];
@@ -122,26 +130,8 @@
         // セル選択
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 
-        // ツールバー
-        [self setToolbar:[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)]];
-        [[self toolbar] setBarStyle:UIBarStyleBlackOpaque];
-        [[self toolbar] setBarTintColor:[[CitrusTouchApplication callTheme] callNavigationBarTintColor]];
-        [[self toolbar] setTranslucent:YES];
-        [self setPrevNextSegmented:[[UISegmentedControl alloc] initWithItems:@[@"前へ", @"次へ"]]];
-        [[self prevNextSegmented] addTarget:self action:@selector(onChangePrevNextSegmented:) forControlEvents:UIControlEventValueChanged];
-        [[self prevNextSegmented] setTintColor:[UIColor whiteColor]];
-        UIBarButtonItem *barButtonPrevNext = [[UIBarButtonItem alloc] initWithCustomView:[self prevNextSegmented]];
-
-        // ツールバーパーツ
-        UIBarButtonItem *barSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        CTButtonGroup *buttonGroup = [CTButtonGroup bottunGroup];
-        [buttonGroup addButtonWithTitle:@"完了" complete:^(CTButton *buttonValue) {
-            [self onTapBarButtonDone];
-        }];
-        [[self toolbar] setItems:@[ barButtonPrevNext, barSpacer, [buttonGroup toBarButtonItem] ]];
-
         // ツールバー(配置)
-        [[self textField] setInputAccessoryView:[self toolbar]];
+        [[self textField] setInputAccessoryView:[self callAccessoryToolbar]];
     }
     return self;
 }
@@ -166,6 +156,7 @@
     }
     return [[self textField] text];
 }
+
 // テキスト設定
 - (void)setContentText:(NSString *)stringValue
 {
@@ -184,23 +175,15 @@
 // 値変更時(前後ボタン)
 - (void)onChangePrevNextSegmented:(UISegmentedControl *)segmentedControl
 {
-    switch ([segmentedControl selectedSegmentIndex])
+    // 前へ(後へ)フラグ
+    BOOL isPrev = ([segmentedControl selectedSegmentIndex] == 0 ? YES : NO);
+    // 対象セル
+    CTTableCellTextField *tableCell = (isPrev == YES ? [self prevCell] : [self nextCell]);
+    // responder処理
+    if ([self hasResponder:tableCell] == YES && [[tableCell responder] canBecomeFirstResponder] == YES)
     {
-        case 0: // 前へ
-            if ([self prevCell] != nil && [[self prevCell] responder] != nil && [[[self prevCell] responder] canBecomeFirstResponder] == YES)
-            {
-                [[[self prevCell] responder] becomeFirstResponder];
-            }
-            break;
-        case 1: // 次へ
-            if ([self nextCell] != nil && [[self nextCell] responder] != nil && [[[self nextCell] responder] canBecomeFirstResponder] == YES)
-            {
-                [[[self nextCell] responder] becomeFirstResponder];
-            }
-        default:
-            break;
+        [[tableCell responder] becomeFirstResponder];
     }
-
     // リフレッシュ
     [self refreshPrevNextSegmented];
 }
@@ -208,39 +191,23 @@
 // リフレッシュ(前後ボタン)
 - (void)refreshPrevNextSegmented
 {
-    // 前後ボタン
-    if ([self prevCell] != nil && [[self prevCell] responder] != nil)
-    {
-        [[self prevNextSegmented] setEnabled:YES forSegmentAtIndex:0];
-    }
-    else
-    {
-        [[self prevNextSegmented] setEnabled:NO forSegmentAtIndex:0];
-    }
-    if ([self nextCell] != nil && [[self nextCell] responder] != nil)
-    {
-        [[self prevNextSegmented] setEnabled:YES forSegmentAtIndex:1];
-    }
-    else
-    {
-        [[self prevNextSegmented] setEnabled:NO forSegmentAtIndex:1];
-    }
+    // 前後ボタン(前)
+    [[self prevNextSegmented] setEnabled:[self hasResponder:[self prevCell]] forSegmentAtIndex:0];
+    // 前後ボタン(後)
+    [[self prevNextSegmented] setEnabled:[self hasResponder:[self nextCell]] forSegmentAtIndex:1];
+    // 普通はタッチした時に選択状態になるが YES にすると、ボタンみたいに状態が元に戻る
     [[self prevNextSegmented] setMomentary:YES];
 }
 
 // レスポンダ設定(前へ)
 - (void)setPrevCellResponder:(CTTableCellTextField *)tableCell
 {
-    if ([tableCell isKindOfClass:[CTTableCellTextField class]] == YES
-       || [tableCell isKindOfClass:[CTTableCellDatePicker class]] == YES
-       || [tableCell isKindOfClass:[CTTableCellTextView class]] == YES)
+    if ([self isKindOfFriendlyCell:tableCell] == YES)
     {
         // 後ポインタの設定
         [tableCell setNextCellResponder:self];
-
         // 前ポインタの設定
         [self setPrevCell:tableCell];
-
         // リフレッシュ
         [self refreshPrevNextSegmented];
     }
@@ -249,13 +216,10 @@
 // レスポンダ設定(次へ)
 - (void)setNextCellResponder:(CTTableCellTextField *)tableCell
 {
-    if ([tableCell isKindOfClass:[CTTableCellTextField class]] == YES
-       || [tableCell isKindOfClass:[CTTableCellDatePicker class]] == YES
-       || [tableCell isKindOfClass:[CTTableCellTextView class]] == YES)
+    if ([self isKindOfFriendlyCell:tableCell] == YES)
     {
         // 後ポインタの設定
         [self setNextCell:tableCell];
-
         // リフレッシュ
         [self refreshPrevNextSegmented];
     }
@@ -265,6 +229,68 @@
 - (CGRect)callOffset
 {
     return CGRectMake(CT8(1), 0, CT8(-1), 0);
+}
+
+
+
+#pragma mark - private
+//
+// private
+//
+
+// responder を持っているか
+- (BOOL)hasResponder:(CTTableCellTextField *)tableCell
+{
+    BOOL result = NO;
+    if (tableCell != nil && [tableCell responder] != nil)
+    {
+        result = YES;
+    }
+    return result;
+}
+
+// text 入力系クラスかどうか
+- (BOOL)isKindOfFriendlyCell:(CTTableCellTextField *)tableCell
+{
+    BOOL result = NO;
+    if ([tableCell isKindOfClass:[CTTableCellTextField class]] == YES
+        || [tableCell isKindOfClass:[CTTableCellDatePicker class]] == YES
+        || [tableCell isKindOfClass:[CTTableCellTextView class]] == YES)
+    {
+        result = YES;
+    }
+    return result;
+}
+
+// ツールバーの生成
+- (UIToolbar *)callAccessoryToolbar
+{
+    if ([self toolbar] == nil)
+    {
+        // ツールバー本体
+        UIToolbar *_toolber = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+        [_toolber setBarStyle:UIBarStyleBlackOpaque];
+        [_toolber setBarTintColor:[[CitrusTouchApplication callTheme] callNavigationBarTintColor]];
+        [_toolber setTranslucent:YES];
+        [self setToolbar:_toolber];
+
+        // 前後セグメント
+        UISegmentedControl *_segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"前へ", @"次へ"]];
+        [_segmentedControl addTarget:self action:@selector(onChangePrevNextSegmented:) forControlEvents:UIControlEventValueChanged];
+        [_segmentedControl setTintColor:[UIColor whiteColor]];
+        [self setPrevNextSegmented:_segmentedControl];
+
+        // 完了ボタン
+        CTButtonGroup *buttonGroup = [CTButtonGroup bottunGroup];
+        [buttonGroup addButtonWithTitle:@"完了" complete:^(CTButton *buttonValue) {
+            [self onTapBarButtonDone];
+        }];
+
+        // 配置
+        [_toolber setItems:@[ [CTBarButtonItem customView:_segmentedControl], [CTBarButtonItem flexibleSpacerItem], [buttonGroup toBarButtonItem],
+                             ]];
+    }
+    return [self toolbar];
 }
 
 @end
