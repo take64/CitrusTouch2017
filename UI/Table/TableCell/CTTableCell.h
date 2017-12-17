@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/03/28.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -18,29 +18,24 @@ typedef enum {
 @class CTLabel;
 @class CTControl;
 
-//
-//@class CTColor;
-
-
 @interface CTTableCell : UITableViewCell
 {
     // entity
     NSManagedObject *entity;
-    
+
     // object
     NSObject *object;
-    
-    
+
     // プレフィックスラベル
     CTLabel *prefixLabel;
     // サフィックスラベル
     CTLabel *suffixLabel;
-    
+
     // コンテンツ用表示領域
     CGFloat prefixWidth;
     CGFloat suffixWidth;
     CGRect contentFrame;
-    
+
     // 優先度
     CTTableCellPartPriority prefixPriority;
     CTTableCellPartPriority contentPriority;
@@ -50,38 +45,12 @@ typedef enum {
     BOOL layouted;
     // サブクラスレイアウト済み
     BOOL subLayouted;
-    
+
     // 背景ビュー
     CTControl *bgView;
-
-    
-//    // ActiveColor
-//    CTColor *activateColor;
-//    // deActiveColor
-//    CTColor *deactivateColor;
-//    
-//
-//
-//    // レスポンダー
-//
-//    // セル
-//    NSIndexPath *prevIndexPath;
-//    NSIndexPath *nextIndexPath;
-//
-////    
-//    // 処理用ツールバー
-//    UIToolbar *toolbar;
-//    UISegmentedControl *prevNextSegmented;
-//    CTTableCell *prevCell;
-//    CTTableCell *nextCell;
-//    UIResponder *responder;
-
-
-//
-//
-//    // 背景View
-//    CTControl *bgView;
 }
+
+
 
 //
 // property
@@ -101,14 +70,6 @@ typedef enum {
 @property (nonatomic, retain) CTControl *bgView;
 
 
-//@property (nonatomic, retain) CTColor *activateColor;
-//@property (nonatomic, retain) CTColor *deactivateColor;
-
-//@property (nonatomic, retain) NSIndexPath *prevIndexPath;
-//@property (nonatomic, retain) NSIndexPath *nextIndexPath;
-
-
-//@property (nonatomic, retain) CTControl *bgView;
 
 //
 // method
@@ -120,47 +81,6 @@ typedef enum {
 // 優先度設定
 - (void)priorityPrefix:(CTTableCellPartPriority)prefix content:(CTTableCellPartPriority)content suffix:(CTTableCellPartPriority)suffix;
 
-
-//
-//// アクティブ
-//- (void) activate;
-//
-//// デアクティブ
-//- (void) deactivate;
-//
-//
-//// ボタン押下時(キーボードDONE)
-//- (void) onTapBarButtonDone;
-//
-//// 値変更時(前後ボタン)
-//- (void) onChangeSegmentedPrevNext:(UISegmentedControl *)segmentedControl;
-//
-//// リフレッシュ(前後ボタン)
-//- (void) refreshSegmentedPrevNext;
-//
-//// レスポンダ設定(前へ)
-//- (void) setPrevCellResponder:(CTTableCell *)tableCell;
-//
-//// レスポンダ設定(次へ)
-//- (void) setNextCellResponder:(CTTableCell *)tableCell;
-//
-//// レスポンダ設定(前へ)
-//- (void) setPrevCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath;
-//
-//// レスポンダ設定(次へ)
-//- (void) setNextCellResponder:(CTTableCell *)tableCell indexPath:(NSIndexPath *)indexPath;
-//
-//
-//// アクティブ色
-//- (CTColor *) activateColor;
-//
-//// デアクティブ色
-//- (CTColor *) deactivateColor;
-//
-//// height
-//+ (CGFloat)callHeight;
-
-
 // bind entity
 - (void)bindEntity:(NSManagedObject *)entityValue;
 
@@ -169,6 +89,5 @@ typedef enum {
 
 // redraw
 - (void)redraw;
-
 
 @end
