@@ -3,7 +3,7 @@
 //  CitrusTouch3
 //
 //  Created by take64 on 2017/04/01.
-//  Copyright © 2017年 citrus.tk. All rights reserved.
+//  Copyright © 2017 citrus.tk. All rights reserved.
 //
 
 #import "CTPlatformDevice.h"
@@ -12,10 +12,17 @@
 
 @implementation CTPlatformDevice
 
+
+
+#pragma mark - method
+//
+// method
+//
+
 // Retinaディスプレイ
 + (BOOL)isRetinaDisplay
 {
-    if([UIScreen instanceMethodForSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f)
+    if ([UIScreen instanceMethodForSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0f)
     {
         return YES;
     }
@@ -25,37 +32,19 @@
 // iPhone?
 + (BOOL)isIPhone
 {
-    NSString *platform = [CTPlatformDevice platform];
-    
-    if([platform hasPrefix:@"iPhone"] == YES)
-    {
-        return YES;
-    }
-    return NO;
+    return [self isPlatformModel:@"iPhone"];
 }
 
 // iPad?
 + (BOOL)isIPad
 {
-    NSString *platform = [CTPlatformDevice platform];
-    
-    if([platform hasPrefix:@"iPad"] == YES)
-    {
-        return YES;
-    }
-    return NO;
+    return [self isPlatformModel:@"iPad"];
 }
 
 // iPod touch?
 + (BOOL)isIPod
 {
-    NSString *platform = [CTPlatformDevice platform];
-    
-    if([platform hasPrefix:@"iPod"] == YES)
-    {
-        return YES;
-    }
-    return NO;
+    return [self isPlatformModel:@"iPod"];
 }
 
 // プラットフォームを取得
@@ -76,16 +65,35 @@
     // バッファサイズ取得
     size_t size;
     sysctlbyname(typeSpecifier, NULL, &size, NULL, 0);
-    
+
     // データ格納
     char *answer = malloc(size);
     sysctlbyname(typeSpecifier, answer, &size, NULL, 0);
-    
+
     // NSString型に変更
     NSString *results = [NSString stringWithCString:answer encoding: NSUTF8StringEncoding];
-    
+
     free(answer);
     return results;
+}
+
+
+
+#pragma mark - private
+//
+// private
+//
+
+// 指定モデルか？どうか？
++ (BOOL)isPlatformModel:(NSString *)modelName
+{
+    NSString *platform = [CTPlatformDevice platform];
+
+    if ([platform hasPrefix:modelName] == YES)
+    {
+        return YES;
+    }
+    return NO;
 }
 
 @end
