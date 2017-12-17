@@ -39,14 +39,11 @@
     CTTableHeaderView *headerFooterView = (CTTableHeaderView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:queueID];
 
     // data exists
-    if ([titleString length] > 0 || titleView != nil)
+    if (([titleString length] > 0 || titleView != nil)
+        && headerFooterView == nil)
     {
-        // generate
-        if (headerFooterView == nil)
-        {
-            headerFooterView = [[CTTableHeaderView alloc] initWithReuseIdentifier:queueID];
-            [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
-        }
+        headerFooterView = [[CTTableHeaderView alloc] initWithReuseIdentifier:queueID];
+        [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
     }
 
     // bind
@@ -82,15 +79,12 @@
     // dequeue
     CTTableFooterView *headerFooterView = (CTTableFooterView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:queueID];
 
-    // data exists
-    if ([titleString length] > 0 || titleView != nil)
+    // data exists and generate
+    if (([titleString length] > 0 || titleView != nil)
+        && headerFooterView == nil)
     {
-        // generate
-        if (headerFooterView == nil)
-        {
-            headerFooterView = [[CTTableFooterView alloc] initWithReuseIdentifier:queueID];
-            [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
-        }
+        headerFooterView = [[CTTableFooterView alloc] initWithReuseIdentifier:queueID];
+        [headerFooterView setMargin:[self callTableSectionMarginSizeWithController:tableDelegate tableView:tableView]];
     }
 
     // bind

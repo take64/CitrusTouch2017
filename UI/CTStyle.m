@@ -16,6 +16,7 @@
 @synthesize _styles;
 
 
+
 #pragma mark - extends
 //
 // extends
@@ -149,36 +150,20 @@
 - (UIFont *)callFont
 {
     // フォントサイズ
-    NSString *_fontSizeString = [[self _styles] objectForKey:@"font-size"];
-    CGFloat _fontSize = 12;
-    if (_fontSizeString != nil)
-    {
-        _fontSize = [_fontSizeString floatValue];
-    }
+    NSString *fontSizeString = [self callStyleKey:@"font-size"];
+    CGFloat fontSize = (fontSizeString == nil ? 12 : [fontSizeString floatValue]);
 
     // フォントボールド
-    NSString *_fontWeight = [[self _styles] objectForKey:@"font-weight"];
+    NSString *fontWeightString = [self callStyleKey:@"font-weight"];
     BOOL isFontBold = NO;
-    if (_fontWeight != nil)
+    if (fontWeightString != nil && [fontWeightString isEqualToString:@"bold"] == YES)
     {
-        if ([_fontWeight isEqualToString:@"bold"] == YES)
-        {
-            isFontBold = YES;
-        }
+        isFontBold = YES;
     }
+
     // 生成
-    UIFont *_font;
-
-    if (isFontBold == YES)
-    {
-        _font = [UIFont boldSystemFontOfSize:_fontSize];
-    }
-    else
-    {
-        _font = [UIFont systemFontOfSize:_fontSize];
-    }
-
-    return _font;
+    UIFont *font = (isFontBold == YES ? [UIFont boldSystemFontOfSize:fontSize] : [UIFont systemFontOfSize:fontSize]);
+    return font;
 }
 
 // フォント要素取得
@@ -299,6 +284,56 @@
                       }];
 }
 
+// 横文字寄せ取得
+- (NSTextAlignment)callTextAlignment
+{
+    NSString *textAlignString = [self callStyleKey:@"text-align"];
+    NSTextAlignment textAlignment;
+    if (textAlignString == nil && [textAlignString isEqualToString:@"center"] == YES)
+    {
+        textAlignment = NSTextAlignmentCenter;
+    }
+    else if ([textAlignString isEqualToString:@"left"] == YES)
+    {
+        textAlignment = NSTextAlignmentLeft;
+    }
+    else if ([textAlignString isEqualToString:@"right"] == YES)
+    {
+        textAlignment = NSTextAlignmentRight;
+    }
+    // AnalyzeのLogic error対策
+    else
+    {
+        textAlignment = NSTextAlignmentCenter;
+    }
+    return textAlignment;
+}
+
+// 縦文字寄せ取得
+- (CTStyleVerticalAlignment)callVerticalAlignment
+{
+    NSString *verticalAlignString = [self callStyleKey:@"vertical-align"];
+    CTStyleVerticalAlignment verticalAlignment;
+    if (verticalAlignString == nil && [verticalAlignString isEqualToString:@"middle"] == YES)
+    {
+        verticalAlignment = CTStyleVerticalAlignmentMiddle;
+    }
+    else if ([verticalAlignString isEqualToString:@"top"] == YES)
+    {
+        verticalAlignment = CTStyleVerticalAlignmentTop;
+    }
+    else if ([verticalAlignString isEqualToString:@"bottom"] == YES)
+    {
+        verticalAlignment = CTStyleVerticalAlignmentBottom;
+    }
+    // AnalyzeのLogic error対策
+    else
+    {
+        verticalAlignment = CTStyleVerticalAlignmentMiddle;
+    }
+    return verticalAlignment;
+}
+
 // フレーム取得
 - (CGRect)callFrame
 {
@@ -358,32 +393,18 @@
     {
         lineBreakMode |= NSLineBreakByTruncatingMiddle;
     }
-    if ([lineBreak isEqualToString:@"word-wrapping"] == YES)
-    {
-        lineBreakMode = NSLineBreakByWordWrapping;// Wrap at word boundaries, default
-    }
-    else if ([lineBreak isEqualToString:@"char-wrapping"] == YES)
-    {
-        lineBreakMode = NSLineBreakByCharWrapping; // Wrap at character boundaries
-    }
-    else if ([lineBreak isEqualToString:@"clipping"] == YES)
-    {
-        lineBreakMode = NSLineBreakByClipping; // Simply clip
-    }
-    else if ([lineBreak isEqualToString:@"truncating-head"] == YES)
-    {
-        lineBreakMode = NSLineBreakByTruncatingHead; // Truncate at head of line: "...wxyz"
-    }
-    else if ([lineBreak isEqualToString:@"truncating-tail"] == YES)
-    {
-        lineBreakMode = NSLineBreakByTruncatingTail; // Truncate at head of line: "...wxyz"
-    }
-    else if ([lineBreak isEqualToString:@"truncating-middle"] == YES)
-    {
-        lineBreakMode = NSLineBreakByTruncatingMiddle;  // Truncate middle of line:  "ab...yz"
-    }
-    return lineBreakMode;
+    // 改行モード一覧
+    NSDictionary *lineBreakModes = @{
+                                     @"word-wrapping"       :@(NSLineBreakByWordWrapping),      // Wrap at word boundaries, default
+                                     @"char-wrapping"       :@(NSLineBreakByCharWrapping),      // Wrap at character boundaries
+                                     @"clipping"            :@(NSLineBreakByClipping),          // Simply clip
+                                     @"truncating-head"     :@(NSLineBreakByTruncatingHead),    // Truncate at head of line: "...wxyz"
+                                     @"truncating-tail"     :@(NSLineBreakByTruncatingTail),    // Truncate at tail of line: "abcd..."
+                                     @"truncating-middle"   :@(NSLineBreakByTruncatingMiddle),  // Truncate middle of line:  "ab...yz"
+                                     };
+    return [[lineBreakModes objectForKey:lineBreak] integerValue];
 }
+
 
 
 #pragma mark - private

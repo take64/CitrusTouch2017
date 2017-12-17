@@ -31,13 +31,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     // デフォルト処理
-    CGFloat widthDefault = 64;
-    CGFloat heightDefault = 48;
-    if (CGRectIsEmpty(frame) == YES)
-    {
-        frame = CGRectMake(0, 0, widthDefault, heightDefault);
-    }
-
+    frame = (CGRectIsEmpty(frame) == YES ? CGRectMake(0, 0, 64, 48) : frame);
     self = [super initWithFrame:frame];
     if (self)
     {
@@ -50,7 +44,6 @@
                                             @"width"               :CTStr(frame.size.width),
                                             @"height"              :CTStr(frame.size.height),
                                             }];
-
         // 値監視
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"width" options:NSKeyValueObservingOptionNew context:NULL];
         [[[self callStyleNormal] callAllStyles] addObserver:self forKeyPath:@"height" options:NSKeyValueObservingOptionNew context:NULL];
@@ -64,30 +57,26 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     CGRect _frame = [self frame];
-    CGSize _size = _frame.size;
-    CGPoint _origin = _frame.origin;
     // width 変更時
     if ([keyPath isEqualToString:@"width"] == YES)
     {
-        _size.width = [[[self callStyleNormal] callStyleKey:@"width"] floatValue];
+        _frame.size.width = [[[self callStyleNormal] callStyleKey:@"width"] floatValue];
     }
     // height 変更時
     else if ([keyPath isEqualToString:@"height"] == YES)
     {
-        _size.height = [[[self callStyleNormal] callStyleKey:@"height"] floatValue];
+        _frame.size.height = [[[self callStyleNormal] callStyleKey:@"height"] floatValue];
     }
     // top 変更時
     else if ([keyPath isEqualToString:@"top"] == YES)
     {
-        _origin.y = [[[self callStyleNormal] callStyleKey:@"top"] floatValue];
+        _frame.origin.y = [[[self callStyleNormal] callStyleKey:@"top"] floatValue];
     }
     // left 変更時
     else if ([keyPath isEqualToString:@"left"] == YES)
     {
-        _origin.x = [[[self callStyleNormal] callStyleKey:@"left"] floatValue];
+        _frame.origin.x = [[[self callStyleNormal] callStyleKey:@"left"] floatValue];
     }
-    _frame.size = _size;
-    _frame.origin = _origin;
     [self setFrame:_frame];
 }
 
@@ -98,21 +87,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     // スタイルシート
-    CTStyle *stylesheet = [[self callStyleNormal] copy];
-
-    switch ([self controlState])
-    {
-        case CTControlStateNormal:
-            break;
-        case CTControlStateHighlighted:
-            stylesheet = [self callStyleHighlighted];
-            break;
-        case CTControlStateDisabled:
-            stylesheet = [self callStyleDisabled];
-            break;
-        default:
-            break;
-    }
+    CTStyle *stylesheet = [self callControlStateStylesheet];
 
     // 文字列要素
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
@@ -352,80 +327,44 @@
         CGRect titleFrame = CGRectMake(0, 0, (fontBounds.width), (fontBounds.height));
 
         // text-align
-        NSString *_textAlignString = [stylesheet callStyleKey:@"text-align"];
-        NSTextAlignment _textAlignment;
-        if (_textAlignString == nil && [_textAlignString isEqualToString:@"center"] == YES)
-        {
-            _textAlignment = NSTextAlignmentCenter;
-        }
-        else if ([_textAlignString isEqualToString:@"left"] == YES)
-        {
-            _textAlignment = NSTextAlignmentLeft;
-        }
-        else if ([_textAlignString isEqualToString:@"right"] == YES)
-        {
-            _textAlignment = NSTextAlignmentRight;
-        }
-        // AnalyzeのLogic error対策
-        else
-        {
-            _textAlignment = NSTextAlignmentCenter;
-        }
+        NSTextAlignment textAlignment = [stylesheet callTextAlignment];
 
         // vertical-align
-        NSString *_verticalAlignString = [stylesheet callStyleKey:@"vertical-align"];
-        CTStyleVerticalAlignment _verticalAlignment;
-        if (_verticalAlignString == nil && [_verticalAlignString isEqualToString:@"middle"] == YES)
-        {
-            _verticalAlignment = CTStyleVerticalAlignmentMiddle;
-        }
-        else if ([_verticalAlignString isEqualToString:@"top"] == YES)
-        {
-            _verticalAlignment = CTStyleVerticalAlignmentTop;
-        }
-        else if ([_verticalAlignString isEqualToString:@"bottom"] == YES)
-        {
-            _verticalAlignment = CTStyleVerticalAlignmentBottom;
-        }
-        // AnalyzeのLogic error対策
-        else
-        {
-            _verticalAlignment = CTStyleVerticalAlignmentMiddle;
-        }
+        CTStyleVerticalAlignment verticalAlignment = [stylesheet callVerticalAlignment];
 
         // 横位置
         CGFloat titleFrameX = 0;
-        if (_textAlignment == NSTextAlignmentCenter)
+        if (textAlignment == NSTextAlignmentCenter)
         {
             titleFrameX = (paddedContentRect.size.width / 2 - fontBounds.width / 2) + paddedContentRect.origin.x;
         }
-        else if (_textAlignment == NSTextAlignmentLeft)
+        else if (textAlignment == NSTextAlignmentLeft)
         {
             titleFrameX = paddedContentRect.origin.x;
         }
-        else if (_textAlignment == NSTextAlignmentRight)
+        else if (textAlignment == NSTextAlignmentRight)
         {
             titleFrameX = (paddedContentRect.origin.x + paddedContentRect.size.width) - fontBounds.width;
         }
 
         // 縦位置
         CGFloat titleFrameY = 0;
-        if (_verticalAlignment == CTStyleVerticalAlignmentTop)
+        if (verticalAlignment == CTStyleVerticalAlignmentTop)
         {
             titleFrameY = paddedContentRect.origin.y;
         }
-        else if (_verticalAlignment == CTStyleVerticalAlignmentMiddle)
+        else if (verticalAlignment == CTStyleVerticalAlignmentMiddle)
         {
             titleFrameY = (paddedContentRect.size.height / 2 - fontBounds.height / 2) + paddedContentRect.origin.y;
         }
-        else if (_verticalAlignment == CTStyleVerticalAlignmentBottom)
+        else if (verticalAlignment == CTStyleVerticalAlignmentBottom)
         {
             titleFrameY = (paddedContentRect.size.height - fontBounds.height) + paddedContentRect.origin.y;
         }
 
         titleFrame.origin = CGPointMake(titleFrameX, titleFrameY);
 
-        [paragraph setAlignment:_textAlignment];
+        [paragraph setAlignment:textAlignment];
 
         [[self text] drawInRect:titleFrame withAttributes:attributes];
 
@@ -627,6 +566,26 @@
     CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius.right_bottom + offset);
     CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius.left_bottom  + offset);
     CGContextClosePath(context);
+}
+
+// コントロールステートに基づくスタイルシートの取得
+- (CTStyle *)callControlStateStylesheet
+{
+    CTStyle *stylesheet = [[self callStyleNormal] copy];
+    switch ([self controlState])
+    {
+        case CTControlStateNormal:
+            break;
+        case CTControlStateHighlighted:
+            stylesheet = [self callStyleHighlighted];
+            break;
+        case CTControlStateDisabled:
+            stylesheet = [self callStyleDisabled];
+            break;
+        default:
+            break;
+    }
+    return stylesheet;
 }
 
 @end

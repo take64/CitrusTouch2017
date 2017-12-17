@@ -28,37 +28,21 @@
     // NSString
     else if ([compare isKindOfClass:[NSString class]] == YES)
     {
-        if ([(NSString *)compare isEqualToString:@""] == YES)
-        {
-            isEmpty = YES;
-        }
+        isEmpty = ([(NSString *)compare isEqualToString:@""] == YES);
     }
     // NSNumber
     else if ([compare isKindOfClass:[NSNumber class]] == YES)
     {
-        if ([(NSNumber *)compare compare:[NSNumber numberWithInt:0]] == NSOrderedSame)
-        {
-            isEmpty = YES;
-        }
+        isEmpty = ([(NSNumber *)compare compare:[NSNumber numberWithInt:0]] == NSOrderedSame);
     }
     // NSDecimalNumber
     else if ([compare isKindOfClass:[NSDecimalNumber class]] == YES)
     {
-        if ([(NSDecimalNumber *)compare compare:[NSDecimalNumber zero]] == NSOrderedSame)
-        {
-            isEmpty = YES;
-        }
+        isEmpty = ([(NSDecimalNumber *)compare compare:[NSDecimalNumber zero]] == NSOrderedSame);
     }
 
     // return
-    if (isEmpty == YES)
-    {
-        return value2;
-    }
-    else
-    {
-        return value1;
-    }
+    return (isEmpty == YES ? value2 : value1);
 }
 
 @end

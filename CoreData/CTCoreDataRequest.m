@@ -18,14 +18,8 @@
 // データ取得
 + (NSArray *)requestWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters sortColumns:(NSArray *)sortColumns fetchLimit:(NSInteger)fetchLimit fetchOffset:(NSInteger)fetchOffset;
 {
-    // 座席Entityを取得
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
-    [request setEntity:entity];
-
-    // 取得条件
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:whereQuery argumentArray:whereParameters];
-    [request setPredicate:predicate];
+    // リクエスト
+    NSFetchRequest *request = [self generateFetchRequestWithContext:context entityName:entityName whereQuery:whereQuery whereParameters:whereParameters];
 
     // ソート
     [self bindSortRequest:request sortColumns:sortColumns];
@@ -51,12 +45,9 @@
     }
     else if ([results count] == 0)
     {
-        return nil;
+        results = nil;
     }
-    else
-    {
-        return results;
-    }
+    return results;
 }
 
 // データ取得(1件)
@@ -69,28 +60,16 @@
 + (NSManagedObject *)objectWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters sortColumns:(NSArray *)sortColumns
 {
     NSArray *results = [self requestWithContext:context entityName:entityName whereQuery:whereQuery whereParameters:whereParameters sortColumns:sortColumns fetchLimit:1 fetchOffset:0];
-    if (results != nil)
-    {
-        return [results objectAtIndex:0];
-    }
-    else
-    {
-        return nil;
-    }
+    //　取得できない場合はnil
+    return [results objectAtIndex:0];
 }
 
 // データ取得(全件)
 + (NSArray *)listWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters sortColumns:(NSArray *)sortColumns
 {
     NSArray *results = [self requestWithContext:context entityName:entityName whereQuery:whereQuery whereParameters:whereParameters sortColumns:sortColumns fetchLimit:0 fetchOffset:0];
-    if (results != nil)
-    {
-        return results;
-    }
-    else
-    {
-        return nil;
-    }
+    //　取得できない場合はnil
+    return results;
 }
 
 // フェッチ取得
@@ -101,14 +80,8 @@
         whereParameters = nil;
     }
 
-    // 座席Entityを取得
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
-    [request setEntity:entity];
-
-    // 取得条件
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:whereQuery argumentArray:whereParameters];
-    [request setPredicate:predicate];
+    // リクエスト
+    NSFetchRequest *request = [self generateFetchRequestWithContext:context entityName:entityName whereQuery:whereQuery whereParameters:whereParameters];
 
     // ソート
     [self bindSortRequest:request sortColumns:sortColumns];
@@ -159,20 +132,11 @@
 + (id)functionWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName functionName:(NSString *)functionName columnName:(NSString *)columnName whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters groupby:(NSArray *)groupby
 {
     // リクエスト
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-
-    // 取得用 Entity 生成
-    NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:context];
-    [request setEntity:entity];
+    NSFetchRequest *request = [self generateFetchRequestWithContext:context entityName:entityName whereQuery:whereQuery whereParameters:whereParameters];
 
     // expression
-    NSExpression *keyPathExpression = [NSExpression expressionForKeyPath:columnName];
-    NSExpression *expression = [NSExpression expressionForFunction:functionName arguments:@[ keyPathExpression ]];
-    // expression description
-    NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
-    [expressionDescription setName:@"result"];
-    [expressionDescription setExpression:expression];
-    [expressionDescription setExpressionResultType:NSInteger16AttributeType];
+    NSString *resultName = @"result";
+    NSExpressionDescription *expressionDescription = [self generateExpressionDescriptionWithFunction:functionName column:columnName result:resultName];
 
     // result properties
     [request setResultType:NSDictionaryResultType];
@@ -183,10 +147,6 @@
     {
         [request setPropertiesToGroupBy:groupby];
     }
-
-    // 取得条件
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:whereQuery argumentArray:whereParameters];
-    [request setPredicate:predicate];
 
     // データ取得
     NSError *error;
@@ -201,7 +161,7 @@
     }
     else
     {
-        result = [[results objectAtIndex:0] valueForKey:@"result"];
+        result = [[results objectAtIndex:0] valueForKey:resultName];
     }
     return result;
 }
@@ -236,6 +196,35 @@
         }
     }
     [request setSortDescriptors:sortDescriptors];
+}
+
+// 関数用 expression の生成
++ (NSExpressionDescription *)generateExpressionDescriptionWithFunction:(NSString *)functionName column:(NSString *)columnName result:(NSString *)resultName
+{
+    // expression
+    NSExpression *keyPathExpression = [NSExpression expressionForKeyPath:columnName];
+    NSExpression *expression = [NSExpression expressionForFunction:functionName arguments:@[ keyPathExpression ]];
+    // expression description
+    NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
+    [expressionDescription setName:resultName];
+    [expressionDescription setExpression:expression];
+    [expressionDescription setExpressionResultType:NSInteger16AttributeType];
+    return expressionDescription;
+}
+
+// 汎用的な FetchRequest の生成
++ (NSFetchRequest *)generateFetchRequestWithContext:(NSManagedObjectContext *)context entityName:(NSString *)entityName whereQuery:(NSString *)whereQuery whereParameters:(NSArray *)whereParameters
+{
+    // リクエスト
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+
+    // 取得用 Entity 生成
+    [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:context]];
+
+    // 取得条件
+    [request setPredicate:[NSPredicate predicateWithFormat:whereQuery argumentArray:whereParameters]];
+
+    return request;
 }
 
 @end
